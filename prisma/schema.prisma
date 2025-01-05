@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 enum Gender {
   Male
   Female
@@ -21,14 +20,37 @@ enum Level {
   One
 }
 
-
 model Player {
-  id               String   @id @default(uuid())
-  name             String
-  email            String?
-  age              Int?
-  phone            String?
-  gender           Gender
-  level            Level
-  points           Int      @default(0)
+  id        String         @id @default(uuid())
+  name      String
+  email     String?
+  age       Int?
+  phone     String?
+  gender    Gender
+  level     Level
+  leagues   LeaguePlayer[] @relation("PlayerLeagues")
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model League {
+  id        String         @id @default(uuid())
+  name      String
+  level     String
+  startDate DateTime
+  endDate   DateTime
+  players   LeaguePlayer[] @relation("LeaguePlayers")
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model LeaguePlayer {
+  id        String   @id @default(uuid())
+  leagueId  String
+  playerId  String
+  league    League   @relation("LeaguePlayers", fields: [leagueId], references: [id])
+  player    Player   @relation("PlayerLeagues", fields: [playerId], references: [id])
+  points    Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
