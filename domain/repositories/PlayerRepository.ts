@@ -17,8 +17,12 @@ export class PlayerRepository {
   }
 
   // eslint-disable-next-line
-  async deletePlayer(id: string): Promise<void> {
-    await prisma.player.delete({
+  async deletePlayer(id: string) {
+    await prisma.leaguePlayer.deleteMany({
+      where: { playerId: id },
+    });
+
+    return prisma.player.delete({
       where: { id },
     });
   }

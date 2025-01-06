@@ -20,37 +20,120 @@ enum Level {
   One
 }
 
+enum LeagueStatus {
+  Upcoming
+  InProgress
+  Completed
+}
+
+enum TournamentStatus {
+  Upcoming
+  InProgress
+  Completed
+}
+
+enum RoundStatus {
+  Upcoming
+  InProgress
+  Completed
+}
+
+enum MatchStatus {
+  Scheduled
+  InProgress
+  Completed
+}
+
 model Player {
-  id        String         @id @default(uuid())
-  name      String
-  email     String?
-  age       Int?
-  phone     String?
-  gender    Gender
-  level     Level
-  leagues   LeaguePlayer[] @relation("PlayerLeagues")
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  id            String         @id @default(uuid())
+  name          String
+  email         String?
+  age           Int?
+  phone         String?
+  gender        Gender
+  level         Level
+  leagues       LeaguePlayer[] @relation("PlayerLeagues")
+  couplesAsPlayer1 Couple[]    @relation("CouplePlayer1")
+  couplesAsPlayer2 Couple[]    @relation("CouplePlayer2")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model League {
-  id        String         @id @default(uuid())
+  id        String       @id @default(uuid())
   name      String
-  level     String
+  level     Level
+  status    LeagueStatus @default(Upcoming)
   startDate DateTime
   endDate   DateTime
   players   LeaguePlayer[] @relation("LeaguePlayers")
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 }
 
 model LeaguePlayer {
   id        String   @id @default(uuid())
   leagueId  String
   playerId  String
-  league    League   @relation("LeaguePlayers", fields: [leagueId], references: [id])
-  player    Player   @relation("PlayerLeagues", fields: [playerId], references: [id])
+  league    League   @relation("LeaguePlayers", fields: [leagueId], references: [id], onDelete: Cascade)
+  player    Player   @relation("PlayerLeagues", fields: [playerId], references: [id], onDelete: Cascade)
   points    Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Tournament {
+  id             String           @id @default(uuid())
+  name           String
+  status         TournamentStatus @default(Upcoming)
+  startDate      DateTime
+  endDate        DateTime?
+  availableCourts Int             @default(1) 
+  couples        Couple[]         @relation("TournamentCouples")
+  rounds         Round[]          @relation("TournamentRounds")
+  winnerCouples  Couple[]         @relation("TournamentWinners")
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+
+model Couple {
+  id                 String       @id @default(uuid())
+  player1Id          String
+  player2Id          String
+  player1            Player       @relation("CouplePlayer1", fields: [player1Id], references: [id])
+  player2            Player       @relation("CouplePlayer2", fields: [player2Id], references: [id])
+  tournaments        Tournament[] @relation("TournamentCouples")
+  tournamentsWon     Tournament[] @relation("TournamentWinners")
+  matchesAsCouple1   Match[]      @relation("MatchCouple1")
+  matchesAsCouple2   Match[]      @relation("MatchCouple2")
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+}
+
+model Round {
+  id           String      @id @default(uuid())
+  tournamentId String
+  number       Int
+  status       RoundStatus @default(Upcoming)
+  matches      Match[]     @relation("RoundMatches")
+  tournament   Tournament  @relation("TournamentRounds", fields: [tournamentId], references: [id])
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Match {
+  id           String      @id @default(uuid())
+  roundId      String
+  couple1Id    String
+  couple2Id    String
+  couple1Score Int?
+  couple2Score Int?
+  status       MatchStatus @default(Scheduled)
+  round        Round       @relation("RoundMatches", fields: [roundId], references: [id])
+  couple1      Couple      @relation("MatchCouple1", fields: [couple1Id], references: [id])
+  couple2      Couple      @relation("MatchCouple2", fields: [couple2Id], references: [id])
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+

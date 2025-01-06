@@ -2,8 +2,6 @@
 
 // eslint-disable-next-line
 export default function LeagueTable({ leagues }: { leagues: any[] }) {
-  console.log("leagues", leagues[0].players);
-
   return (
     <table className="min-w-full border-collapse border border-gray-300">
       <thead>

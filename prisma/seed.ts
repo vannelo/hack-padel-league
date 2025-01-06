@@ -39,7 +39,7 @@ async function main() {
   const league = await prisma.league.create({
     data: {
       name: "Liga 2023",
-      level: "Cuarta",
+      level: Level.Four,
       startDate: new Date("2023-06-01"),
       endDate: new Date("2023-08-31"),
     },
