@@ -16,6 +16,44 @@ function getRandomElement<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
 
+// eslint-disable-next-line
+async function createCouples(players: any[], count: number) {
+  const couples = [];
+  for (let i = 0; i < count; i++) {
+    const player1 = players[i * 2];
+    const player2 = players[i * 2 + 1];
+    const couple = await prisma.couple.create({
+      data: {
+        id: randomUUID(),
+        player1Id: player1.id,
+        player2Id: player2.id,
+      },
+    });
+    couples.push(couple);
+  }
+  return couples;
+}
+
+async function createTournament(
+  name: string,
+  availableCourts: number,
+  // eslint-disable-next-line
+  couples: any[]
+) {
+  const tournament = await prisma.tournament.create({
+    data: {
+      name,
+      availableCourts,
+      startDate: new Date("2025-01-01"),
+      endDate: null,
+      couples: {
+        connect: couples.map((couple) => ({ id: couple.id })),
+      },
+    },
+  });
+  return tournament;
+}
+
 async function main() {
   // Create 20 players
   const players = [];
@@ -56,6 +94,15 @@ async function main() {
       },
     });
   }
+
+  // Create tournaments
+  const tournament1Couples = await createCouples(players.slice(0, 8), 4); // 4 couples (8 players)
+  const tournament2Couples = await createCouples(players.slice(8, 20), 6); // 6 couples (12 players)
+  const tournament3Couples = await createCouples(players.slice(0, 16), 8); // 8 couples (16 players)
+
+  await createTournament("Torneo 1 Court", 1, tournament1Couples); // 1 court
+  await createTournament("Torneo 2 Courts", 2, tournament2Couples); // 2 courts
+  await createTournament("Torneo 3 Courts", 3, tournament3Couples); // 3 courts
 
   console.log("Seeding completed successfully!");
 }

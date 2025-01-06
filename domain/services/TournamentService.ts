@@ -80,20 +80,48 @@ export class TournamentService {
     availableCourts: number
   ): { matches: { couple1Id: string; couple2Id: string }[] }[] {
     const rounds = [];
-    let currentRound: { matches: { couple1Id: string; couple2Id: string }[] } =
-      { matches: [] };
+    const unscheduledMatches = new Set(
+      matches.map((match) => `${match.couple1Id}-${match.couple2Id}`)
+    );
 
-    matches.forEach((match) => {
-      if (currentRound.matches.length < availableCourts) {
+    while (unscheduledMatches.size > 0) {
+      const currentRound: {
+        matches: { couple1Id: string; couple2Id: string }[];
+      } = {
+        matches: [],
+      };
+      const playingCouples = new Set<string>();
+
+      for (const match of matches) {
+        const matchKey = `${match.couple1Id}-${match.couple2Id}`;
+
+        // Skip if match is already scheduled or couples are already playing in this round
+        if (
+          !unscheduledMatches.has(matchKey) ||
+          playingCouples.has(match.couple1Id) ||
+          playingCouples.has(match.couple2Id)
+        ) {
+          continue;
+        }
+
+        // Add match to the current round
         currentRound.matches.push(match);
-      } else {
-        rounds.push(currentRound);
-        currentRound = { matches: [match] };
-      }
-    });
+        playingCouples.add(match.couple1Id);
+        playingCouples.add(match.couple2Id);
 
-    if (currentRound.matches.length > 0) {
-      rounds.push(currentRound);
+        // Mark match as scheduled
+        unscheduledMatches.delete(matchKey);
+
+        // Finalize the round if it reaches the available court limit
+        if (currentRound.matches.length === availableCourts) {
+          break;
+        }
+      }
+
+      // Add the current round to the list of rounds
+      if (currentRound.matches.length > 0) {
+        rounds.push(currentRound);
+      }
     }
 
     return rounds;
