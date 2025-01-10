@@ -1,14 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { addCoupleToTournament } from "@/app/actions/tournamentActions";
 import { useState } from "react";
+import { Tournament, Player, TournamentCouple } from "@prisma/client";
+
+interface TournamentWithCouples extends Tournament {
+  couples: TournamentCouple[];
+}
 
 interface TournamentCoupleAssignmentFormProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tournaments: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  players: any[];
+  tournaments: TournamentWithCouples[];
+  players: Player[];
 }
 
 export default function TournamentCoupleAssignmentForm({
@@ -20,7 +22,6 @@ export default function TournamentCoupleAssignmentForm({
   );
   const [selectedPlayer1, setSelectedPlayer1] = useState<string | null>(null);
 
-  // Filter out players already in couples for the selected tournament
   const getAvailablePlayers = () => {
     if (!selectedTournament) return players;
 
@@ -31,15 +32,13 @@ export default function TournamentCoupleAssignmentForm({
     if (!tournament) return players;
 
     const playersInCouples = new Set(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      tournament.couples.flatMap((couple: any) => [
+      tournament.couples.flatMap((couple) => [
         couple.player1Id,
         couple.player2Id,
       ])
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return players.filter((player: any) => !playersInCouples.has(player.id));
+    return players.filter((player) => !playersInCouples.has(player.id));
   };
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -86,8 +85,7 @@ export default function TournamentCoupleAssignmentForm({
           onChange={(e) => setSelectedTournament(e.target.value)}
         >
           <option value="">-- Select a Tournament --</option>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          {tournaments.map((tournament: any) => (
+          {tournaments.map((tournament) => (
             <option key={tournament.id} value={tournament.id}>
               {tournament.name}
             </option>
@@ -109,8 +107,7 @@ export default function TournamentCoupleAssignmentForm({
           onChange={(e) => setSelectedPlayer1(e.target.value)}
         >
           <option value="">-- Select Player 1 --</option>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          {availablePlayers.map((player: any) => (
+          {availablePlayers.map((player) => (
             <option key={player.id} value={player.id}>
               {player.name}
             </option>
@@ -131,10 +128,9 @@ export default function TournamentCoupleAssignmentForm({
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
         >
           <option value="">-- Select Player 2 --</option>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {availablePlayers
-            .filter((player: any) => player.id !== selectedPlayer1)
-            .map((player: any) => (
+            .filter((player) => player.id !== selectedPlayer1)
+            .map((player) => (
               <option key={player.id} value={player.id}>
                 {player.name}
               </option>

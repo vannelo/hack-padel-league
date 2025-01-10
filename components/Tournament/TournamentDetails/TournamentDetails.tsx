@@ -19,6 +19,8 @@ export default function TournamentDetails({
     }
   }
 
+  console.log("tournament", tournament);
+
   return (
     <>
       <section className="mb-6">

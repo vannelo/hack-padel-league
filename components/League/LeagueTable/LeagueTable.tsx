@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 // eslint-disable-next-line
 export default function LeagueTable({ leagues }: { leagues: any[] }) {
   return (
@@ -11,6 +13,7 @@ export default function LeagueTable({ leagues }: { leagues: any[] }) {
           <th className="border border-gray-300 px-4 py-2">Start Date</th>
           <th className="border border-gray-300 px-4 py-2">End Date</th>
           <th className="border border-gray-300 px-4 py-2">Players</th>
+          <th className="border border-gray-300 px-4 py-2">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -37,6 +40,14 @@ export default function LeagueTable({ leagues }: { leagues: any[] }) {
               ) : (
                 <span className="text-gray-500">No players</span>
               )}
+            </td>
+            <td className="border border-gray-300 px-4 py-2 text-center">
+              <Link
+                href={`/admin/ligas/${league.id}`}
+                className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                View Details
+              </Link>
             </td>
           </tr>
         ))}

@@ -1,6 +1,7 @@
 "use client";
 
 import { createLeague } from "@/app/actions/leagueActions";
+import { Level } from "@prisma/client";
 
 export default function LeagueCreationForm() {
   async function handleSubmit(formData: FormData) {
@@ -61,7 +62,7 @@ export default function LeagueCreationForm() {
           <option value="Level 1">Level 1</option>
           <option value="Level 2">Level 2</option>
           <option value="Level 3">Level 3</option>
-          <option value="Level 4">Level 4</option>
+          <option value={Level.Four}>Level 4</option>
           <option value="Level 5">Level 5</option>
         </select>
       </div>

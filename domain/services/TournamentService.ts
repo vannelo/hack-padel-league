@@ -41,10 +41,9 @@ export class TournamentService {
       throw new Error("A tournament must have at least 2 couples to start.");
     }
 
-    // Generate rounds and matches
-    const matches = this.generateMatches(tournament.couples);
-    const rounds = this.splitMatchesIntoRounds(
-      matches,
+    // Generate rounds with optimized logic
+    const rounds = this.generateRounds(
+      tournament.couples,
       tournament.availableCourts
     );
 
@@ -59,69 +58,45 @@ export class TournamentService {
     );
   }
 
-  private generateMatches(
-    // eslint-disable-next-line
-    couples: any[]
-  ): { couple1Id: string; couple2Id: string }[] {
-    const matches = [];
-    for (let i = 0; i < couples.length; i++) {
-      for (let j = i + 1; j < couples.length; j++) {
-        matches.push({
-          couple1Id: couples[i].id,
-          couple2Id: couples[j].id,
-        });
-      }
-    }
-    return matches;
-  }
-
-  private splitMatchesIntoRounds(
-    matches: { couple1Id: string; couple2Id: string }[],
+  private generateRounds(
+    couples: { id: string }[],
     availableCourts: number
   ): { matches: { couple1Id: string; couple2Id: string }[] }[] {
-    const rounds = [];
-    const unscheduledMatches = new Set(
-      matches.map((match) => `${match.couple1Id}-${match.couple2Id}`)
-    );
+    const totalCouples = couples.length;
+    const totalRounds = totalCouples - 1;
+    const rounds: { matches: { couple1Id: string; couple2Id: string }[] }[] =
+      [];
 
-    while (unscheduledMatches.size > 0) {
-      const currentRound: {
-        matches: { couple1Id: string; couple2Id: string }[];
-      } = {
-        matches: [],
-      };
-      const playingCouples = new Set<string>();
+    // If odd number of couples, add a "bye" couple
+    if (totalCouples % 2 !== 0) {
+      couples.push({ id: "bye" });
+    }
 
-      for (const match of matches) {
-        const matchKey = `${match.couple1Id}-${match.couple2Id}`;
+    const n = couples.length;
 
-        // Skip if match is already scheduled or couples are already playing in this round
-        if (
-          !unscheduledMatches.has(matchKey) ||
-          playingCouples.has(match.couple1Id) ||
-          playingCouples.has(match.couple2Id)
-        ) {
-          continue;
-        }
+    for (let round = 0; round < totalRounds; round++) {
+      const matches: { couple1Id: string; couple2Id: string }[] = [];
 
-        // Add match to the current round
-        currentRound.matches.push(match);
-        playingCouples.add(match.couple1Id);
-        playingCouples.add(match.couple2Id);
+      for (let i = 0; i < n / 2; i++) {
+        const couple1 = couples[i];
+        const couple2 = couples[n - 1 - i];
 
-        // Mark match as scheduled
-        unscheduledMatches.delete(matchKey);
+        if (couple1.id !== "bye" && couple2.id !== "bye") {
+          matches.push({
+            couple1Id: couple1.id,
+            couple2Id: couple2.id,
+          });
 
-        // Finalize the round if it reaches the available court limit
-        if (currentRound.matches.length === availableCourts) {
-          break;
+          if (matches.length === availableCourts) {
+            break;
+          }
         }
       }
 
-      // Add the current round to the list of rounds
-      if (currentRound.matches.length > 0) {
-        rounds.push(currentRound);
-      }
+      rounds.push({ matches });
+
+      // Rotate the array, keeping the first element fixed
+      couples = [couples[0], ...couples.slice(-1), ...couples.slice(1, -1)];
     }
 
     return rounds;

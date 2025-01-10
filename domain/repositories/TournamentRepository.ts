@@ -57,7 +57,7 @@ export class TournamentRepository {
     player1Id: string;
     player2Id: string;
   }) {
-    const existingCouples = await prisma.couple.findMany({
+    const existingCouples = await prisma.tournamentCouple.findMany({
       where: {
         tournaments: {
           some: { id: data.tournamentId },
@@ -82,10 +82,10 @@ export class TournamentRepository {
       throw new Error("A player cannot be both Player 1 and Player 2.");
     }
 
-    return prisma.couple.create({
+    return prisma.tournamentCouple.create({
       data: {
-        player1Id: data.player1Id,
-        player2Id: data.player2Id,
+        player1: { connect: { id: data.player1Id } },
+        player2: { connect: { id: data.player2Id } },
         tournaments: {
           connect: { id: data.tournamentId },
         },
@@ -104,23 +104,25 @@ export class TournamentRepository {
     tournamentId: string,
     rounds: { matches: { couple1Id: string; couple2Id: string }[] }[]
   ) {
-    for (let i = 0; i < rounds.length; i++) {
-      const round = await prisma.round.create({
-        data: {
-          tournamentId,
-          number: i + 1,
-          status: "Upcoming",
-        },
-      });
+    return prisma.$transaction(async (tx) => {
+      for (let i = 0; i < rounds.length; i++) {
+        const round = await tx.tournamentRound.create({
+          data: {
+            tournament: { connect: { id: tournamentId } },
+            number: i + 1,
+            status: "Upcoming",
+          },
+        });
 
-      await prisma.match.createMany({
-        data: rounds[i].matches.map((match) => ({
-          roundId: round.id,
-          couple1Id: match.couple1Id,
-          couple2Id: match.couple2Id,
-          status: "Scheduled",
-        })),
-      });
-    }
+        await tx.tournamentMatch.createMany({
+          data: rounds[i].matches.map((match) => ({
+            roundId: round.id,
+            couple1Id: match.couple1Id,
+            couple2Id: match.couple2Id,
+            status: "Scheduled",
+          })),
+        });
+      }
+    });
   }
 }
