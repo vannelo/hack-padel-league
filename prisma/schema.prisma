@@ -81,13 +81,15 @@ model League {
 }
 
 model LeagueRound {
-  id        String               @id @default(uuid())
-  leagueId  String
-  league    League               @relation("LeagueRounds", fields: [leagueId], references: [id], onDelete: Cascade)
-  number    Int
-  couples   LeagueRoundCouple[]  @relation("RoundCouples")
-  createdAt DateTime             @default(now())
-  updatedAt DateTime             @updatedAt
+  id           String               @id @default(uuid())
+  leagueId     String
+  league       League               @relation("LeagueRounds", fields: [leagueId], references: [id], onDelete: Cascade)
+  number       Int
+  couples      LeagueRoundCouple[]  @relation("RoundCouples")
+  tournament   Tournament?          @relation("LeagueRoundTournament", fields: [tournamentId], references: [id])
+  tournamentId String?              @unique
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
 }
 
 model LeagueRoundCouple {
@@ -114,21 +116,23 @@ model LeaguePlayer {
 }
 
 model Tournament {
-  id              String               @id @default(uuid())
+  id              String           @id @default(uuid())
   name            String
-  type            TournamentType       @default(Casual)
+  type            TournamentType   @default(Casual)
   leagueId        String?          
-  league          League?              @relation("LeagueTournaments", fields: [leagueId], references: [id])
-  status          TournamentStatus     @default(Upcoming)
+  league          League?          @relation("LeagueTournaments", fields: [leagueId], references: [id])
+  leagueRound     LeagueRound?     @relation("LeagueRoundTournament")
+  status          TournamentStatus @default(Upcoming)
   startDate       DateTime
   endDate         DateTime?
-  availableCourts Int                  @default(1)
-  couples         TournamentCouple[]   @relation("TournamentCouples")
-  rounds          TournamentRound[]    @relation("TournamentRounds")
-  winnerCouples   TournamentCouple[]   @relation("TournamentWinners")
-  createdAt       DateTime             @default(now())
-  updatedAt       DateTime             @updatedAt
+  availableCourts Int              @default(1)
+  couples         TournamentCouple[] @relation("TournamentCouples")
+  rounds          TournamentRound[]  @relation("TournamentRounds")
+  winnerCouples   TournamentCouple[] @relation("TournamentWinners")
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 }
+
 
 model TournamentCouple {
   id               String             @id @default(uuid())

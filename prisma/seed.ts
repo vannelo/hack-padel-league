@@ -65,7 +65,7 @@ async function createTournament(
 async function main() {
   // Create 20 players
   const players = [];
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 12; i++) {
     const player = await prisma.player.create({
       data: {
         name: `Jugador ${i + 1}`,
@@ -84,7 +84,7 @@ async function main() {
   // Create 1 league
   const league = await prisma.league.create({
     data: {
-      name: "Liga 2023",
+      name: "Liga 2025",
       level: Level.Four,
       status: "Upcoming",
       startDate: new Date("2023-06-01"),

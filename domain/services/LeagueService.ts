@@ -1,8 +1,10 @@
 import { LeagueRepository } from "@/domain/repositories/LeagueRepository";
-import { LeagueStatus } from "@prisma/client";
+import { TournamentService } from "@/domain/services/TournamentService";
+import { LeagueStatus, TournamentStatus, TournamentType } from "@prisma/client";
 
 export class LeagueService {
   private leagueRepository = new LeagueRepository();
+  private tournamentService = new TournamentService();
 
   // eslint-disable-next-line
   async createLeague(data: any) {
@@ -45,7 +47,43 @@ export class LeagueService {
     const rounds = this.generateLeagueRounds(league.players);
 
     try {
-      await this.leagueRepository.createRoundsAndCouples(leagueId, rounds);
+      const createdRounds = await this.leagueRepository.createRoundsAndCouples(
+        leagueId,
+        rounds
+      );
+
+      // Create tournaments for each round
+      for (const round of createdRounds) {
+        const tournamentData = {
+          name: `${league.name} - Round ${round.number}`,
+          type: TournamentType.League,
+          startDate: new Date(), // You may want to adjust this based on your requirements
+          endDate: null, // You may want to set an end date
+          status: TournamentStatus.Upcoming,
+          availableCourts: 3,
+          leagueId: leagueId,
+        };
+
+        const tournament = await this.tournamentService.createTournament(
+          tournamentData
+        );
+
+        // Add couples to the tournament
+        for (const couple of round.couples) {
+          await this.tournamentService.addCoupleToTournament({
+            tournamentId: tournament.id,
+            player1Id: couple.player1Id,
+            player2Id: couple.player2Id,
+          });
+        }
+
+        // Update the round with the created tournament
+        await this.leagueRepository.updateRoundTournament(
+          round.id,
+          tournament.id
+        );
+      }
+
       return await this.leagueRepository.updateLeagueStatus(
         leagueId,
         LeagueStatus.InProgress

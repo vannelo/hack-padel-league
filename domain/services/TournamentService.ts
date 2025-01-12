@@ -1,10 +1,20 @@
 import { TournamentRepository } from "@/domain/repositories/TournamentRepository";
+import { TournamentStatus, TournamentType } from "@prisma/client";
 
 export class TournamentService {
   private tournamentRepository = new TournamentRepository();
 
   // eslint-disable-next-line
-  async createTournament(data: any) {
+  async createTournament(data: {
+    name: string;
+    type: TournamentType;
+    startDate: Date;
+    endDate: Date | null;
+    status: TournamentStatus;
+    availableCourts: number;
+    leagueId?: string;
+    leagueRoundId?: string;
+  }) {
     return this.tournamentRepository.createTournament(data);
   }
 

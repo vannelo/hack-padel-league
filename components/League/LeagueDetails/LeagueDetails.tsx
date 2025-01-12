@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { startLeague } from "@/app/actions/leagueActions";
@@ -13,13 +12,10 @@ export default function LeagueDetails({
     try {
       await startLeague(league.id);
       alert("League started successfully!");
-      // Optionally, reload the page or revalidate data
     } catch (error) {
       alert((error as Error).message);
     }
   }
-
-  console.log("league", league);
 
   return (
     <>
@@ -53,6 +49,7 @@ export default function LeagueDetails({
         <h2 className="text-lg font-semibold text-gray-700">Rounds</h2>
         {league.rounds && league.rounds.length > 0 ? (
           <div className="mt-4">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {league.rounds.map((round: any) => (
               <div
                 key={round.id}
@@ -61,6 +58,7 @@ export default function LeagueDetails({
                 <h3 className="text-md font-semibold">Round {round.number}</h3>
                 {round.couples && round.couples.length > 0 ? (
                   <ul className="list-disc list-inside mt-2">
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                     {round.couples.map((couple: any) => (
                       <li key={couple.id}>
                         {couple.player1.name} & {couple.player2.name}
@@ -73,12 +71,17 @@ export default function LeagueDetails({
                   </p>
                 )}
 
-                {/* Dummy link for round tournament */}
-                <Link href={`/round-tournament/${round.id}`}>
-                  <button className="mt-4 px-4 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
-                    Go to Round Tournament
-                  </button>
-                </Link>
+                {round.tournament ? (
+                  <Link href={`/admin/torneos/${round.tournament.id}`}>
+                    <button className="mt-4 px-4 py-2 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                      Go to Round Tournament
+                    </button>
+                  </Link>
+                ) : (
+                  <p className="text-sm text-gray-500 mt-2">
+                    No tournament created for this round yet.
+                  </p>
+                )}
               </div>
             ))}
           </div>

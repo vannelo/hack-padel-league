@@ -1,5 +1,6 @@
 import { getTournamentById } from "@/app/actions/tournamentActions";
 import TournamentDetails from "@/components/Tournament/TournamentDetails/TournamentDetails";
+import TournamentRounds from "@/components/Tournament/TournamentRounds/TournamentRounds";
 
 export default async function TournamentDetailsPage({
   params,
@@ -20,37 +21,7 @@ export default async function TournamentDetailsPage({
         </h1>
         <TournamentDetails tournament={tournament} />
       </section>
-
-      <section className="mb-6">
-        <h2 className="text-lg font-semibold text-gray-700">Rounds</h2>
-        {tournament.rounds.length > 0 ? (
-          <div>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {tournament.rounds.map((round: any) => (
-              <div key={round.id} className="mb-4">
-                <h3 className="text-md font-semibold">
-                  Round {round.number} ({round.status})
-                </h3>
-                <ul className="list-disc list-inside">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  {round.matches.map((match: any) => (
-                    <li key={match.id}>
-                      {match.couple1.player1.name} &{" "}
-                      {match.couple1.player2.name} vs{" "}
-                      {match.couple2.player1.name} &{" "}
-                      {match.couple2.player2.name} - Score:{" "}
-                      {match.couple1Score || 0}-{match.couple2Score || 0}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p>No rounds have been created yet.</p>
-        )}
-      </section>
-
+      <TournamentRounds tournament={tournament} />
       <section>
         <h2 className="text-lg font-semibold text-gray-700">Winners</h2>
         {tournament.winnerCouples.length > 0 ? (

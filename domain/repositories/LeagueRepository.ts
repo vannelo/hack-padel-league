@@ -36,7 +36,6 @@ export class LeagueRepository {
             player: true,
           },
         },
-        tournaments: true,
         rounds: {
           include: {
             couples: {
@@ -45,6 +44,7 @@ export class LeagueRepository {
                 player2: true,
               },
             },
+            tournament: true,
           },
         },
       },
@@ -67,28 +67,39 @@ export class LeagueRepository {
   ) {
     return prisma.$transaction(
       async (tx) => {
+        const createdRounds = [];
         for (const round of rounds) {
           const createdRound = await tx.leagueRound.create({
             data: {
               leagueId,
               number: round.number,
+              couples: {
+                create: round.couples.map((couple) => ({
+                  player1Id: couple.player1Id,
+                  player2Id: couple.player2Id,
+                })),
+              },
+            },
+            include: {
+              couples: true,
             },
           });
-
-          await tx.leagueRoundCouple.createMany({
-            data: round.couples.map((couple) => ({
-              leagueRoundId: createdRound.id,
-              player1Id: couple.player1Id,
-              player2Id: couple.player2Id,
-            })),
-          });
+          createdRounds.push(createdRound);
         }
+        return createdRounds;
       },
       {
         maxWait: 10000, // 10 seconds
         timeout: 60000, // 60 seconds
       }
     );
+  }
+
+  async updateRoundTournament(roundId: string, tournamentId: string) {
+    return prisma.leagueRound.update({
+      where: { id: roundId },
+      data: { tournamentId: tournamentId },
+    });
   }
 
   async updateLeagueStatus(leagueId: string, status: LeagueStatus) {
