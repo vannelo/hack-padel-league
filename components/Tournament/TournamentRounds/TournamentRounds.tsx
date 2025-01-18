@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { TournamentMatchStatus } from "@prisma/client";
+import { updateMatchScore } from "@/app/actions/tournamentActions";
 
 function Input({
   type,
@@ -8,12 +10,14 @@ function Input({
   onChange,
   className,
   min,
+  disabled,
 }: {
   type: string;
   value: number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   min?: number;
+  disabled?: boolean;
 }) {
   return (
     <input
@@ -22,6 +26,7 @@ function Input({
       onChange={onChange}
       className={`px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
       min={min}
+      disabled={disabled}
     />
   );
 }
@@ -30,15 +35,18 @@ function Button({
   children,
   onClick,
   className,
+  disabled,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   className?: string;
+  disabled?: boolean;
 }) {
   return (
     <button
       onClick={onClick}
       className={`px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+      disabled={disabled}
     >
       {children}
     </button>
@@ -49,11 +57,14 @@ export default function TournamentRounds({
   tournament,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tournament: any;
+  tournament: any; // Consider creating a proper type for this
 }) {
   const [scores, setScores] = useState<
     Record<string, { couple1Score: number; couple2Score: number }>
   >({});
+  const [loadingMatches, setLoadingMatches] = useState<Record<string, boolean>>(
+    {}
+  );
 
   const handleScoreChange = (
     matchId: string,
@@ -69,8 +80,29 @@ export default function TournamentRounds({
     }));
   };
 
-  const handleUpdateScore = (matchId: string) => {
-    console.log(`Updating score for match ${matchId}:`, scores[matchId]);
+  const handleUpdateScore = async (matchId: string) => {
+    const matchScores = scores[matchId];
+    if (matchScores) {
+      setLoadingMatches((prev) => ({ ...prev, [matchId]: true }));
+      try {
+        await updateMatchScore({
+          matchId,
+          couple1Score: matchScores.couple1Score,
+          couple2Score: matchScores.couple2Score,
+        });
+        alert(`Score updated successfully for match ${matchId}`);
+        // You might want to refresh the tournament data here
+      } catch (error) {
+        console.error("Error updating score:", error);
+        alert(
+          `Error updating score for match ${matchId}: ${
+            (error as Error).message
+          }`
+        );
+      } finally {
+        setLoadingMatches((prev) => ({ ...prev, [matchId]: false }));
+      }
+    }
   };
 
   return (
@@ -78,14 +110,14 @@ export default function TournamentRounds({
       <h2 className="text-lg font-semibold text-gray-700 mb-4">Rounds</h2>
       {tournament.rounds.length > 0 ? (
         <div className="space-y-6">
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {/* eslint-disable-next-line */}
           {tournament.rounds.map((round: any) => (
             <div key={round.id} className="bg-white shadow rounded-lg p-4">
               <h3 className="text-md font-semibold mb-3">
                 Round {round.number} ({round.status})
               </h3>
               <ul className="space-y-4">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {/* eslint-disable-next-line */}
                 {round.matches.map((match: any) => (
                   <li
                     key={match.id}
@@ -120,6 +152,10 @@ export default function TournamentRounds({
                           }
                           className="w-16"
                           min={0}
+                          disabled={
+                            loadingMatches[match.id] ||
+                            match.status === TournamentMatchStatus.Completed
+                          }
                         />
                         <span className="text-gray-500">-</span>
                         <Input
@@ -138,9 +174,30 @@ export default function TournamentRounds({
                           }
                           className="w-16"
                           min={0}
+                          disabled={
+                            loadingMatches[match.id] ||
+                            match.status === TournamentMatchStatus.Completed
+                          }
                         />
-                        <Button onClick={() => handleUpdateScore(match.id)}>
-                          Update
+                        <Button
+                          onClick={() => handleUpdateScore(match.id)}
+                          className={
+                            match.status === TournamentMatchStatus.Completed
+                              ? "bg-gray-400"
+                              : loadingMatches[match.id]
+                              ? "bg-blue-300"
+                              : ""
+                          }
+                          disabled={
+                            loadingMatches[match.id] ||
+                            match.status === TournamentMatchStatus.Completed
+                          }
+                        >
+                          {match.status === TournamentMatchStatus.Completed
+                            ? "Completed"
+                            : loadingMatches[match.id]
+                            ? "Updating..."
+                            : "Update"}
                         </Button>
                       </div>
                     </div>

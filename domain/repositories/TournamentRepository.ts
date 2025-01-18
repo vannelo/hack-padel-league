@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TournamentStatus } from "@prisma/client";
+import { TournamentMatchStatus, TournamentStatus } from "@prisma/client";
 
 export class TournamentRepository {
   // eslint-disable-next-line
@@ -30,6 +30,7 @@ export class TournamentRepository {
       include: {
         couples: {
           include: { player1: true, player2: true },
+          orderBy: { score: "desc" },
         },
         rounds: {
           include: {
@@ -123,6 +124,55 @@ export class TournamentRepository {
           })),
         });
       }
+    });
+  }
+
+  async updateMatchScore(data: {
+    matchId: string;
+    couple1Score: number;
+    couple2Score: number;
+  }) {
+    const updatedMatch = await prisma.$transaction(async (tx) => {
+      const match = await tx.tournamentMatch.update({
+        where: { id: data.matchId },
+        data: {
+          couple1Score: data.couple1Score,
+          couple2Score: data.couple2Score,
+          status: TournamentMatchStatus.Completed,
+        },
+        include: {
+          couple1: true,
+          couple2: true,
+        },
+      });
+
+      // Update scores for both couples
+      await tx.tournamentCouple.update({
+        where: { id: match.couple1Id },
+        data: { score: { increment: data.couple1Score } },
+      });
+
+      await tx.tournamentCouple.update({
+        where: { id: match.couple2Id },
+        data: { score: { increment: data.couple2Score } },
+      });
+
+      return match;
+    });
+
+    return updatedMatch;
+  }
+
+  async finishTournament(tournamentId: string, winnerCoupleIds: string[]) {
+    return prisma.tournament.update({
+      where: { id: tournamentId },
+      data: {
+        status: TournamentStatus.Completed,
+        endDate: new Date(),
+        winnerCouples: {
+          connect: winnerCoupleIds.map((id) => ({ id })),
+        },
+      },
     });
   }
 }

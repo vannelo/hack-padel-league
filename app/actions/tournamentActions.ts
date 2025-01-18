@@ -28,3 +28,15 @@ export async function getAllTournaments() {
 export async function getTournamentById(id: string) {
   return tournamentService.getTournamentById(id);
 }
+
+export async function updateMatchScore(data: {
+  matchId: string;
+  couple1Score: number;
+  couple2Score: number;
+}) {
+  return tournamentService.updateMatchScore(data);
+}
+
+export async function finishTournament(tournamentId: string) {
+  return tournamentService.finishTournament(tournamentId);
+}

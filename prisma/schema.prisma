@@ -133,7 +133,6 @@ model Tournament {
   updatedAt       DateTime         @updatedAt
 }
 
-
 model TournamentCouple {
   id               String             @id @default(uuid())
   player1Id        String
@@ -144,6 +143,7 @@ model TournamentCouple {
   tournamentsWon   Tournament[]       @relation("TournamentWinners")
   matchesAsCouple1 TournamentMatch[]  @relation("TournamentMatchCouple1")
   matchesAsCouple2 TournamentMatch[]  @relation("TournamentMatchCouple2")
+  score            Int                @default(0)
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
 }

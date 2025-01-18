@@ -111,4 +111,38 @@ export class TournamentService {
 
     return rounds;
   }
+
+  async updateMatchScore(data: {
+    matchId: string;
+    couple1Score: number;
+    couple2Score: number;
+  }) {
+    return this.tournamentRepository.updateMatchScore(data);
+  }
+
+  async finishTournament(tournamentId: string) {
+    const tournament = await this.tournamentRepository.getTournamentById(
+      tournamentId
+    );
+
+    if (!tournament) {
+      throw new Error("Tournament not found.");
+    }
+
+    if (tournament.status !== TournamentStatus.InProgress) {
+      throw new Error("Only in-progress tournaments can be finished.");
+    }
+
+    // Determine the winner(s) based on the highest score
+    const winnerScore = Math.max(...tournament.couples.map((c) => c.score));
+    const winnerCouples = tournament.couples.filter(
+      (c) => c.score === winnerScore
+    );
+
+    // Update the tournament status and set the winner(s)
+    return this.tournamentRepository.finishTournament(
+      tournamentId,
+      winnerCouples.map((c) => c.id)
+    );
+  }
 }

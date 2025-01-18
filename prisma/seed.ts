@@ -25,9 +25,11 @@ function getRandomElement<T>(array: T[]): T {
 // eslint-disable-next-line
 async function createTournamentCouples(players: any[], count: number) {
   const couples = [];
-  for (let i = 0; i < count; i++) {
-    const player1 = players[i * 2];
-    const player2 = players[i * 2 + 1];
+  const shuffledPlayers = [...players].sort(() => Math.random() - 0.5);
+
+  for (let i = 0; i < count && i * 2 + 1 < shuffledPlayers.length; i++) {
+    const player1 = shuffledPlayers[i * 2];
+    const player2 = shuffledPlayers[i * 2 + 1];
     const couple = await prisma.tournamentCouple.create({
       data: {
         id: randomUUID(),
@@ -105,18 +107,9 @@ async function main() {
   }
 
   // Create tournaments
-  const tournament1Couples = await createTournamentCouples(
-    players.slice(0, 8),
-    4
-  ); // 4 couples (8 players)
-  const tournament2Couples = await createTournamentCouples(
-    players.slice(8, 20),
-    6
-  ); // 6 couples (12 players)
-  const tournament3Couples = await createTournamentCouples(
-    players.slice(0, 16),
-    8
-  ); // 8 couples (16 players)
+  const tournament1Couples = await createTournamentCouples(players, 4); // 4 couples (8 players)
+  const tournament2Couples = await createTournamentCouples(players, 6); // 6 couples (12 players)
+  const tournament3Couples = await createTournamentCouples(players, 8); // 8 couples (16 players)
 
   await createTournament("Torneo 1 Court", 1, tournament1Couples); // 1 court
   await createTournament("Torneo 3 Courts", 3, tournament2Couples); // 3 courts
