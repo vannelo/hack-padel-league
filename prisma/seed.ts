@@ -67,7 +67,7 @@ async function createTournament(
 async function main() {
   // Create 20 players
   const players = [];
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 8; i++) {
     const player = await prisma.player.create({
       data: {
         name: `Jugador ${i + 1}`,

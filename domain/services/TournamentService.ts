@@ -1,8 +1,10 @@
 import { TournamentRepository } from "@/domain/repositories/TournamentRepository";
 import { TournamentStatus, TournamentType } from "@prisma/client";
+import { LeagueRepository } from "../repositories/LeagueRepository";
 
 export class TournamentService {
   private tournamentRepository = new TournamentRepository();
+  private leagueRepository = new LeagueRepository();
 
   // eslint-disable-next-line
   async createTournament(data: {
@@ -140,9 +142,23 @@ export class TournamentService {
     );
 
     // Update the tournament status and set the winner(s)
-    return this.tournamentRepository.finishTournament(
+    const updatedTournament = await this.tournamentRepository.finishTournament(
       tournamentId,
       winnerCouples.map((c) => c.id)
     );
+
+    // If the tournament is of type "League", update the league player points
+    if (tournament.type === TournamentType.League && tournament.leagueId) {
+      const playerScores = tournament.couples.flatMap((couple) => [
+        { playerId: couple.player1Id, score: couple.score },
+        { playerId: couple.player2Id, score: couple.score },
+      ]);
+      await this.leagueRepository.updatePlayerScores(
+        tournament.leagueId,
+        playerScores
+      );
+    }
+
+    return updatedTournament;
   }
 }

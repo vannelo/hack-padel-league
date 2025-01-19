@@ -108,4 +108,25 @@ export class LeagueRepository {
       data: { status },
     });
   }
+
+  async updatePlayerScores(
+    leagueId: string,
+    playerScores: { playerId: string; score: number }[]
+  ) {
+    return prisma.$transaction(
+      playerScores.map(({ playerId, score }) =>
+        prisma.leaguePlayer.updateMany({
+          where: {
+            leagueId: leagueId,
+            playerId: playerId,
+          },
+          data: {
+            points: {
+              increment: score,
+            },
+          },
+        })
+      )
+    );
+  }
 }
