@@ -176,27 +176,4 @@ export class TournamentRepository {
       },
     });
   }
-
-  async updatePlayerScores(
-    leagueId: string,
-    playerScores: { playerId: string; score: number }[]
-  ) {
-    return prisma.$transaction(
-      playerScores.map(({ playerId, score }) =>
-        prisma.leaguePlayer.update({
-          where: {
-            leagueId_playerId: {
-              leagueId,
-              playerId,
-            },
-          },
-          data: {
-            points: {
-              increment: score,
-            },
-          },
-        })
-      )
-    );
-  }
 }
