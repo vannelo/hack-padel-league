@@ -30,7 +30,7 @@ export default function TournamentCreationForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-6 max-w-md mx-auto border rounded shadow bg-white"
+      className="p-6 max-w-md border rounded shadow bg-white"
     >
       <div className="mb-4">
         <label htmlFor="name" className="block mb-2 text-sm font-medium">

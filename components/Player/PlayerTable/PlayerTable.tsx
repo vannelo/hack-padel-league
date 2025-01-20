@@ -1,39 +1,65 @@
 "use client";
 
 import { deletePlayer } from "@/app/actions/playerActions";
+import { Button } from "@mui/material";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-interface PlayerTableProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  players: any;
-}
+// eslint-disable-next-line
+export default function PlayerTable({ players }: { players: any[] }) {
+  const router = useRouter();
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 50,
+    page: 0,
+  });
 
-export default function PlayerTable({ players }: PlayerTableProps) {
+  const columns: GridColDef[] = [
+    { field: "name", headerName: "Name", flex: 1 },
+    {
+      field: "level",
+      headerName: "Level",
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => (
+        <Button
+          onClick={() => handleDelete(params.id as string)}
+          variant="contained"
+          color="error"
+        >
+          Delete
+        </Button>
+      ),
+    },
+  ];
+
+  const rows = players.map((player) => ({
+    id: player.id,
+    name: player.name,
+    level: player.level,
+  }));
+
   async function handleDelete(id: string) {
-    // Call the server action to add a player
     await deletePlayer(id);
-    alert("Player deleted successfully!");
+    alert("Jugador eliminado exitosamente");
+    router.refresh();
   }
 
   return (
-    <ul className="space-y-2">
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      {players.map((player: any) => (
-        <li
-          key={player.id}
-          className="p-3 bg-gray-100 rounded-md shadow-sm hover:shadow-md transition-shadow flex justify-between items-center"
-        >
-          <div>
-            <span className="font-medium text-gray-800">{player.name}</span>{" "}
-            <span className="text-sm text-gray-500">(ID: {player.id})</span>
-          </div>
-          <button
-            onClick={() => handleDelete(player.id)}
-            className="px-4 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-          >
-            Delete
-          </button>
-        </li>
-      ))}
-    </ul>
+    <div style={{ height: 400, width: "100%" }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        pageSizeOptions={[5, 10, 20]}
+        pagination
+        disableRowSelectionOnClick
+      />
+    </div>
   );
 }

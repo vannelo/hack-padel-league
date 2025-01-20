@@ -68,7 +68,7 @@ export default function TournamentCoupleAssignmentForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md bg-white"
+      className="max-w-md p-6 border border-gray-300 rounded-lg shadow-md bg-white"
     >
       <div className="mb-4">
         <label
@@ -137,7 +137,6 @@ export default function TournamentCoupleAssignmentForm({
             ))}
         </select>
       </div>
-
       <button
         type="submit"
         className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"

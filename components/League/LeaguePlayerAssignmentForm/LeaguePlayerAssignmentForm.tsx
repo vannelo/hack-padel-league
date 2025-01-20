@@ -33,7 +33,7 @@ export default function LeaguePlayerAssignmentForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md bg-white"
+      className="max-w-md p-6 border border-gray-300 rounded-lg shadow-md bg-white"
     >
       <div className="mb-4">
         <label

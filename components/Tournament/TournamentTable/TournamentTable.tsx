@@ -1,59 +1,92 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { Chip, Button } from "@mui/material";
 
 export default function TournamentTable({
   tournaments,
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tournaments: any;
+  // eslint-disable-next-line
+  tournaments: any[];
 }) {
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 5,
+    page: 0,
+  });
+
+  const columns: GridColDef[] = [
+    { field: "name", headerName: "Name", flex: 1 },
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => (
+        <Chip
+          label={params.value}
+          color={
+            params.value === "Upcoming"
+              ? "primary"
+              : params.value === "InProgress"
+              ? "secondary"
+              : "default"
+          }
+        />
+      ),
+    },
+    {
+      field: "couples",
+      headerName: "Couples",
+      flex: 2,
+      renderCell: (params: GridRenderCellParams) =>
+        params.value.length > 0 ? (
+          <ul className="list-disc list-inside">
+            {/*  eslint-disable-next-line */}
+            {params.value.map((couple: any) => (
+              <li key={couple.id} className="mb-1">
+                {couple.player1?.name || "Player 1"} &{" "}
+                {couple.player2?.name || "Player 2"}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <span className="text-gray-500">No couples assigned</span>
+        ),
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => (
+        <Link href={`/admin/torneos/${params.id}`} passHref>
+          <Button variant="contained" color="primary" size="small">
+            View Details
+          </Button>
+        </Link>
+      ),
+    },
+  ];
+
+  const rows = tournaments.map((tournament) => ({
+    id: tournament.id,
+    name: tournament.name,
+    status: tournament.status,
+    couples: tournament.couples,
+  }));
+
   return (
-    <table className="min-w-full border-collapse border border-gray-300">
-      <thead>
-        <tr>
-          <th className="border border-gray-300 px-4 py-2">Name</th>
-          <th className="border border-gray-300 px-4 py-2">Status</th>
-          <th className="border border-gray-300 px-4 py-2">Couples</th>
-          <th className="border border-gray-300 px-4 py-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {tournaments.length > 0 &&
-          tournaments.map((tournament: any) => (
-            <tr key={tournament.id}>
-              <td className="border border-gray-300 px-4 py-2">
-                {tournament.name}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                {tournament.status}
-              </td>
-              <td className="border border-gray-300 px-4 py-2">
-                {tournament.couples.length > 0 ? (
-                  <ul className="list-disc list-inside">
-                    {tournament.couples.map((couple: any) => (
-                      <li key={couple.id} className="mb-2">
-                        {couple.player1?.name || "Player 1"} &{" "}
-                        {couple.player2?.name || "Player 2"}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <span className="text-gray-500">No couples assigned</span>
-                )}
-              </td>
-              <td className="border border-gray-300 px-4 py-2 text-center">
-                <Link
-                  href={`/admin/torneos/${tournament.id}`}
-                  className="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  View Details
-                </Link>
-              </td>
-            </tr>
-          ))}
-      </tbody>
-    </table>
+    <div style={{ height: 400, width: "100%" }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        pageSizeOptions={[5, 10, 20]}
+        pagination
+        disableRowSelectionOnClick
+      />
+    </div>
   );
 }

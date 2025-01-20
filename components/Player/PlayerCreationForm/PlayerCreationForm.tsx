@@ -1,8 +1,11 @@
 "use client";
 
 import { createPlayer } from "@/app/actions/playerActions";
+import { useRouter } from "next/navigation";
 
 export default function PlayerCreationForm() {
+  const router = useRouter();
+
   async function handleSubmit(formData: FormData) {
     const name = formData.get("name") as string;
     const email = "user@gmail.com";
@@ -13,13 +16,14 @@ export default function PlayerCreationForm() {
 
     // Call the server action to add a player
     await createPlayer({ name, email, age, phone, gender, level });
-    alert("Player added successfully!");
+    alert("Jugador creado exitosamente");
+    router.refresh();
   }
 
   return (
     <form
       action={handleSubmit}
-      className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md bg-white"
+      className="p-6 border border-gray-300 rounded-lg shadow-md bg-white"
     >
       <div className="mb-4">
         <label

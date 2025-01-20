@@ -5,28 +5,28 @@ import LeaguePlayerAssignmentForm from "@/components/League/LeaguePlayerAssignme
 import LeagueTable from "@/components/League/LeagueTable/LeagueTable";
 
 export default async function AdminLeagues() {
-  // Fetch the players
   const leagues = await getAllLeagues();
   const players = await getAllPlayers();
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">Admin Ligas</h1>
+    <div className="container mx-auto py-16">
+      <h1 className="text-2xl font-bold text-gray-800 mb-4">Ligas</h1>
       <section className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-700 mb-3">
-          Ligas Registradas
-        </h2>
         <LeagueTable leagues={leagues} />
       </section>
-      <section>
-        <h2 className="text-xl font-semibold text-gray-700 mb-3">Crear liga</h2>
-        <LeagueCreationForm />
-      </section>
-      <section>
-        <h2 className="text-xl font-semibold text-gray-700 mb-3">
-          Agregar jugador a liga
-        </h2>
-        <LeaguePlayerAssignmentForm leagues={leagues} players={players} />
+      <section className="mb-8 flex">
+        <div className="w-1/3">
+          <h2 className="text-xl font-semibold text-gray-700 mb-3">
+            Crear liga
+          </h2>
+          <LeagueCreationForm />
+        </div>
+        <div className="w-1/3">
+          <h2 className="text-xl font-semibold text-gray-700 mb-3">
+            Agregar jugador a liga
+          </h2>
+          <LeaguePlayerAssignmentForm leagues={leagues} players={players} />
+        </div>
       </section>
     </div>
   );

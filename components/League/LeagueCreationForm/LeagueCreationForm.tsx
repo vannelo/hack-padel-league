@@ -2,8 +2,11 @@
 
 import { createLeague } from "@/app/actions/leagueActions";
 import { Level } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 export default function LeagueCreationForm() {
+  const router = useRouter();
+
   async function handleSubmit(formData: FormData) {
     const name = formData.get("name") as string;
     const level = formData.get("level") as string;
@@ -23,12 +26,13 @@ export default function LeagueCreationForm() {
       endDate: new Date(endDate),
     });
     alert("League added successfully!");
+    router.refresh();
   }
 
   return (
     <form
       action={handleSubmit}
-      className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md bg-white"
+      className="max-w-md p-6 border border-gray-300 rounded-lg shadow-md bg-white"
     >
       <div className="mb-4">
         <label
@@ -59,11 +63,11 @@ export default function LeagueCreationForm() {
           required
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
         >
-          <option value="Level 1">Level 1</option>
-          <option value="Level 2">Level 2</option>
-          <option value="Level 3">Level 3</option>
+          <option value={Level.One}>Level 1</option>
+          <option value={Level.Two}>Level 2</option>
+          <option value={Level.Three}>Level 3</option>
           <option value={Level.Four}>Level 4</option>
-          <option value="Level 5">Level 5</option>
+          <option value={Level.Five}>Level 5</option>
         </select>
       </div>
 
