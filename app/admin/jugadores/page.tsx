@@ -1,9 +1,9 @@
 import { getAllPlayers } from "@/app/actions/playerActions";
 import PlayerCreationForm from "@/components/Player/PlayerCreationForm/PlayerCreationForm";
 import PlayerTable from "@/components/Player/PlayerTable/PlayerTable";
+export const revalidate = 0;
 
 export default async function AdminPlayers() {
-  // Fetch the players
   const players = await getAllPlayers();
 
   return (
