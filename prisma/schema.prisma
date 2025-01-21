@@ -13,6 +13,7 @@ enum Gender {
 }
 
 enum Level {
+  Six
   Five
   Four
   Three

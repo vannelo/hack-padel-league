@@ -36,6 +36,10 @@ export class PlayerRepository {
 
   // eslint-disable-next-line
   async getAllPlayers(): Promise<any[]> {
-    return prisma.player.findMany();
+    return prisma.player.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
   }
 }
