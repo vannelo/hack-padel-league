@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Gender, Level } from "@prisma/client";
-import { createPlayer } from "@/app/actions/playerActions";
+import { updatePlayer } from "@/app/actions/playerActions";
 import { genderMap, levelMap } from "@/constants/playerEnums";
 import {
   Button,
@@ -17,17 +17,21 @@ import {
   Stack,
 } from "@mui/material";
 
-interface PlayerCreationFormProps {
-  onPlayerCreated: (message: string) => void;
+interface PlayerEditFormProps {
+  onPlayerUpdated: (message: string) => void;
   onError: (message: string) => void;
+  // eslint-disable-next-line
+  initialData: any;
 }
 
-export default function PlayerCreationForm({
-  onPlayerCreated,
+export default function PlayerEditForm({
+  onPlayerUpdated,
   onError,
-}: PlayerCreationFormProps) {
+  initialData,
+}: PlayerEditFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
+    id: "",
     name: "",
     email: "",
     age: "",
@@ -41,6 +45,20 @@ export default function PlayerCreationForm({
     age: "",
     phone: "",
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        id: initialData.id,
+        name: initialData.name,
+        email: initialData.email ?? "",
+        age: initialData.age ? initialData.age.toString() : "",
+        phone: initialData.phone ?? "",
+        gender: initialData.gender,
+        level: initialData.level,
+      });
+    }
+  }, [initialData]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -77,11 +95,11 @@ export default function PlayerCreationForm({
         age: Number.parseInt(formData.age, 10),
       };
 
-      await createPlayer(playerData);
-      onPlayerCreated(`${formData.name} ha sido añadido al sistema.`);
+      await updatePlayer(playerData);
+      onPlayerUpdated(`${formData.name} ha sido actualizado exitosamente.`);
       // eslint-disable-next-line
     } catch (error: any) {
-      onError("Error al crear el jugador. Por favor, inténtalo de nuevo.");
+      onError("Error al actualizar el jugador. Por favor, inténtalo de nuevo.");
     } finally {
       setIsSubmitting(false);
     }
@@ -98,7 +116,7 @@ export default function PlayerCreationForm({
       }}
     >
       <Typography variant="h6" gutterBottom>
-        Crear jugador
+        Editar jugador
       </Typography>
       <Stack spacing={2} direction={{ xs: "column", sm: "row" }} sx={{ mb: 2 }}>
         <TextField
@@ -189,7 +207,7 @@ export default function PlayerCreationForm({
         disabled={isSubmitting}
         sx={{ mt: 2 }}
       >
-        {isSubmitting ? "Guardando..." : "Crear Jugador"}
+        {isSubmitting ? "Guardando..." : "Actualizar Jugador"}
       </Button>
     </Box>
   );

@@ -18,13 +18,7 @@ export class PlayerRepository {
 
   // eslint-disable-next-line
   async deletePlayer(id: string) {
-    await prisma.leaguePlayer.deleteMany({
-      where: { playerId: id },
-    });
-
-    return prisma.player.delete({
-      where: { id },
-    });
+    return this.updatePlayer(id, { status: "Deleted" });
   }
 
   // eslint-disable-next-line
@@ -37,6 +31,9 @@ export class PlayerRepository {
   // eslint-disable-next-line
   async getAllPlayers(): Promise<any[]> {
     return prisma.player.findMany({
+      where: {
+        status: "Active",
+      },
       orderBy: {
         createdAt: "desc",
       },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { getAllPlayers } from "@/app/actions/playerActions";
 import PlayerTable from "@/components/Player/PlayerTable/PlayerTable";
 import PlayerCreationModal from "@/components/Player/PlayerCreationModal/PlayerCreationModal";
@@ -21,7 +21,11 @@ export default function AdminPlayers() {
     fetchPlayers();
   }, []);
 
-  const handleOpenModal = () => setIsModalOpen(true);
+  const handleOpenModal = () => {
+    setEditingPlayerId(null);
+    setIsModalOpen(true);
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingPlayerId(null);

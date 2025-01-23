@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum PlayerStatus {
+  Active
+  Deleted
+}
+
 enum Gender {
   Male
   Female
@@ -58,6 +63,7 @@ model Player {
   phone                         String?
   gender                        Gender
   level                         Level
+  status                        PlayerStatus          @default(Active)
   leagues                       LeaguePlayer[]        @relation("PlayerLeagues")
   tournamentCouplesAsPlayer1    TournamentCouple[]    @relation("TournamentCouplePlayer1")
   tournamentCouplesAsPlayer2    TournamentCouple[]    @relation("TournamentCouplePlayer2")

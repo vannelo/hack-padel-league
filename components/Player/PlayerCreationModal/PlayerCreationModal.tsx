@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Modal, Box, Snackbar, Alert } from "@mui/material";
 import PlayerCreationForm from "../PlayerCreationForm/PlayerCreationForm";
+import PlayerEditForm from "../PlayerEditForm/PlayerEditForm";
 import { getPlayerById } from "@/app/actions/playerActions";
 
 interface PlayerCreationModalProps {
@@ -85,11 +86,18 @@ export default function PlayerCreationModal({
             overflowY: "auto",
           }}
         >
-          <PlayerCreationForm
-            onPlayerCreated={handlePlayerCreated}
-            onError={handleError}
-            initialData={playerData}
-          />
+          {editingPlayerId && playerData ? (
+            <PlayerEditForm
+              onPlayerUpdated={handlePlayerCreated}
+              onError={handleError}
+              initialData={playerData}
+            />
+          ) : (
+            <PlayerCreationForm
+              onPlayerCreated={handlePlayerCreated}
+              onError={handleError}
+            />
+          )}
         </Box>
       </Modal>
       <Snackbar
