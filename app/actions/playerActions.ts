@@ -2,35 +2,29 @@
 
 import { appRoutes } from "@/constants/appRoutes";
 import { playerService } from "@/domain";
+import { Player } from "@/types/player";
 import { revalidatePath } from "next/cache";
 
-// eslint-disable-next-line
-export async function createPlayer(playerData: any): Promise<any> {
-  const newPlayer = await playerService.createPlayer(playerData);
-  return newPlayer;
+export async function createPlayer(
+  playerData: Partial<Player>
+): Promise<Player> {
+  return await playerService.createPlayer(playerData);
 }
 
-// eslint-disable-next-line
-export async function updatePlayer(data: any) {
-  if (!data.id) {
-    throw new Error("Player ID is required for updating");
-  }
-  const result = await playerService.updatePlayer(data.id, data);
-  revalidatePath("/admin/jugadores");
-  return result;
+export async function updatePlayer(playerId: string, data: Partial<Player>) {
+  await playerService.updatePlayer(playerId, data);
+  revalidatePath(appRoutes.players.index);
 }
 
-export async function deletePlayer(playerId: string): Promise<void> {
+export async function deletePlayer(playerId: string) {
   await playerService.deletePlayer(playerId);
   revalidatePath(appRoutes.players.index);
 }
 
-// eslint-disable-next-line
-export async function getAllPlayers(): Promise<any> {
+export async function getAllPlayers(): Promise<Player[]> {
   return await playerService.getAllPlayers();
 }
 
-// eslint-disable-next-line
-export async function getPlayerById(playerId: string): Promise<any> {
+export async function getPlayerById(playerId: string): Promise<Player> {
   return await playerService.getPlayerById(playerId);
 }

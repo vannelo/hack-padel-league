@@ -1,28 +1,35 @@
 import { useState, useEffect } from "react";
-import { Modal, Box, Snackbar, Alert } from "@mui/material";
+import {
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 import PlayerCreationForm from "../PlayerCreationForm/PlayerCreationForm";
 import PlayerEditForm from "../PlayerEditForm/PlayerEditForm";
 import { getPlayerById } from "@/app/actions/playerActions";
+import { Player } from "@/types/player";
 
-interface PlayerCreationModalProps {
+interface PlayerModalProps {
   open: boolean;
   onClose: () => void;
   onPlayerCreated: () => void;
   editingPlayerId: string | null;
 }
 
-export default function PlayerCreationModal({
+export default function PlayerModal({
   open,
   onClose,
   onPlayerCreated,
   editingPlayerId,
-}: PlayerCreationModalProps) {
+}: PlayerModalProps) {
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success" as "success" | "error",
   });
-  const [playerData, setPlayerData] = useState(null);
+  const [playerData, setPlayerData] = useState<Player | null>(null);
 
   useEffect(() => {
     if (editingPlayerId) {
@@ -66,26 +73,11 @@ export default function PlayerCreationModal({
 
   return (
     <>
-      <Modal
-        open={open}
-        onClose={onClose}
-        aria-labelledby="modal-player-creation"
-        aria-describedby="modal-create-new-player"
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-            maxHeight: "90vh",
-            overflowY: "auto",
-          }}
-        >
+      <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+        <DialogTitle>
+          {editingPlayerId ? "Editar jugador" : "Crear jugador"}
+        </DialogTitle>
+        <DialogContent>
           {editingPlayerId && playerData ? (
             <PlayerEditForm
               onPlayerUpdated={handlePlayerCreated}
@@ -98,8 +90,8 @@ export default function PlayerCreationModal({
               onError={handleError}
             />
           )}
-        </Box>
-      </Modal>
+        </DialogContent>
+      </Dialog>
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}

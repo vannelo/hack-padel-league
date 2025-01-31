@@ -2,6 +2,7 @@
 
 import { deletePlayer } from "@/app/actions/playerActions";
 import { levelMap, genderMap } from "@/constants/playerEnums";
+import { Player } from "@/types/player";
 import { Button, Stack } from "@mui/material";
 import {
   DataGrid,
@@ -10,16 +11,17 @@ import {
 } from "@mui/x-data-grid";
 import { useState } from "react";
 
+interface PlayerTableProps {
+  players: Player[];
+  onPlayerDeleted: () => void;
+  onPlayerEdit: (playerId: string) => void;
+}
+
 export default function PlayerTable({
   players,
   onPlayerDeleted,
   onPlayerEdit,
-}: {
-  // eslint-disable-next-line
-  players: any[];
-  onPlayerDeleted: () => void;
-  onPlayerEdit: (playerId: string) => void;
-}) {
+}: PlayerTableProps) {
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 50,
     page: 0,
@@ -52,7 +54,16 @@ export default function PlayerTable({
       width: 200,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
-        <Stack direction="row" spacing={1}>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
           <Button
             onClick={() => onPlayerEdit(params.id as string)}
             variant="contained"
@@ -62,7 +73,9 @@ export default function PlayerTable({
             Editar
           </Button>
           <Button
-            onClick={() => handleDelete(params.id as string)}
+            onClick={() =>
+              handleDelete(params.id as string, params.row.name as string)
+            }
             variant="contained"
             color="error"
             size="small"
@@ -84,12 +97,20 @@ export default function PlayerTable({
     level: player.level,
   }));
 
-  async function handleDelete(id: string) {
-    if (window.confirm("¿Estás seguro de que quieres eliminar este jugador?")) {
+  async function handleDelete(id: string, name: string) {
+    if (window.confirm(`¿Estás seguro de que quieres eliminar a ${name}?`)) {
       await deletePlayer(id);
       alert("Jugador eliminado exitosamente");
       onPlayerDeleted();
     }
+  }
+
+  if (players.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-500">No hay jugadores registrados.</p>
+      </div>
+    );
   }
 
   return (

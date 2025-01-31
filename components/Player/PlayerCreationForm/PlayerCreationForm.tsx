@@ -13,7 +13,6 @@ import {
   FormControl,
   InputLabel,
   Box,
-  Typography,
   Stack,
 } from "@mui/material";
 
@@ -79,8 +78,7 @@ export default function PlayerCreationForm({
 
       await createPlayer(playerData);
       onPlayerCreated(`${formData.name} ha sido añadido al sistema.`);
-      // eslint-disable-next-line
-    } catch (error: any) {
+    } catch {
       onError("Error al crear el jugador. Por favor, inténtalo de nuevo.");
     } finally {
       setIsSubmitting(false);
@@ -97,9 +95,6 @@ export default function PlayerCreationForm({
         gap: 2,
       }}
     >
-      <Typography variant="h6" gutterBottom>
-        Crear jugador
-      </Typography>
       <Stack spacing={2} direction={{ xs: "column", sm: "row" }} sx={{ mb: 2 }}>
         <TextField
           required

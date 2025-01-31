@@ -13,15 +13,14 @@ import {
   FormControl,
   InputLabel,
   Box,
-  Typography,
   Stack,
 } from "@mui/material";
+import { Player } from "@/types/player";
 
 interface PlayerEditFormProps {
   onPlayerUpdated: (message: string) => void;
   onError: (message: string) => void;
-  // eslint-disable-next-line
-  initialData: any;
+  initialData: Player;
 }
 
 export default function PlayerEditForm({
@@ -90,15 +89,15 @@ export default function PlayerEditForm({
 
     setIsSubmitting(true);
     try {
+      const playerId = formData.id;
       const playerData = {
         ...formData,
         age: Number.parseInt(formData.age, 10),
       };
 
-      await updatePlayer(playerData);
+      await updatePlayer(playerId, playerData);
       onPlayerUpdated(`${formData.name} ha sido actualizado exitosamente.`);
-      // eslint-disable-next-line
-    } catch (error: any) {
+    } catch {
       onError("Error al actualizar el jugador. Por favor, inténtalo de nuevo.");
     } finally {
       setIsSubmitting(false);
@@ -115,9 +114,6 @@ export default function PlayerEditForm({
         gap: 2,
       }}
     >
-      <Typography variant="h6" gutterBottom>
-        Editar jugador
-      </Typography>
       <Stack spacing={2} direction={{ xs: "column", sm: "row" }} sx={{ mb: 2 }}>
         <TextField
           required
