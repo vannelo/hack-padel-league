@@ -9,13 +9,34 @@ import { randomUUID } from "crypto";
 
 const prisma = new PrismaClient();
 
-const genders: Gender[] = [Gender.Male, Gender.Female];
 const levels: Level[] = [
   Level.Five,
   Level.Four,
   Level.Three,
   Level.Two,
   Level.One,
+];
+const playerNames = [
+  "Juan Lebrón",
+  "Alejandro Galán",
+  "Paquito Navarro",
+  "Martín Di Nenno",
+  "Agustín Tapia",
+  "Federico Chingotto",
+  "Arturo Coello",
+  "Fernando Belasteguín",
+  "Sanyo Gutiérrez",
+  "Pablo Lima",
+  "Gemma Triay",
+  "Alejandra Salazar",
+  "Paula Josemaría",
+  "Ariana Sánchez",
+  "Beatriz González",
+  "Marta Ortega",
+  "Lucía Sainz",
+  "Marta Marrero",
+  "Javier Garrido",
+  "Miguel Lamperti",
 ];
 
 function getRandomElement<T>(array: T[]): T {
@@ -67,16 +88,16 @@ async function createTournament(
 async function main() {
   // Create 20 players
   const players = [];
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < playerNames.length; i++) {
     const player = await prisma.player.create({
       data: {
-        name: `Jugador ${i + 1}`,
-        email: `jugador${i + 1}@example.com`,
-        age: Math.floor(Math.random() * 30) + 18,
+        name: playerNames[i],
+        email: `${playerNames[i].toLowerCase().replace(" ", ".")}@example.com`,
+        age: Math.floor(Math.random() * 20) + 25, // Ages between 25 and 44
         phone: `+1${Math.floor(Math.random() * 10000000000)
           .toString()
           .padStart(10, "0")}`,
-        gender: getRandomElement(genders),
+        gender: i < 10 ? Gender.Male : Gender.Female,
         level: getRandomElement(levels),
       },
     });
@@ -107,13 +128,19 @@ async function main() {
   }
 
   // Create tournaments
-  const tournament1Couples = await createTournamentCouples(players, 4); // 4 couples (8 players)
-  const tournament2Couples = await createTournamentCouples(players, 6); // 6 couples (12 players)
-  const tournament3Couples = await createTournamentCouples(players, 8); // 8 couples (16 players)
+  const tournament1Couples = await createTournamentCouples(players, 4);
+  const tournament2Couples = await createTournamentCouples(players, 6);
+  const tournament3Couples = await createTournamentCouples(players, 8);
+  const tournament4Couples = await createTournamentCouples(players, 10);
+  const tournament5Couples = await createTournamentCouples(players, 4);
+  const tournament6Couples = await createTournamentCouples(players, 6);
 
-  await createTournament("Torneo 1 Court", 1, tournament1Couples); // 1 court
-  await createTournament("Torneo 3 Courts", 3, tournament2Couples); // 3 courts
-  await createTournament("Torneo 4 Courts", 4, tournament3Couples); // 4 courts
+  await createTournament("Torneo 1 Court", 1, tournament1Couples);
+  await createTournament("Torneo 3 Courts", 3, tournament2Couples);
+  await createTournament("Torneo 4 Courts", 4, tournament3Couples);
+  await createTournament("Torneo 5 Courts", 5, tournament4Couples);
+  await createTournament("Torneo 1 Court", 3, tournament5Couples);
+  await createTournament("Torneo 3 Courts", 3, tournament6Couples);
 
   console.log("Seeding completed successfully!");
 }

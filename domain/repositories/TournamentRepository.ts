@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
+import { CreateTournamentData, TournamentCoupleData } from "@/types/tournament";
 import { TournamentMatchStatus, TournamentStatus } from "@prisma/client";
 
 export class TournamentRepository {
-  // eslint-disable-next-line
-  async createTournament(data: any) {
+  async createTournament(data: CreateTournamentData) {
     return prisma.tournament.create({
       data,
     });
@@ -54,15 +54,14 @@ export class TournamentRepository {
     });
   }
 
-  async addCoupleToTournament(data: {
-    tournamentId: string;
-    player1Id: string;
-    player2Id: string;
-  }) {
+  async addCoupleToTournament(
+    tournamentId: string,
+    data: TournamentCoupleData
+  ) {
     const existingCouples = await prisma.tournamentCouple.findMany({
       where: {
         tournaments: {
-          some: { id: data.tournamentId },
+          some: { id: tournamentId },
         },
       },
     });
@@ -89,7 +88,7 @@ export class TournamentRepository {
         player1: { connect: { id: data.player1Id } },
         player2: { connect: { id: data.player2Id } },
         tournaments: {
-          connect: { id: data.tournamentId },
+          connect: { id: tournamentId },
         },
       },
     });
@@ -99,6 +98,30 @@ export class TournamentRepository {
     return prisma.tournament.update({
       where: { id },
       data: { status },
+      include: {
+        couples: {
+          include: { player1: true, player2: true },
+          orderBy: { score: "desc" },
+        },
+        rounds: {
+          include: {
+            matches: {
+              include: {
+                couple1: {
+                  include: { player1: true, player2: true },
+                },
+                couple2: {
+                  include: { player1: true, player2: true },
+                },
+              },
+            },
+          },
+        },
+        winnerCouples: {
+          include: { player1: true, player2: true },
+        },
+        league: true,
+      },
     });
   }
 
@@ -150,12 +173,20 @@ export class TournamentRepository {
       // Update scores for both couples
       await tx.tournamentCouple.update({
         where: { id: match.couple1Id },
-        data: { score: { increment: data.couple1Score } },
+        data: {
+          score: {
+            increment: data.couple1Score,
+          },
+        },
       });
 
       await tx.tournamentCouple.update({
         where: { id: match.couple2Id },
-        data: { score: { increment: data.couple2Score } },
+        data: {
+          score: {
+            increment: data.couple2Score,
+          },
+        },
       });
 
       return match;
@@ -173,6 +204,30 @@ export class TournamentRepository {
         winnerCouples: {
           connect: winnerCoupleIds.map((id) => ({ id })),
         },
+      },
+      include: {
+        couples: {
+          include: { player1: true, player2: true },
+          orderBy: { score: "desc" },
+        },
+        rounds: {
+          include: {
+            matches: {
+              include: {
+                couple1: {
+                  include: { player1: true, player2: true },
+                },
+                couple2: {
+                  include: { player1: true, player2: true },
+                },
+              },
+            },
+          },
+        },
+        winnerCouples: {
+          include: { player1: true, player2: true },
+        },
+        league: true,
       },
     });
   }

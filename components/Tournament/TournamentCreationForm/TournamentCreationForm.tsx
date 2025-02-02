@@ -1,87 +1,123 @@
 "use client";
 
 import { createTournament } from "@/app/actions/tournamentActions";
+import { useState } from "react";
+import { Button, TextField, Box, Stack } from "@mui/material";
 
-export default function TournamentCreationForm() {
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+interface TournamentCreationFormProps {
+  onTournamentCreated: (message: string) => void;
+  onError: (message: string) => void;
+}
 
-    const name = formData.get("name") as string;
-    const startDate = formData.get("startDate") as string;
-    const availableCourts = Number(formData.get("availableCourts"));
+export default function TournamentCreationForm({
+  onTournamentCreated,
+  onError,
+}: TournamentCreationFormProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    availableCourts: "1",
+  });
+  const [errors, setErrors] = useState({
+    name: "",
+    availableCourts: "",
+  });
 
-    if (!name || !startDate || isNaN(availableCourts) || availableCourts < 1) {
-      alert(
-        "All fields are required, and available courts must be at least 1!"
-      );
-      return;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = { name: "", startDate: "", availableCourts: "" };
+
+    if (formData.name.length < 2) {
+      newErrors.name = "El nombre del torneo debe tener al menos 2 caracteres.";
+      isValid = false;
     }
 
-    await createTournament({
-      name,
-      startDate: new Date(startDate),
-      availableCourts,
-    });
+    const availableCourts = Number(formData.availableCourts);
+    if (isNaN(availableCourts) || availableCourts < 1) {
+      newErrors.availableCourts =
+        "El número de canchas disponibles debe ser al menos 1.";
+      isValid = false;
+    }
 
-    alert("Tournament created successfully!");
-  }
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    try {
+      await createTournament({
+        name: formData.name,
+        availableCourts: Number(formData.availableCourts),
+      });
+      onTournamentCreated(
+        `Torneo "${formData.name}" ha sido añadido al sistema.`
+      );
+    } catch {
+      onError("Error al crear el torneo. Por favor, inténtalo de nuevo.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <form
+    <Box
+      component="form"
       onSubmit={handleSubmit}
-      className="p-6 max-w-md border rounded shadow bg-white"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        maxWidth: "500px",
+        margin: "auto",
+        paddingTop: 2,
+      }}
     >
-      <div className="mb-4">
-        <label htmlFor="name" className="block mb-2 text-sm font-medium">
-          Tournament Name
-        </label>
-        <input
-          type="text"
+      <Stack spacing={2}>
+        <TextField
+          required
+          fullWidth
           id="name"
           name="name"
-          required
-          className="w-full p-2 border rounded"
+          label="Nombre del Torneo"
+          value={formData.name}
+          onChange={handleInputChange}
+          error={!!errors.name}
+          helperText={errors.name}
         />
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="startDate" className="block mb-2 text-sm font-medium">
-          Start Date
-        </label>
-        <input
-          type="date"
-          id="startDate"
-          name="startDate"
+        <TextField
           required
-          className="w-full p-2 border rounded"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label
-          htmlFor="availableCourts"
-          className="block mb-2 text-sm font-medium"
-        >
-          Available Courts
-        </label>
-        <input
-          type="number"
+          fullWidth
           id="availableCourts"
           name="availableCourts"
-          min="1"
-          defaultValue={1}
-          required
-          className="w-full p-2 border rounded"
+          label="Canchas Disponibles"
+          type="number"
+          value={formData.availableCourts}
+          onChange={handleInputChange}
+          error={!!errors.availableCourts}
+          helperText={errors.availableCourts}
+          inputProps={{
+            min: 1,
+          }}
         />
-      </div>
-
-      <button
+      </Stack>
+      <Button
         type="submit"
-        className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        variant="contained"
+        disabled={isSubmitting}
+        sx={{ mt: 2 }}
       >
-        Create Tournament
-      </button>
-    </form>
+        {isSubmitting ? "Creando..." : "Crear Torneo"}
+      </Button>
+    </Box>
   );
 }

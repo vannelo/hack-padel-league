@@ -1,23 +1,14 @@
 import { TournamentRepository } from "@/domain/repositories/TournamentRepository";
 import { TournamentStatus, TournamentType } from "@prisma/client";
 import { LeagueRepository } from "../repositories/LeagueRepository";
+import { CreateTournamentData, TournamentCoupleData } from "@/types/tournament";
 
 export class TournamentService {
   private tournamentRepository = new TournamentRepository();
   private leagueRepository = new LeagueRepository();
 
-  // eslint-disable-next-line
-  async createTournament(data: {
-    name: string;
-    type: TournamentType;
-    startDate: Date;
-    endDate: Date | null;
-    status: TournamentStatus;
-    availableCourts: number;
-    leagueId?: string;
-    leagueRoundId?: string;
-  }) {
-    return this.tournamentRepository.createTournament(data);
+  async createTournament(tournamentData: CreateTournamentData) {
+    return this.tournamentRepository.createTournament(tournamentData);
   }
 
   async getAllTournaments() {
@@ -28,12 +19,14 @@ export class TournamentService {
     return this.tournamentRepository.getTournamentById(id);
   }
 
-  async addCoupleToTournament(data: {
-    tournamentId: string;
-    player1Id: string;
-    player2Id: string;
-  }) {
-    return this.tournamentRepository.addCoupleToTournament(data);
+  async addCoupleToTournament(
+    tournamentId: string,
+    coupleData: TournamentCoupleData
+  ) {
+    return this.tournamentRepository.addCoupleToTournament(
+      tournamentId,
+      coupleData
+    );
   }
 
   async startTournament(tournamentId: string) {
@@ -49,11 +42,10 @@ export class TournamentService {
       throw new Error("Only upcoming tournaments can be started.");
     }
 
-    if (tournament.couples.length < 2) {
-      throw new Error("A tournament must have at least 2 couples to start.");
+    if (tournament.couples.length < 4) {
+      throw new Error("A tournament must have at least 4 couples to start.");
     }
 
-    // Generate rounds with optimized logic
     const rounds = this.generateRounds(
       tournament.couples,
       tournament.availableCourts
@@ -66,7 +58,7 @@ export class TournamentService {
 
     return this.tournamentRepository.updateTournamentStatus(
       tournamentId,
-      "InProgress"
+      TournamentStatus.InProgress
     );
   }
 
@@ -79,11 +71,6 @@ export class TournamentService {
     const rounds: { matches: { couple1Id: string; couple2Id: string }[] }[] =
       [];
 
-    // If odd number of couples, add a "bye" couple
-    if (totalCouples % 2 !== 0) {
-      couples.push({ id: "bye" });
-    }
-
     const n = couples.length;
 
     for (let round = 0; round < totalRounds; round++) {
@@ -92,22 +79,18 @@ export class TournamentService {
       for (let i = 0; i < n / 2; i++) {
         const couple1 = couples[i];
         const couple2 = couples[n - 1 - i];
+        matches.push({
+          couple1Id: couple1.id,
+          couple2Id: couple2.id,
+        });
 
-        if (couple1.id !== "bye" && couple2.id !== "bye") {
-          matches.push({
-            couple1Id: couple1.id,
-            couple2Id: couple2.id,
-          });
-
-          if (matches.length === availableCourts) {
-            break;
-          }
+        if (matches.length === availableCourts) {
+          break;
         }
       }
 
       rounds.push({ matches });
 
-      // Rotate the array, keeping the first element fixed
       couples = [couples[0], ...couples.slice(-1), ...couples.slice(1, -1)];
     }
 
@@ -135,19 +118,16 @@ export class TournamentService {
       throw new Error("Only in-progress tournaments can be finished.");
     }
 
-    // Determine the winner(s) based on the highest score
     const winnerScore = Math.max(...tournament.couples.map((c) => c.score));
     const winnerCouples = tournament.couples.filter(
       (c) => c.score === winnerScore
     );
 
-    // Update the tournament status and set the winner(s)
     const updatedTournament = await this.tournamentRepository.finishTournament(
       tournamentId,
       winnerCouples.map((c) => c.id)
     );
 
-    // If the tournament is of type "League", update the league player points
     if (tournament.type === TournamentType.League && tournament.leagueId) {
       const playerScores = tournament.couples.flatMap((couple) => [
         { playerId: couple.player1Id, score: couple.score },

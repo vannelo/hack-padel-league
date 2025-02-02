@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { getAllPlayers } from "@/app/actions/playerActions";
 import PlayerTable from "@/components/Player/PlayerTable/PlayerTable";
-import PlayerCreationModal from "@/components/Player/PlayerModal/PlayerModal";
+import PlayerModal from "@/components/Player/PlayerModal/PlayerModal";
 import { Button, CircularProgress } from "@mui/material";
 import type { Player } from "@/types/player";
 
@@ -75,7 +75,7 @@ export default function AdminPlayers() {
         )}
       </section>
       <section className="mb-8">
-        <PlayerCreationModal
+        <PlayerModal
           open={isModalOpen}
           onClose={handleCloseModal}
           onPlayerCreated={handlePlayerCreated}

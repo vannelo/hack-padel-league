@@ -130,7 +130,7 @@ model Tournament {
   league          League?          @relation("LeagueTournaments", fields: [leagueId], references: [id])
   leagueRound     LeagueRound?     @relation("LeagueRoundTournament")
   status          TournamentStatus @default(Upcoming)
-  startDate       DateTime
+  startDate       DateTime?
   endDate         DateTime?
   availableCourts Int              @default(1)
   couples         TournamentCouple[] @relation("TournamentCouples")

@@ -70,8 +70,7 @@ export class LeagueService {
 
         // Add couples to the tournament
         for (const couple of round.couples) {
-          await this.tournamentService.addCoupleToTournament({
-            tournamentId: tournament.id,
+          await this.tournamentService.addCoupleToTournament(tournament.id, {
             player1Id: couple.player1Id,
             player2Id: couple.player2Id,
           });

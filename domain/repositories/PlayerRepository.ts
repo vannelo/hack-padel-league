@@ -1,10 +1,10 @@
 import { prisma } from "@/lib/prisma";
+import { CreatePlayerData, Player } from "@/types/player";
 
 export class PlayerRepository {
-  // eslint-disable-next-line
-  async createPlayer(playerData: any): Promise<any> {
+  async createPlayer(data: CreatePlayerData): Promise<Player> {
     return prisma.player.create({
-      data: playerData,
+      data,
     });
   }
 

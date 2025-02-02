@@ -2,11 +2,11 @@
 
 import { appRoutes } from "@/constants/appRoutes";
 import { playerService } from "@/domain";
-import { Player } from "@/types/player";
+import { CreatePlayerData, Player } from "@/types/player";
 import { revalidatePath } from "next/cache";
 
 export async function createPlayer(
-  playerData: Partial<Player>
+  playerData: CreatePlayerData
 ): Promise<Player> {
   return await playerService.createPlayer(playerData);
 }

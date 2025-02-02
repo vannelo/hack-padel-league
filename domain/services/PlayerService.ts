@@ -1,10 +1,10 @@
 import { PlayerRepository } from "@/domain/repositories/PlayerRepository";
+import { CreatePlayerData, Player } from "@/types/player";
 
 export class PlayerService {
   private playerRepository = new PlayerRepository();
 
-  // eslint-disable-next-line
-  async createPlayer(playerData: any): Promise<any> {
+  async createPlayer(playerData: CreatePlayerData): Promise<Player> {
     return this.playerRepository.createPlayer(playerData);
   }
 

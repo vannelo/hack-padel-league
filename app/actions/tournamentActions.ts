@@ -1,20 +1,26 @@
 "use server";
 
 import { TournamentService } from "@/domain/services/TournamentService";
+import {
+  CreateTournamentData,
+  Tournament,
+  TournamentCoupleData,
+} from "@/types/tournament";
 
 const tournamentService = new TournamentService();
 
-// eslint-disable-next-line
-export async function createTournament(data: any) {
-  return tournamentService.createTournament(data);
+export async function createTournament(
+  tournamentData: CreateTournamentData
+): Promise<Tournament> {
+  const tournament = await tournamentService.createTournament(tournamentData);
+  return tournament as Tournament;
 }
 
-export async function addCoupleToTournament(data: {
-  tournamentId: string;
-  player1Id: string;
-  player2Id: string;
-}) {
-  return tournamentService.addCoupleToTournament(data);
+export async function addCoupleToTournament(
+  tournamentId: string,
+  coupleData: TournamentCoupleData
+) {
+  return tournamentService.addCoupleToTournament(tournamentId, coupleData);
 }
 
 export async function startTournament(tournamentId: string) {

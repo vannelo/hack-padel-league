@@ -112,6 +112,7 @@ export default function PlayerEditForm({
         display: "flex",
         flexDirection: "column",
         gap: 2,
+        paddingTop: 2,
       }}
     >
       <Stack spacing={2} direction={{ xs: "column", sm: "row" }} sx={{ mb: 2 }}>
