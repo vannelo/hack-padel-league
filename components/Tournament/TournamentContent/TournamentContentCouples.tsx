@@ -5,7 +5,7 @@ import type { Tournament, TournamentCouple } from "@/types/tournament";
 import TournamentCoupleAssignmentModal from "../TournamentCoupleAssignmentModal/TournamentCoupleAssignmentModal";
 import { useState } from "react";
 import { Player } from "@/types/player";
-import { TournamentStatus } from "@prisma/client";
+import { TournamentStatus, TournamentType } from "@prisma/client";
 
 interface TournamentContentCouplesProps {
   tournament: Tournament;
@@ -28,17 +28,18 @@ export default function TournamentContentCouples({
         Parejas
       </Typography>
       <>
-        {tournament.status === TournamentStatus.Upcoming && (
-          <Box sx={{ mb: 2 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setIsAddingPlayer(true)}
-            >
-              Agregar pareja
-            </Button>
-          </Box>
-        )}
+        {tournament.status === TournamentStatus.Upcoming &&
+          tournament.type !== TournamentType.League && (
+            <Box sx={{ mb: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setIsAddingPlayer(true)}
+              >
+                Agregar pareja
+              </Button>
+            </Box>
+          )}
         {tournament.couples.length > 0 ? (
           <Box>
             {tournament.couples.map((couple: TournamentCouple) => (

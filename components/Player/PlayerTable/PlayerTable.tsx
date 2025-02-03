@@ -3,7 +3,7 @@
 import { deletePlayer } from "@/app/actions/playerActions";
 import { levelMap, genderMap } from "@/constants/playerEnums";
 import { Player } from "@/types/player";
-import { Button, Stack } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
 import {
   DataGrid,
   type GridColDef,
@@ -26,6 +26,14 @@ export default function PlayerTable({
     pageSize: 50,
     page: 0,
   });
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredPlayers = players.filter(
+    (player) =>
+      player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      player.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      player.phone?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const columns: GridColDef[] = [
     { field: "name", headerName: "Nombre", flex: 1 },
@@ -87,7 +95,7 @@ export default function PlayerTable({
     },
   ];
 
-  const rows = players.map((player) => ({
+  const rows = filteredPlayers.map((player) => ({
     id: player.id,
     name: player.name,
     email: player.email,
@@ -105,25 +113,38 @@ export default function PlayerTable({
     }
   }
 
-  if (players.length === 0) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-gray-500">No hay jugadores registrados.</p>
-      </div>
-    );
-  }
-
   return (
-    <div style={{ height: 600, width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        paginationModel={paginationModel}
-        onPaginationModelChange={setPaginationModel}
-        pageSizeOptions={[10, 25, 50]}
-        pagination
-        disableRowSelectionOnClick
-      />
+    <div>
+      <div style={{ marginBottom: "1rem" }}>
+        <TextField
+          label="Buscar jugador"
+          variant="outlined"
+          fullWidth
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+      {filteredPlayers.length === 0 ? (
+        <div className="text-center py-8">
+          <p className="text-gray-500">
+            {searchTerm
+              ? "No se encontraron jugadores que coincidan."
+              : "No hay jugadores registrados."}
+          </p>
+        </div>
+      ) : (
+        <div style={{ height: 600, width: "100%" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={[10, 25, 50]}
+            pagination
+            disableRowSelectionOnClick
+          />
+        </div>
+      )}
     </div>
   );
 }

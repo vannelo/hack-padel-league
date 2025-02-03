@@ -42,8 +42,8 @@ export class TournamentService {
       throw new Error("Only upcoming tournaments can be started.");
     }
 
-    if (tournament.couples.length < 4) {
-      throw new Error("A tournament must have at least 4 couples to start.");
+    if (tournament.couples.length < 3) {
+      throw new Error("A tournament must have at least 3 couples to start.");
     }
 
     const rounds = this.generateRounds(
@@ -70,7 +70,6 @@ export class TournamentService {
     const totalRounds = totalCouples - 1;
     const rounds: { matches: { couple1Id: string; couple2Id: string }[] }[] =
       [];
-
     const n = couples.length;
 
     for (let round = 0; round < totalRounds; round++) {
@@ -90,7 +89,6 @@ export class TournamentService {
       }
 
       rounds.push({ matches });
-
       couples = [couples[0], ...couples.slice(-1), ...couples.slice(1, -1)];
     }
 

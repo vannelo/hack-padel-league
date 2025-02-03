@@ -3,20 +3,29 @@
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import Link from "next/link";
 import { useState } from "react";
-import { Button, Chip } from "@mui/material";
+import { Button, Chip, TextField } from "@mui/material";
+import { League } from "@/types/league";
 
-// eslint-disable-next-line
-export default function LeagueTable({ leagues }: { leagues: any[] }) {
+interface LeagueTableProps {
+  leagues: League[];
+}
+
+export default function LeagueTable({ leagues }: LeagueTableProps) {
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 5,
     page: 0,
   });
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredLeagues = leagues.filter((league) =>
+    league.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", flex: 1 },
+    { field: "name", headerName: "Nombre", flex: 1 },
     {
       field: "status",
-      headerName: "status",
+      headerName: "Estado",
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Chip
@@ -32,16 +41,13 @@ export default function LeagueTable({ leagues }: { leagues: any[] }) {
       ),
     },
     {
-      field: "level",
-      headerName: "level",
-    },
-    {
       field: "players",
-      headerName: "players",
+      headerName: "Jugadores",
+      flex: 1,
     },
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: "Acciones",
       flex: 1,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
@@ -54,26 +60,47 @@ export default function LeagueTable({ leagues }: { leagues: any[] }) {
     },
   ];
 
-  const rows = leagues.map((league) => ({
+  const rows = filteredLeagues.map((league) => ({
     id: league.id,
-    status: league.status,
     name: league.name,
-    level: league.level,
+    status: league.status,
     players: `${league.players.length} jugadores`,
-    couples: league.couples,
   }));
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        paginationModel={paginationModel}
-        onPaginationModelChange={setPaginationModel}
-        pageSizeOptions={[5, 10, 20]}
-        pagination
-        disableRowSelectionOnClick
-      />
+    <div>
+      {/* Search input */}
+      <div style={{ marginBottom: "1rem" }}>
+        <TextField
+          label="Buscar liga"
+          variant="outlined"
+          fullWidth
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
+      {filteredLeagues.length === 0 ? (
+        <div style={{ textAlign: "center", padding: "1rem" }}>
+          <p>
+            {searchTerm
+              ? "No se encontraron ligas que coincidan."
+              : "No hay ligas registradas."}
+          </p>
+        </div>
+      ) : (
+        <div style={{ height: 400, width: "100%" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={[5, 10, 20]}
+            pagination
+            disableRowSelectionOnClick
+          />
+        </div>
+      )}
     </div>
   );
 }

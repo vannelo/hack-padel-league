@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
+import { CreateLeagueData } from "@/types/league";
 import { LeagueStatus } from "@prisma/client";
 
 export class LeagueRepository {
-  // eslint-disable-next-line
-  async createLeague(data: any) {
+  async createLeague(data: CreateLeagueData) {
     return prisma.league.create({
       data,
     });

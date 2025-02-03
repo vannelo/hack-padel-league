@@ -1,6 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { CreateTournamentData, TournamentCoupleData } from "@/types/tournament";
-import { TournamentMatchStatus, TournamentStatus } from "@prisma/client";
+import {
+  TournamentMatchStatus,
+  TournamentRoundStatus,
+  TournamentStatus,
+} from "@prisma/client";
 
 export class TournamentRepository {
   async createTournament(data: CreateTournamentData) {
@@ -135,7 +139,7 @@ export class TournamentRepository {
           data: {
             tournament: { connect: { id: tournamentId } },
             number: i + 1,
-            status: "Upcoming",
+            status: TournamentRoundStatus.Upcoming,
           },
         });
 
@@ -144,7 +148,7 @@ export class TournamentRepository {
             roundId: round.id,
             couple1Id: match.couple1Id,
             couple2Id: match.couple2Id,
-            status: "Scheduled",
+            status: TournamentMatchStatus.Scheduled,
           })),
         });
       }
@@ -170,7 +174,6 @@ export class TournamentRepository {
         },
       });
 
-      // Update scores for both couples
       await tx.tournamentCouple.update({
         where: { id: match.couple1Id },
         data: {

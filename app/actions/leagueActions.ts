@@ -3,11 +3,10 @@
 import { leagueService } from "@/domain";
 import { appRoutes } from "@/constants/appRoutes";
 import { revalidatePath } from "next/cache";
+import { CreateLeagueData } from "@/types/league";
 
-// eslint-disable-next-line
-export async function createLeague(data: any) {
+export async function createLeague(data: CreateLeagueData) {
   await leagueService.createLeague(data);
-  revalidatePath(appRoutes.leagues.index);
 }
 
 export async function deleteLeague(id: string) {

@@ -1,5 +1,9 @@
 import { getLeagueById } from "@/app/actions/leagueActions";
-import LeagueDetails from "@/components/League/LeagueDetails/LeagueDetails";
+import { getAllPlayers } from "@/app/actions/playerActions";
+import LeagueContent from "@/components/League/LeagueContent/LeagueContent";
+import { League } from "@/types/league";
+import { Container } from "@mui/material";
+import { notFound } from "next/navigation";
 
 export default async function LeagueDetailsPage({
   params,
@@ -7,18 +11,15 @@ export default async function LeagueDetailsPage({
   params: { id: string };
 }) {
   const league = await getLeagueById(params.id);
+  const players = await getAllPlayers();
 
   if (!league) {
-    return <p>League not found.</p>;
+    notFound();
   }
+
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <section className="my-8">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">
-          League: {league.name}
-        </h1>
-        <LeagueDetails league={league} />
-      </section>
-    </div>
+    <Container maxWidth="lg">
+      <LeagueContent initialLeague={league as League} players={players} />
+    </Container>
   );
 }

@@ -1,13 +1,13 @@
 import { LeagueRepository } from "@/domain/repositories/LeagueRepository";
 import { TournamentService } from "@/domain/services/TournamentService";
+import { CreateLeagueData } from "@/types/league";
 import { LeagueStatus, TournamentStatus, TournamentType } from "@prisma/client";
 
 export class LeagueService {
   private leagueRepository = new LeagueRepository();
   private tournamentService = new TournamentService();
 
-  // eslint-disable-next-line
-  async createLeague(data: any) {
+  async createLeague(data: CreateLeagueData) {
     return this.leagueRepository.createLeague(data);
   }
 

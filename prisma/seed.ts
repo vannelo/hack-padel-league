@@ -1,3 +1,4 @@
+import { Player } from "@/types/player";
 import {
   PrismaClient,
   Gender,
@@ -43,8 +44,7 @@ function getRandomElement<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-// eslint-disable-next-line
-async function createTournamentCouples(players: any[], count: number) {
+async function createTournamentCouples(players: Player[], count: number) {
   const couples = [];
   const shuffledPlayers = [...players].sort(() => Math.random() - 0.5);
 
@@ -108,7 +108,6 @@ async function main() {
   const league = await prisma.league.create({
     data: {
       name: "Liga 2025",
-      level: Level.Four,
       status: "Upcoming",
       startDate: new Date("2023-06-01"),
       endDate: new Date("2023-08-31"),

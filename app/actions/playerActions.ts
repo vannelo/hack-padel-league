@@ -5,10 +5,8 @@ import { playerService } from "@/domain";
 import { CreatePlayerData, Player } from "@/types/player";
 import { revalidatePath } from "next/cache";
 
-export async function createPlayer(
-  playerData: CreatePlayerData
-): Promise<Player> {
-  return await playerService.createPlayer(playerData);
+export async function createPlayer(playerData: CreatePlayerData) {
+  await playerService.createPlayer(playerData);
 }
 
 export async function updatePlayer(playerId: string, data: Partial<Player>) {

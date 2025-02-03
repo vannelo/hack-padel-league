@@ -76,10 +76,9 @@ model Player {
 model League {
   id          String           @id @default(uuid())
   name        String
-  level       Level
   status      LeagueStatus     @default(Upcoming)
-  startDate   DateTime
-  endDate     DateTime
+  startDate   DateTime?
+  endDate     DateTime?
   players     LeaguePlayer[]   @relation("LeaguePlayers")
   tournaments Tournament[]     @relation("LeagueTournaments")
   rounds      LeagueRound[]    @relation("LeagueRounds")

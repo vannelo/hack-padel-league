@@ -1,19 +1,10 @@
 "use server";
 
-import { TournamentService } from "@/domain/services/TournamentService";
-import {
-  CreateTournamentData,
-  Tournament,
-  TournamentCoupleData,
-} from "@/types/tournament";
+import { tournamentService } from "@/domain";
+import { CreateTournamentData, TournamentCoupleData } from "@/types/tournament";
 
-const tournamentService = new TournamentService();
-
-export async function createTournament(
-  tournamentData: CreateTournamentData
-): Promise<Tournament> {
-  const tournament = await tournamentService.createTournament(tournamentData);
-  return tournament as Tournament;
+export async function createTournament(tournamentData: CreateTournamentData) {
+  await tournamentService.createTournament(tournamentData);
 }
 
 export async function addCoupleToTournament(

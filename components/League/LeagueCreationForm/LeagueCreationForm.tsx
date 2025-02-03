@@ -1,114 +1,75 @@
 "use client";
 
 import { createLeague } from "@/app/actions/leagueActions";
-import { Level } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Box, TextField, Button } from "@mui/material";
 
-export default function LeagueCreationForm() {
-  const router = useRouter();
+interface LeagueCreationFormProps {
+  onLeagueCreated: (message: string) => void;
+  onError: (message: string) => void;
+}
 
-  async function handleSubmit(formData: FormData) {
-    const name = formData.get("name") as string;
-    const level = formData.get("level") as string;
-    const startDate = formData.get("startDate") as string;
-    const endDate = formData.get("endDate") as string;
+export default function LeagueCreationForm({
+  onLeagueCreated,
+  onError,
+}: LeagueCreationFormProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
 
-    if (!name || !level || !startDate || !endDate) {
-      alert("Please fill in all fields!");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (name.trim().length < 2) {
+      setError("El nombre debe tener al menos 2 caracteres.");
       return;
     }
-
-    // Call the server action to add a league
-    await createLeague({
-      name,
-      level,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
-    });
-    alert("League added successfully!");
-    router.refresh();
-  }
+    setIsSubmitting(true);
+    try {
+      // Call the server action with only the league name.
+      await createLeague({ name });
+      onLeagueCreated(`Liga "${name}" añadida exitosamente.`);
+    } catch {
+      onError("Error al crear la liga. Por favor, inténtalo de nuevo.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <form
-      action={handleSubmit}
-      className="max-w-md p-6 border border-gray-300 rounded-lg shadow-md bg-white"
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        maxWidth: "500px",
+        margin: "auto",
+        paddingTop: 2,
+      }}
     >
-      <div className="mb-4">
-        <label
-          htmlFor="name"
-          className="block mb-2 text-sm font-medium text-gray-700"
-        >
-          League Name:
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label
-          htmlFor="level"
-          className="block mb-2 text-sm font-medium text-gray-700"
-        >
-          Level:
-        </label>
-        <select
-          id="level"
-          name="level"
-          required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-        >
-          <option value={Level.One}>Level 1</option>
-          <option value={Level.Two}>Level 2</option>
-          <option value={Level.Three}>Level 3</option>
-          <option value={Level.Four}>Level 4</option>
-          <option value={Level.Five}>Level 5</option>
-        </select>
-      </div>
-
-      <div className="mb-4">
-        <label
-          htmlFor="startDate"
-          className="block mb-2 text-sm font-medium text-gray-700"
-        >
-          Start Date:
-        </label>
-        <input
-          type="date"
-          id="startDate"
-          name="startDate"
-          required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label
-          htmlFor="endDate"
-          className="block mb-2 text-sm font-medium text-gray-700"
-        >
-          End Date:
-        </label>
-        <input
-          type="date"
-          id="endDate"
-          name="endDate"
-          required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-        />
-      </div>
-
-      <button
+      <TextField
+        required
+        fullWidth
+        id="name"
+        name="name"
+        label="Nombre de la Liga"
+        value={name}
+        onChange={(e) => {
+          setName(e.target.value);
+          setError("");
+        }}
+        error={!!error}
+        helperText={error}
+      />
+      <Button
         type="submit"
-        className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        variant="contained"
+        disabled={isSubmitting}
+        sx={{ mt: 2 }}
       >
-        Add League
-      </button>
-    </form>
+        {isSubmitting ? "Creando..." : "Añadir Liga"}
+      </Button>
+    </Box>
   );
 }
