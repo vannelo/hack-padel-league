@@ -27,9 +27,9 @@ export async function generateMetadata({
       type: "website",
       images: [
         {
-          url: "/img/hack-logo.png",
-          width: 1200,
-          height: 630,
+          url: "/img/meta.jpg",
+          width: 1500,
+          height: 800,
           alt: "Hack Padel Logo",
         },
       ],
@@ -39,7 +39,7 @@ export async function generateMetadata({
       site: "@hackpadel",
       title: `${tournament.name} | Torneo de Hack Padel`,
       description: `Consulta los resultados, parejas y rondas del torneo ${tournament.name} en Hack Padel.`,
-      images: ["/img/hack-logo.png"],
+      images: ["/img/meta.jpg"],
     },
   };
 }
