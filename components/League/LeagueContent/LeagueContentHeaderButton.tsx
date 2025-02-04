@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Box, Button, Divider, Typography } from "@mui/material";
 import { LeagueStatus } from "@prisma/client";
 import { League, LeaguePlayer } from "@/types/league";
-import { startLeague } from "@/app/actions/leagueActions";
+import { finishLeague, startLeague } from "@/app/actions/leagueActions";
 
 interface LeagueContentHeaderButtonProps {
   league: League;
@@ -17,10 +17,10 @@ export default function LeagueContentHeaderButton({
   showSnackbar,
   onLeagueUpdate,
 }: LeagueContentHeaderButtonProps) {
-  const [isStarting, setIsStarting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleStartLeague() {
-    setIsStarting(true);
+    setIsLoading(true);
     try {
       await startLeague(league.id);
       showSnackbar("¡Liga iniciada con éxito!", "success");
@@ -28,7 +28,25 @@ export default function LeagueContentHeaderButton({
     } catch {
       showSnackbar("Ocurrió un error al iniciar la liga.", "error");
     } finally {
-      setIsStarting(false);
+      setIsLoading(false);
+    }
+  }
+
+  async function handleFinishLeague() {
+    const isConfirmed = window.confirm(
+      "¿Estás seguro de que quieres finalizar la liga? Esta acción no se puede deshacer."
+    );
+    if (!isConfirmed) return; // Stop execution if user cancels
+
+    setIsLoading(true);
+    try {
+      await finishLeague(league.id);
+      showSnackbar("¡Liga finalizada con éxito!", "success");
+      onLeagueUpdate();
+    } catch {
+      showSnackbar("Ocurrió un error al finalizar la liga.", "error");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -54,9 +72,9 @@ export default function LeagueContentHeaderButton({
               variant="contained"
               color="success"
               onClick={handleStartLeague}
-              disabled={isStarting || !canStartLeague}
+              disabled={isLoading || !canStartLeague}
             >
-              {isStarting ? "Iniciando..." : "Iniciar Liga"}
+              {isLoading ? "Iniciando..." : "Iniciar Liga"}
             </Button>
             {!canStartLeague && (
               <Typography variant="body2" color="error" sx={{ mt: 1 }}>
@@ -65,6 +83,16 @@ export default function LeagueContentHeaderButton({
               </Typography>
             )}
           </Box>
+        )}
+        {league.status === LeagueStatus.InProgress && (
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleFinishLeague}
+            disabled={isLoading}
+          >
+            {isLoading ? "Finalizando..." : "Finalizar Liga"}
+          </Button>
         )}
       </Box>
       <Divider sx={{ my: 2 }} />

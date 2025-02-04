@@ -1,7 +1,7 @@
 "use client";
 
 import { Typography, Box, Button } from "@mui/material";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Player } from "@/types/player";
 import { LeagueStatus } from "@prisma/client";
 import { League, LeaguePlayer } from "@/types/league";
@@ -22,10 +22,15 @@ export default function LeagueContentCouples({
 }: LeagueContentCouplesProps) {
   const [isAddingPlayer, setIsAddingPlayer] = useState(false);
 
+  // Sort players by points in descending order
+  const sortedPlayers = useMemo(() => {
+    return [...league.players].sort((a, b) => b.points - a.points);
+  }, [league.players]);
+
   return (
     <Box my={4}>
       <Typography variant="h5" gutterBottom>
-        Parejas
+        Jugadores
       </Typography>
       <>
         {league.status === LeagueStatus.Upcoming && (
@@ -35,13 +40,13 @@ export default function LeagueContentCouples({
               color="primary"
               onClick={() => setIsAddingPlayer(true)}
             >
-              Agregar pareja
+              Agregar jugador
             </Button>
           </Box>
         )}
-        {league.players.length > 0 ? (
+        {sortedPlayers.length > 0 ? (
           <Box>
-            {league.players.map((player: LeaguePlayer) => (
+            {sortedPlayers.map((player: LeaguePlayer) => (
               <Box key={player.id}>
                 <Typography>
                   {player.player.name} - Puntos:{" "}

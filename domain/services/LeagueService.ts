@@ -55,9 +55,9 @@ export class LeagueService {
       // Create tournaments for each round
       for (const round of createdRounds) {
         const tournamentData = {
-          name: `${league.name} - Round ${round.number}`,
+          name: `${league.name} - Jornada ${round.number}`,
           type: TournamentType.League,
-          startDate: new Date(), // You may want to adjust this based on your requirements
+          startDate: null, // You may want to adjust this based on your requirements
           endDate: null, // You may want to set an end date
           status: TournamentStatus.Upcoming,
           availableCourts: 3,
@@ -124,5 +124,24 @@ export class LeagueService {
     }
 
     return rounds;
+  }
+
+  async finishLeague(leagueId: string) {
+    const league = await this.leagueRepository.getLeagueById(leagueId);
+
+    if (!league) {
+      throw new Error("League not found.");
+    }
+
+    if (league.status !== LeagueStatus.InProgress) {
+      throw new Error("Only leagues in progress can be finished.");
+    }
+
+    const updatedLeague = await this.leagueRepository.updateLeagueStatus(
+      leagueId,
+      LeagueStatus.Completed
+    );
+
+    return updatedLeague;
   }
 }

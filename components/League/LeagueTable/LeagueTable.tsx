@@ -53,7 +53,7 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
       renderCell: (params: GridRenderCellParams) => (
         <Link href={`/admin/ligas/${params.id}`} passHref>
           <Button variant="contained" color="primary" size="small">
-            View Details
+            Ver Liga
           </Button>
         </Link>
       ),

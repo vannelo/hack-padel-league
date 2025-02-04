@@ -11,10 +11,10 @@ import {
 import Link from "next/link";
 import type {
   LeagueRound,
-  LeagueRoundCouple,
   ExtendedTournamentRound,
   TournamentMatchWithCouples,
 } from "@/types/league";
+import { TournamentStatus } from "@prisma/client";
 
 interface LeagueContentRoundsProps {
   rounds: LeagueRound[];
@@ -23,6 +23,8 @@ interface LeagueContentRoundsProps {
 export default function LeagueContentRounds({
   rounds,
 }: LeagueContentRoundsProps) {
+  console.log("rounds", rounds);
+
   return (
     <Box sx={{ mb: 4 }}>
       <Typography variant="h6" gutterBottom>
@@ -43,27 +45,7 @@ export default function LeagueContentRounds({
             <Typography variant="subtitle1" gutterBottom>
               Ronda {round.number}
             </Typography>
-            {round.couples && round.couples.length > 0 ? (
-              <List dense>
-                {round.couples.map((couple: LeagueRoundCouple) => (
-                  <ListItem key={couple.id}>
-                    <ListItemText
-                      primary={`${couple.player1.name} & ${couple.player2.name}`}
-                      secondary={
-                        couple.player1.status === "Deleted" ||
-                        couple.player2.status === "Deleted"
-                          ? " (Jugador inactivo)"
-                          : ""
-                      }
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                No hay parejas asignadas.
-              </Typography>
-            )}
+
             {round.tournament ? (
               <Box
                 sx={{
@@ -80,7 +62,20 @@ export default function LeagueContentRounds({
                   <strong>Nombre:</strong> {round.tournament.name}
                 </Typography>
                 <Typography variant="body2">
-                  <strong>Estado:</strong> {round.tournament.status}
+                  <strong>Estado:</strong>{" "}
+                  <span
+                    style={{
+                      color:
+                        round.tournament.status === TournamentStatus.Completed
+                          ? "green"
+                          : round.tournament.status ===
+                            TournamentStatus.InProgress
+                          ? "blue"
+                          : "black",
+                    }}
+                  >
+                    {round.tournament.status}
+                  </span>
                 </Typography>
                 {round.tournament.startDate && (
                   <Typography variant="body2">
@@ -94,12 +89,21 @@ export default function LeagueContentRounds({
                     {new Date(round.tournament.endDate).toLocaleDateString()}
                   </Typography>
                 )}
-                {round.tournament &&
+
+                {/* Properly Checking for Tournament Completion & Winners */}
+                {round.tournament.status === "Completed" &&
                 round.tournament.winnerCouples &&
                 round.tournament.winnerCouples.length > 0 ? (
-                  <Typography variant="body2" sx={{ mt: 1 }}>
-                    <strong>Ganador:</strong>{" "}
-                    {round.tournament?.winnerCouples.map((couple, index) => (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      mt: 1,
+                      color: "green",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    🏆 <strong>Ganador:</strong>{" "}
+                    {round.tournament.winnerCouples.map((couple, index) => (
                       <span key={couple.id}>
                         {couple.player1.name} & {couple.player2.name}
                         {index <
@@ -108,6 +112,17 @@ export default function LeagueContentRounds({
                           : ""}
                       </span>
                     ))}
+                  </Typography>
+                ) : round.tournament.status === "Completed" ? (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      mt: 1,
+                      color: "red",
+                    }}
+                  >
+                    ⚠️ El torneo ha finalizado, pero no se han registrado
+                    ganadores.
                   </Typography>
                 ) : (
                   <Typography
@@ -118,6 +133,7 @@ export default function LeagueContentRounds({
                     No hay pareja ganadora aún.
                   </Typography>
                 )}
+
                 {round.tournament.rounds &&
                   round.tournament.rounds.length > 0 && (
                     <Box sx={{ mt: 2 }}>
@@ -135,7 +151,8 @@ export default function LeagueContentRounds({
                             }}
                           >
                             <Typography variant="body2">
-                              Ronda {tRound.number} - Estado: {tRound.status}
+                              Ronda {tRound.number} - Estado:{" "}
+                              <strong>{tRound.status}</strong>
                             </Typography>
                             {tRound.matches && tRound.matches.length > 0 ? (
                               <List dense>

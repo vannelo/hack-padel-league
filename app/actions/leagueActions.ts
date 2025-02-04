@@ -31,3 +31,7 @@ export async function getLeagueById(id: string) {
 export async function startLeague(leagueId: string) {
   return leagueService.startLeague(leagueId);
 }
+
+export async function finishLeague(leagueId: string) {
+  return leagueService.finishLeague(leagueId);
+}

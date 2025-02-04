@@ -5,7 +5,10 @@ import Link from "next/link";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Chip, Button, TextField } from "@mui/material";
 import { Tournament } from "@/types/tournament";
-import { tournamentStatusMap } from "@/constants/tournamentEnums";
+import {
+  tournamentStatusMap,
+  tournamentTypeMap,
+} from "@/constants/tournamentEnums";
 import { TournamentStatus } from "@prisma/client";
 
 export default function TournamentTable({
@@ -57,7 +60,11 @@ export default function TournamentTable({
       field: "type",
       headerName: "Tipo",
       flex: 1,
-      renderCell: (params: GridRenderCellParams) => <p>{params.value}</p>,
+      renderCell: (params: GridRenderCellParams) => (
+        <p>
+          {tournamentTypeMap[params.value as keyof typeof tournamentTypeMap]}
+        </p>
+      ),
     },
     {
       field: "actions",
@@ -67,7 +74,7 @@ export default function TournamentTable({
       renderCell: (params: GridRenderCellParams) => (
         <Link href={`/admin/torneos/${params.id}`} passHref>
           <Button variant="contained" color="primary" size="small">
-            View Details
+            Ver Torneo
           </Button>
         </Link>
       ),

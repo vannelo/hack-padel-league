@@ -50,7 +50,6 @@ export default function TournamentDetailsHeaderButton({
 
   return (
     <>
-      {" "}
       <Box
         sx={{
           display: "flex",

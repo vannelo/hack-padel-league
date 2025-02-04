@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { addPlayerToLeague } from "@/app/actions/leagueActions";
 import {
   Dialog,
@@ -37,6 +37,12 @@ export default function LeaguePlayerAssignmentModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [playerId, setPlayerId] = useState("");
   const [error, setError] = useState("");
+
+  const availablePlayers = useMemo(() => {
+    return players.filter(
+      (player) => !league.players.some((lp) => lp.player.id === player.id)
+    );
+  }, [players, league.players]);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     setPlayerId(event.target.value);
@@ -90,11 +96,17 @@ export default function LeaguePlayerAssignmentModal({
               <MenuItem value="">
                 <em>-- Seleccione un Jugador --</em>
               </MenuItem>
-              {players.map((player) => (
-                <MenuItem key={player.id} value={player.id}>
-                  {player.name}
+              {availablePlayers.length > 0 ? (
+                availablePlayers.map((player) => (
+                  <MenuItem key={player.id} value={player.id}>
+                    {player.name}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem disabled value="">
+                  No hay jugadores disponibles
                 </MenuItem>
-              ))}
+              )}
             </Select>
             {error && (
               <Box
@@ -108,7 +120,7 @@ export default function LeaguePlayerAssignmentModal({
           <Button
             type="submit"
             variant="contained"
-            disabled={isSubmitting}
+            disabled={isSubmitting || availablePlayers.length === 0}
             sx={{ mt: 2 }}
           >
             {isSubmitting ? "Añadiendo..." : "Añadir Jugador a la Liga"}

@@ -44,7 +44,13 @@ export class LeagueRepository {
                 player2: true,
               },
             },
-            tournament: true,
+            tournament: {
+              include: {
+                winnerCouples: {
+                  include: { player1: true, player2: true },
+                },
+              },
+            },
           },
         },
       },

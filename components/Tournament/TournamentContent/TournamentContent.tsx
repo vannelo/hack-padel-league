@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useCallback } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import { notFound } from "next/navigation";
-import { TournamentStatus } from "@prisma/client";
 import type { Tournament } from "@/types/tournament";
 import type { Player } from "@/types/player";
 import { useSnackbar } from "@/hooks/useSnackBar";
@@ -25,36 +24,12 @@ export default function TournamentContent({
   players,
 }: TournamentContentProps) {
   const { showSnackbar } = useSnackbar();
-  const {
-    tournament,
-    isLoading,
-    fetchTournament,
-    finishTournament,
-    areAllMatchesPlayed,
-  } = useTournament(initialTournament);
+  const { tournament, isLoading, fetchTournament } =
+    useTournament(initialTournament);
 
   const handleTournamentUpdate = useCallback(() => {
     fetchTournament();
   }, [fetchTournament]);
-
-  const handleFinishTournament = useCallback(async () => {
-    try {
-      await finishTournament();
-      showSnackbar("¡Torneo finalizado con éxito!", "success");
-    } catch (error) {
-      console.error("Error finishing tournament:", error);
-      showSnackbar("Ocurrió un error al finalizar el torneo.", "error");
-    }
-  }, [finishTournament, showSnackbar]);
-
-  useEffect(() => {
-    if (
-      areAllMatchesPlayed &&
-      tournament?.status !== TournamentStatus.InProgress
-    ) {
-      handleFinishTournament();
-    }
-  }, [areAllMatchesPlayed, tournament?.status, handleFinishTournament]);
 
   if (!tournament) {
     notFound();
