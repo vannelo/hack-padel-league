@@ -1,7 +1,49 @@
+import type { Metadata } from "next";
 import { getLeagueById } from "@/app/actions/leagueActions";
 import { TournamentStatus } from "@prisma/client";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const league = await getLeagueById(params.id);
+
+  if (!league) {
+    return {
+      title: "Liga no encontrada | Hack Padel",
+      description: "La liga que buscas no existe o ha sido eliminada.",
+    };
+  }
+
+  return {
+    title: `Liga | ${league.name} | Hack Padel`,
+    description: `Consulta la clasificación, jugadores y rondas de la liga ${league.name} en Hack Padel. Descubre torneos, posiciones y campeones.`,
+    openGraph: {
+      title: `${league.name} | Hack Padel`,
+      description: `Consulta la clasificación, jugadores y rondas de la liga ${league.name} en Hack Padel.`,
+      url: `https://hackpadel.com/liga/${league.id}`,
+      type: "website",
+      images: [
+        {
+          url: "/img/hack-logo.png",
+          width: 1200,
+          height: 630,
+          alt: "Hack Padel Logo",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: "@hackpadel",
+      title: `${league.name} | Hack Padel`,
+      description: `Consulta la clasificación, jugadores y rondas de la liga ${league.name} en Hack Padel.`,
+      images: ["/img/hack-logo.png"],
+    },
+  };
+}
 
 export default async function LeagueDetailsPage({
   params,
@@ -90,27 +132,6 @@ export default async function LeagueDetailsPage({
                                 ).toLocaleDateString()}
                               </p>
                             )}
-                            {/* 🏆 Check for Tournament Winner */}
-                            {/* {round.tournament.status === "Completed" &&
-                              round.tournament.winnerCouples &&
-                              round.tournament.winnerCouples.length > 0 && (
-                                <p className="font-bold mt-2">
-                                  🏆 <strong>Ganador:</strong>{" "}
-                                  {round.tournament.winnerCouples.map(
-                                    (couple, index) => (
-                                      <span key={couple.id}>
-                                        {couple.player1.name} &{" "}
-                                        {couple.player2.name}
-                                        {index <
-                                        round.tournament.winnerCouples.length -
-                                          1
-                                          ? ", "
-                                          : ""}
-                                      </span>
-                                    )
-                                  )}
-                                </p>
-                              )} */}
                           </div>
                         )}
                       </div>

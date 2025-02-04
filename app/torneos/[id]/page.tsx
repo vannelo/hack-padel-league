@@ -1,6 +1,48 @@
+import type { Metadata } from "next";
 import { getTournamentById } from "@/app/actions/tournamentActions";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const tournament = await getTournamentById(params.id);
+
+  if (!tournament) {
+    return {
+      title: "Torneo no encontrado | Hack Padel",
+      description: "El torneo que buscas no existe o ha sido eliminado.",
+    };
+  }
+
+  return {
+    title: `Torneo | ${tournament.name} | Hack Padel`,
+    description: `Consulta los resultados, parejas y rondas del torneo ${tournament.name} en Hack Padel.`,
+    openGraph: {
+      title: `${tournament.name} | Torneo de Hack Padel`,
+      description: `Descubre los jugadores, resultados y clasificaciones del torneo ${tournament.name}.`,
+      url: `https://hackpadel.com/torneos/${tournament.id}`,
+      type: "website",
+      images: [
+        {
+          url: "/img/hack-logo.png",
+          width: 1200,
+          height: 630,
+          alt: "Hack Padel Logo",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: "@hackpadel",
+      title: `${tournament.name} | Torneo de Hack Padel`,
+      description: `Consulta los resultados, parejas y rondas del torneo ${tournament.name} en Hack Padel.`,
+      images: ["/img/hack-logo.png"],
+    },
+  };
+}
 
 export default async function TournamentDetailsPage({
   params,
