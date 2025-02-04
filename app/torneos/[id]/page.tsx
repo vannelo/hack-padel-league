@@ -15,7 +15,7 @@ export default async function TournamentDetailsPage({
 
   return (
     <div className="bg-black text-white min-h-[100vh]">
-      <div className="container mx-auto py-16">
+      <div className="container mx-auto py-16 px-8">
         {/* HEADER */}
         <div className="flex flex-col justify-center items-center mb-8">
           <Image
@@ -25,13 +25,13 @@ export default async function TournamentDetailsPage({
             alt="Hack Padel Logo"
             className="mx-auto mb-4"
           />
-          <h2 className="text-4xl font-bold">{tournament.name}</h2>
+          <h2 className="text-4xl font-bold text-center">{tournament.name}</h2>
           <h3 className="text-lg tracking-[16px] text-primary">TORNEO</h3>
         </div>
 
-        <div className="flex gap-8">
+        <div className="block md:flex gap-8">
           {/* JUGADORES */}
-          <div className="w-1/4">
+          <div className="w-full md:w-1/4 mb-8">
             <div className="border rounded-[32px] p-8">
               <h4 className="text-primary font-bold border-b border-primary mb-4">
                 Jugadores
@@ -53,7 +53,7 @@ export default async function TournamentDetailsPage({
           </div>
 
           {/* RONDAS */}
-          <div className="w-3/4">
+          <div className="w-full md:w-3/4">
             <ul>
               {tournament.rounds && tournament.rounds.length > 0 ? (
                 tournament.rounds.map((round) => (
