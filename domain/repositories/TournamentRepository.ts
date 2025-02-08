@@ -133,26 +133,24 @@ export class TournamentRepository {
     tournamentId: string,
     rounds: { matches: { couple1Id: string; couple2Id: string }[] }[]
   ) {
-    return prisma.$transaction(async (tx) => {
-      for (let i = 0; i < rounds.length; i++) {
-        const round = await tx.tournamentRound.create({
-          data: {
-            tournament: { connect: { id: tournamentId } },
-            number: i + 1,
-            status: TournamentRoundStatus.Upcoming,
-          },
-        });
+    for (let i = 0; i < rounds.length; i++) {
+      const round = await prisma.tournamentRound.create({
+        data: {
+          tournament: { connect: { id: tournamentId } },
+          number: i + 1,
+          status: TournamentRoundStatus.Upcoming,
+        },
+      });
 
-        await tx.tournamentMatch.createMany({
-          data: rounds[i].matches.map((match) => ({
-            roundId: round.id,
-            couple1Id: match.couple1Id,
-            couple2Id: match.couple2Id,
-            status: TournamentMatchStatus.Scheduled,
-          })),
-        });
-      }
-    });
+      await prisma.tournamentMatch.createMany({
+        data: rounds[i].matches.map((match) => ({
+          roundId: round.id,
+          couple1Id: match.couple1Id,
+          couple2Id: match.couple2Id,
+          status: TournamentMatchStatus.Scheduled,
+        })),
+      });
+    }
   }
 
   async updateMatchScore(data: {

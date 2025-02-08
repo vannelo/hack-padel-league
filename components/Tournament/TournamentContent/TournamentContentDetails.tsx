@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography, Chip, Box, Link } from "@mui/material";
+import { Typography, Chip, Box, Link, Button } from "@mui/material";
 import NextLink from "next/link";
 import type { Tournament } from "@/types/tournament";
 import { TournamentStatus, TournamentType } from "@prisma/client";
@@ -44,8 +44,6 @@ export default function TournamentContentDetails({
           <strong>Canchas Disponibles:</strong> {tournament.availableCourts}
         </Typography>
       </Box>
-
-      {/* Add League Link if Tournament is a League Type */}
       {tournament.type === TournamentType.League && tournament.leagueId && (
         <Box sx={{ mt: 2 }}>
           <Typography>
@@ -60,6 +58,16 @@ export default function TournamentContentDetails({
             </Link>
           </Typography>
         </Box>
+      )}
+      {tournament.status === TournamentStatus.InProgress && (
+        <Button
+          variant="contained"
+          color="primary"
+          href={`/torneos/${tournament.id}`}
+          target="_blank"
+        >
+          Ver link público
+        </Button>
       )}
     </Box>
   );

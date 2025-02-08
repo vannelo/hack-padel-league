@@ -3,7 +3,6 @@ import { SnackbarProvider } from "@/hooks/useSnackBar";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 
-// Load Montserrat font from Google Fonts
 const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],

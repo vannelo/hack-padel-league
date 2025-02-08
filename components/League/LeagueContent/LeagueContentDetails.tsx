@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography, Chip, Box } from "@mui/material";
+import { Typography, Chip, Box, Button } from "@mui/material";
 import { LeagueStatus } from "@prisma/client";
 import { League } from "@/types/league";
 import { leagueStatusMap } from "@/constants/leagueEnums";
@@ -31,12 +31,22 @@ export default function LeagueContentDetails({
         />
       </Box>
       {league.startDate && (
-        <Box>
+        <Box sx={{ mb: 2 }}>
           <Typography>
             <strong>Fecha:</strong>{" "}
             {new Date(league.startDate).toLocaleDateString()}
           </Typography>
         </Box>
+      )}
+      {league.status === LeagueStatus.InProgress && (
+        <Button
+          variant="contained"
+          color="primary"
+          href={`/ligas/${league.id}`}
+          target="_blank"
+        >
+          Ver link público
+        </Button>
       )}
     </Box>
   );

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getTournamentById } from "@/app/actions/tournamentActions";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import { TournamentType } from "@prisma/client";
 
 export async function generateMetadata({
   params,
@@ -60,17 +62,46 @@ export default async function TournamentDetailsPage({
       <div className="container mx-auto py-16 px-8">
         {/* HEADER */}
         <div className="flex flex-col justify-center items-center mb-8">
-          <Image
-            src="/img/hack-logo.png"
-            width={160}
-            height={160}
-            alt="Hack Padel Logo"
-            className="mx-auto mb-4"
-          />
+          <Link href="/" className="text-primary font-bold text-2xl">
+            <Image
+              src="/img/hack-logo.png"
+              width={160}
+              height={160}
+              alt="Hack Padel Logo"
+              className="mx-auto mb-4"
+            />
+          </Link>
           <h2 className="text-4xl font-bold text-center">{tournament.name}</h2>
           <h3 className="text-lg tracking-[16px] text-primary">TORNEO</h3>
+          {tournament.type === TournamentType.League && (
+            <div className="uppercase font-bold text-white my-4">
+              Liga:{" "}
+              <Link
+                href={`/ligas/${tournament.leagueId}`}
+                className="text-primary hover:underline"
+              >
+                {tournament.league?.name}
+              </Link>
+            </div>
+          )}
+          {tournament.winnerCouples.length > 0 && (
+            <div className="text-center">
+              <h4 className="text-primary font-bold border-b border-primary mb-4">
+                Ganadores
+              </h4>
+              <ul>
+                {tournament.winnerCouples.map((couple) => (
+                  <li
+                    key={couple.id}
+                    className="flex justify-between text-xl font-bold"
+                  >
+                    {couple.player1.name} / {couple.player2.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-
         <div className="block md:flex gap-8">
           {/* JUGADORES */}
           <div className="w-full md:w-1/4 mb-8">
@@ -93,7 +124,6 @@ export default async function TournamentDetailsPage({
               </ul>
             </div>
           </div>
-
           {/* RONDAS */}
           <div className="w-full md:w-3/4">
             <ul>
@@ -111,23 +141,28 @@ export default async function TournamentDetailsPage({
                         <div className="mt-2">
                           {round.matches.map((match) => (
                             <div
+                              className="flex items-center p-2"
                               key={match.id}
-                              className="pl-4 border-l border-gray-500 mb-2"
                             >
-                              <p>
+                              <div className="flex-1 text-right">
                                 {match.couple1.player1.name} y{" "}
-                                {match.couple1.player2.name} vs{" "}
+                                {match.couple1.player2.name}
+                              </div>
+                              <div className="mx-4">
+                                <div className="bg-primary text-black px-4 py-1 rounded-full font-bold">
+                                  {match.status === "Completed" ? (
+                                    `${match.couple1Score} - ${match.couple2Score}`
+                                  ) : (
+                                    <span className="text-[12px]">
+                                      Por jugar
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="flex-1 text-left">
                                 {match.couple2.player1.name} y{" "}
                                 {match.couple2.player2.name}
-                              </p>
-                              <p>
-                                <strong>Marcador:</strong>{" "}
-                                <span className="text-primary">
-                                  {match.status === "Completed"
-                                    ? `${match.couple1Score} - ${match.couple2Score}`
-                                    : "Por jugar"}
-                                </span>
-                              </p>
+                              </div>
                             </div>
                           ))}
                         </div>

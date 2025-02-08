@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Button, Chip, TextField } from "@mui/material";
 import { League } from "@/types/league";
+import { leagueStatusMap } from "@/constants/leagueEnums";
 
 interface LeagueTableProps {
   leagues: League[];
@@ -29,7 +30,7 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Chip
-          label={params.value}
+          label={leagueStatusMap[params.value as keyof typeof leagueStatusMap]}
           color={
             params.value === "Upcoming"
               ? "primary"

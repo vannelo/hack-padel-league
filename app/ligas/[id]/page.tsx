@@ -3,6 +3,7 @@ import { getLeagueById } from "@/app/actions/leagueActions";
 import { TournamentStatus } from "@prisma/client";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 export async function generateMetadata({
   params,
@@ -20,28 +21,7 @@ export async function generateMetadata({
 
   return {
     title: `Liga | ${league.name} | Hack Padel`,
-    description: `Consulta la clasificación, jugadores y rondas de la liga ${league.name} en Hack Padel. Descubre torneos, posiciones y campeones.`,
-    openGraph: {
-      title: `${league.name} | Hack Padel`,
-      description: `Consulta la clasificación, jugadores y rondas de la liga ${league.name} en Hack Padel.`,
-      url: `https://hackpadel.com/liga/${league.id}`,
-      type: "website",
-      images: [
-        {
-          url: "/img/meta.jpg",
-          width: 1500,
-          height: 800,
-          alt: "Hack Padel Logo",
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      site: "@hackpadel",
-      title: `${league.name} | Hack Padel`,
-      description: `Consulta la clasificación, jugadores y rondas de la liga ${league.name} en Hack Padel.`,
-      images: ["/img/meta.jpg"],
-    },
+    description: `Consulta la clasificación, jugadores y rondas de la liga ${league.name} en Hack Padel.`,
   };
 }
 
@@ -56,7 +36,6 @@ export default async function LeagueDetailsPage({
     notFound();
   }
 
-  // Sorting players by points in descending order
   const sortedPlayers = [...league.players].sort((a, b) => b.points - a.points);
 
   return (
@@ -64,13 +43,15 @@ export default async function LeagueDetailsPage({
       <div className="container mx-auto py-16 px-8">
         {/* HEADER */}
         <div className="flex flex-col justify-center items-center mb-8">
-          <Image
-            src="/img/hack-logo.png"
-            width={160}
-            height={160}
-            alt="Hack Padel Logo"
-            className="mx-auto mb-4"
-          />
+          <Link href="/" className="text-primary font-bold text-2xl">
+            <Image
+              src="/img/hack-logo.png"
+              width={160}
+              height={160}
+              alt="Hack Padel Logo"
+              className="mx-auto mb-4"
+            />
+          </Link>
           <h2 className="text-4xl font-bold">{league.name}</h2>
           <h3 className="text-lg tracking-[16px] text-primary">LIGA</h3>
         </div>
@@ -82,15 +63,26 @@ export default async function LeagueDetailsPage({
                 Jugadores
               </h4>
               <ul>
-                {sortedPlayers.map((player) => (
-                  <li
-                    key={player.id}
-                    className="flex justify-between items-center"
-                  >
-                    {player.player.name}
-                    <strong>{player.points}</strong>
-                  </li>
-                ))}
+                {sortedPlayers.map((player, index) => {
+                  let className =
+                    "flex justify-between items-center p-2 rounded-md transition-all duration-500 ease-in-out";
+                  let arrow = null;
+
+                  if (index < 3) {
+                    className += " text-primary animate-bounce";
+                    arrow = "↑"; // Rising animation
+                  } else if (index >= sortedPlayers.length - 3) {
+                    className += " text-red-600 animate-bounce";
+                    arrow = "↓"; // Falling animation
+                  }
+
+                  return (
+                    <li key={player.id} className={className}>
+                      {arrow} {player.player.name}
+                      <strong>{player.points}</strong>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>
@@ -109,21 +101,10 @@ export default async function LeagueDetailsPage({
                     </h4>
                     <div className="block md:flex gap-4">
                       <div className="w-full md:w-1/4">
-                        {round.tournament && (
+                        {round.tournament?.status ===
+                          TournamentStatus.Upcoming && (
                           <div>
-                            <p
-                              className={
-                                round.tournament.status ===
-                                TournamentStatus.Completed
-                                  ? "text-green-500 font-bold"
-                                  : "text-white font-bold"
-                              }
-                            >
-                              {round.tournament.status ===
-                              TournamentStatus.Completed
-                                ? "Finalizada"
-                                : "Pendiente"}
-                            </p>
+                            <p className="text-white font-bold">Pendiente</p>
                             {round.tournament.startDate && (
                               <p>
                                 <strong>Fecha:</strong>{" "}
@@ -134,6 +115,23 @@ export default async function LeagueDetailsPage({
                             )}
                           </div>
                         )}
+                        {round.tournament?.winnerCouples &&
+                          round.tournament.winnerCouples.length > 0 && (
+                            <div>
+                              <p className="font-bold">Ganadores:</p>
+                              <p className="text-primary">
+                                {
+                                  round.tournament?.winnerCouples[0].player1
+                                    .name
+                                }{" "}
+                                /{" "}
+                                {
+                                  round.tournament?.winnerCouples[0].player2
+                                    .name
+                                }{" "}
+                              </p>
+                            </div>
+                          )}
                       </div>
                       <div className="w-full md:w-3/4 mb-4">
                         <p>
@@ -155,7 +153,7 @@ export default async function LeagueDetailsPage({
                             ? `/torneos/${round.tournament.id}`
                             : "#"
                         }
-                        className="inline-block bg-primary text-black px-4 py-2 rounded-lg"
+                        className="inline-block bg-primary text-black px-4 py-2 rounded-lg font-bold"
                       >
                         Ver Torneo
                       </a>
