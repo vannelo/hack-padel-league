@@ -43,7 +43,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${montserrat.className} antialiased`}>
-        <SnackbarProvider>{children}</SnackbarProvider>
+        <SnackbarProvider>
+          <main>{children}</main>
+        </SnackbarProvider>
       </body>
     </html>
   );

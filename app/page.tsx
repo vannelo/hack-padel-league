@@ -11,9 +11,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   return (
-    <div className="bg-black text-white min-h-[100vh]">
-      <div className="container mx-auto py-16 px-8">
-        {/* HEADER */}
+    <div className="bg-black text-white min-h-[100vh] flex flex-col justify-center items-center">
+      <div className="container mx-auto px-4">
         <div className="flex flex-col justify-center items-center mb-8">
           <Link href="/" className="text-primary font-bold text-2xl">
             <Image
@@ -24,16 +23,15 @@ export default async function HomePage() {
               className="mx-auto mb-4"
             />
           </Link>
-          <h3 className="text-lg tracking-[4px] text-white">
+          <h3 className="text-lg font-bold text-white uppercase text-center">
             Primera cancha de padel en Lindavista
           </h3>
         </div>
-        {/* LIGAS GRID */}
         <div className="flex justify-center items-center">
           <div className="text-center">
             <Link
               href="/ligas/"
-              className="block w-full bg-primary text-black px-4 py-2 rounded-lg font-bold"
+              className="text-primary font-bold text-2xl mb-4 hover:underline"
             >
               Ver Ligas
             </Link>
