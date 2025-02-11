@@ -1,57 +1,63 @@
-"use client";
+'use client'
 
-import { getAllLeagues } from "@/app/actions/leagueActions";
-import LeagueModal from "@/components/League/LeagueModal/LeagueModal";
-import LeagueTable from "@/components/League/LeagueTable/LeagueTable";
-import { League } from "@/types/league";
-import { Button, CircularProgress } from "@mui/material";
-import { useEffect, useState } from "react";
+import { getAllLeagues } from '@/app/actions/leagueActions'
+import LeagueModal from '@/components/League/LeagueModal/LeagueModal'
+import LeagueTable from '@/components/League/LeagueTable/LeagueTable'
+import Breadcrumbs from '@/components/UI/Breadcrumbs/Breadcrumbs'
+import Button from '@/components/UI/Button/Button'
+import { League } from '@/types/league'
+import { CircularProgress } from '@mui/material'
+import { useEffect, useState } from 'react'
 
 export default function AdminLeagues() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [leagues, setLeagues] = useState<League[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [leagues, setLeagues] = useState<League[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   const fetchLeagues = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const fetchedLeagues = await getAllLeagues();
-      setLeagues(fetchedLeagues as League[]);
+      const fetchedLeagues = await getAllLeagues()
+      setLeagues(fetchedLeagues as League[])
     } catch {
-      console.error("Error fetching leagues");
+      console.error('Error fetching leagues')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchLeagues();
-  }, []);
+    fetchLeagues()
+  }, [])
 
   const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+    setIsModalOpen(true)
+  }
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
   const handleLeagueCreated = () => {
-    fetchLeagues();
-    handleCloseModal();
-  };
+    fetchLeagues()
+    handleCloseModal()
+  }
 
   return (
     <div className="container mx-auto py-16">
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">Ligas</h1>
+      <Breadcrumbs />
+      <h1 className="mb-4 text-2xl font-bold text-gray-800">Ligas</h1>
       <section className="mb-8">
-        <Button variant="contained" color="primary" onClick={handleOpenModal}>
-          Crear liga
-        </Button>
+        <Button
+          label="Crear Liga"
+          onClick={handleOpenModal}
+          variant="primary"
+          size="medium"
+        />
       </section>
       <section className="mb-8">
         {isLoading ? (
-          <div className="flex justify-center items-center h-64">
+          <div className="flex h-64 items-center justify-center">
             <CircularProgress />
           </div>
         ) : (
@@ -66,5 +72,5 @@ export default function AdminLeagues() {
         />
       </section>
     </div>
-  );
+  )
 }

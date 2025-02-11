@@ -1,59 +1,68 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useState } from 'react'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import { appRoutes } from '@/constants/appRoutes'
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const router = useRouter();
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = await signIn("credentials", {
+    e.preventDefault()
+    const result = await signIn('credentials', {
       username,
       password,
       redirect: false,
-    });
+    })
 
     if (result?.ok) {
-      router.push("/admin");
+      router.push(appRoutes.admin.players)
     } else {
-      alert("Invalid credentials");
+      alert('Invalid credentials')
     }
-  };
+  }
 
   return (
-    <div className="flex justify-center items-center h-screen bg-black text-white">
+    <div className="flex h-screen items-center justify-center">
       <form
         onSubmit={handleLogin}
-        className="bg-gray-800 p-8 rounded-lg shadow-md w-96"
+        className="w-96 rounded-lg p-8 text-center shadow-lg"
       >
-        <h2 className="text-xl font-bold text-center mb-4">Admin Login</h2>
+        <Image
+          src="/img/hack-logo-black.png"
+          width={150}
+          height={150}
+          alt="Logo"
+          className="mx-auto mb-4"
+        />
+        <h2 className="mb-4 text-center text-xl font-bold">Login</h2>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="usuario"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full p-2 mb-4 rounded bg-gray-700 text-white"
+          className="mb-4 w-full rounded bg-slate-200 p-2 text-center"
           required
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 mb-4 rounded bg-gray-700 text-white"
+          className="mb-4 w-full rounded bg-slate-200 p-2 text-center"
           required
         />
         <button
           type="submit"
-          className="w-full bg-primary text-black py-2 rounded-lg"
+          className="w-full rounded-lg bg-primary py-2 font-bold text-black"
         >
           Login
         </button>
       </form>
     </div>
-  );
+  )
 }

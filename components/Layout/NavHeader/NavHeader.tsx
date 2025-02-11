@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function NavHeader() {
   return (
-    <div className="flex flex-col justify-center items-center">
-      <Link href="/" className="text-primary font-bold text-2xl">
+    <div className="flex flex-col items-center justify-center">
+      <Link href="/" className="text-2xl font-bold text-primary">
         <Image
           src="/img/hack-logo.png"
           width={160}
@@ -16,5 +16,5 @@ export default function NavHeader() {
         />
       </Link>
     </div>
-  );
+  )
 }

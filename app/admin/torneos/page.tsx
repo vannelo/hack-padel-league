@@ -1,57 +1,63 @@
-"use client";
+'use client'
 
-import { getAllTournaments } from "@/app/actions/tournamentActions";
-import TournamentModal from "@/components/Tournament/TournamentModal/TournamentModal";
-import TournamentTable from "@/components/Tournament/TournamentTable/TournamentTable";
-import { Tournament } from "@/types/tournament";
-import { Button, CircularProgress } from "@mui/material";
-import { useEffect, useState } from "react";
+import { getAllTournaments } from '@/app/actions/tournamentActions'
+import TournamentModal from '@/components/Tournament/TournamentModal/TournamentModal'
+import TournamentTable from '@/components/Tournament/TournamentTable/TournamentTable'
+import Breadcrumbs from '@/components/UI/Breadcrumbs/Breadcrumbs'
+import Button from '@/components/UI/Button/Button'
+import { Tournament } from '@/types/tournament'
+import { CircularProgress } from '@mui/material'
+import { useEffect, useState } from 'react'
 
 export default function AdminTournaments() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [tournaments, setTournaments] = useState<Tournament[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [tournaments, setTournaments] = useState<Tournament[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   const fetchTournaments = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const fetchedTournaments = await getAllTournaments();
-      setTournaments(fetchedTournaments as Tournament[]);
+      const fetchedTournaments = await getAllTournaments()
+      setTournaments(fetchedTournaments as Tournament[])
     } catch (error) {
-      console.error("Error fetching players and tournaments:", error);
+      console.error('Error fetching players and tournaments:', error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchTournaments();
-  }, []);
+    fetchTournaments()
+  }, [])
 
   const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+    setIsModalOpen(true)
+  }
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
   const handleTournamentCreated = () => {
-    fetchTournaments();
-    handleCloseModal();
-  };
+    fetchTournaments()
+    handleCloseModal()
+  }
 
   return (
     <div className="container mx-auto py-16">
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">Torneos</h1>
+      <Breadcrumbs />
+      <h1 className="mb-4 text-2xl font-bold text-gray-800">Torneos</h1>
       <section className="mb-8">
-        <Button variant="contained" color="primary" onClick={handleOpenModal}>
-          Crear torneo
-        </Button>
+        <Button
+          label="Crear Torneo"
+          onClick={handleOpenModal}
+          variant="primary"
+          size="medium"
+        />
       </section>
       <section className="mb-8">
         {isLoading ? (
-          <div className="flex justify-center items-center h-64">
+          <div className="flex h-64 items-center justify-center">
             <CircularProgress />
           </div>
         ) : (
@@ -66,5 +72,5 @@ export default function AdminTournaments() {
         />
       </section>
     </div>
-  );
+  )
 }
