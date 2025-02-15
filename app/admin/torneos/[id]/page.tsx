@@ -1,24 +1,23 @@
-import { getAllPlayers } from "@/app/actions/playerActions";
-import { getTournamentById } from "@/app/actions/tournamentActions";
-import TournamentContent from "@/components/Tournament/TournamentContent/TournamentContent";
-import { Container } from "@mui/material";
-import { notFound } from "next/navigation";
+import { getAllPlayers } from '@/app/actions/playerActions'
+import { getTournamentById } from '@/app/actions/tournamentActions'
+import TournamentContent from '@/components/Tournament/TournamentContent/TournamentContent'
+import { notFound } from 'next/navigation'
 
 export default async function TournamentDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: { id: string }
 }) {
-  const tournament = await getTournamentById(params.id);
-  const players = await getAllPlayers();
+  const tournament = await getTournamentById(params.id)
+  const players = await getAllPlayers()
 
   if (!tournament) {
-    notFound();
+    notFound()
   }
 
   return (
-    <Container maxWidth="lg">
+    <div className="container mx-auto py-16">
       <TournamentContent initialTournament={tournament} players={players} />
-    </Container>
-  );
+    </div>
+  )
 }

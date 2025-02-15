@@ -1,79 +1,69 @@
-"use client";
+'use client'
 
-import { useCallback } from "react";
-import { Box, CircularProgress } from "@mui/material";
-import { notFound } from "next/navigation";
-import type { Tournament } from "@/types/tournament";
-import type { Player } from "@/types/player";
-import { useSnackbar } from "@/hooks/useSnackBar";
-
-import TournamentContentHeaderButton from "./TournamentContentHeaderButton";
-import TournamentContentDetails from "./TournamentContentDetails";
-import TournamentContentCouples from "./TournamentContentCouples";
-import TournamentContentWinners from "./TournamentContentWinners";
-import TournamentContentRounds from "./TournamentContentRounds";
-import { useTournament } from "@/hooks/useTournament";
+import { useCallback } from 'react'
+import { CircularProgress } from '@mui/material'
+import { notFound } from 'next/navigation'
+import type { Tournament } from '@/types/tournament'
+import type { Player } from '@/types/player'
+import { useSnackbar } from '@/hooks/useSnackBar'
+import TournamentContentRounds from './TournamentContentRounds'
+import { useTournament } from '@/hooks/useTournament'
+import TournamentContentHeader from './TournamentContentHeader'
+import TournamentContentScores from './TournamentContentScores'
 
 interface TournamentContentProps {
-  initialTournament: Tournament;
-  players: Player[];
+  initialTournament: Tournament
+  players: Player[]
 }
 
 export default function TournamentContent({
   initialTournament,
   players,
 }: TournamentContentProps) {
-  const { showSnackbar } = useSnackbar();
+  const { showSnackbar } = useSnackbar()
   const { tournament, isLoading, fetchTournament } =
-    useTournament(initialTournament);
+    useTournament(initialTournament)
 
   const handleTournamentUpdate = useCallback(() => {
-    fetchTournament();
-  }, [fetchTournament]);
+    fetchTournament()
+  }, [fetchTournament])
 
   if (!tournament) {
-    notFound();
+    notFound()
   }
 
   if (isLoading) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "50vh",
-        }}
-      >
+      <div className="flex h-96 items-center justify-center">
         <CircularProgress />
-      </Box>
-    );
+      </div>
+    )
   }
 
   return (
-    <Box
-      sx={{
-        py: 8,
-      }}
-    >
-      <TournamentContentHeaderButton
+    <>
+      <TournamentContentHeader
         tournament={tournament}
         showSnackbar={showSnackbar}
         onTournamentUpdate={handleTournamentUpdate}
       />
-      <TournamentContentDetails tournament={tournament} />
-      <TournamentContentCouples
-        tournament={tournament}
-        players={players}
-        showSnackbar={showSnackbar}
-        onTournamentUpdate={handleTournamentUpdate}
-      />
-      <TournamentContentWinners tournament={tournament} />
-      <TournamentContentRounds
-        tournament={tournament}
-        showSnackbar={showSnackbar}
-        onTournamentUpdate={handleTournamentUpdate}
-      />
-    </Box>
-  );
+      <div className="block gap-8 md:flex">
+        <div className="mb-4 w-full md:w-2/6">
+          <TournamentContentScores
+            tournament={tournament}
+            players={players}
+            showSnackbar={showSnackbar}
+            onTournamentUpdate={handleTournamentUpdate}
+          />
+        </div>
+        <div className="w-full md:w-4/6">
+          <TournamentContentRounds
+            tournament={tournament}
+            showSnackbar={showSnackbar}
+            onTournamentUpdate={handleTournamentUpdate}
+          />
+        </div>
+      </div>
+    </>
+  )
 }

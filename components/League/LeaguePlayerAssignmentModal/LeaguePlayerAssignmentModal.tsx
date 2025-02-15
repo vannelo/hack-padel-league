@@ -1,29 +1,29 @@
-"use client";
+'use client'
 
-import { useState, useMemo } from "react";
-import { addPlayerToLeague } from "@/app/actions/leagueActions";
+import { useState, useMemo } from 'react'
+import { addPlayerToLeague } from '@/app/actions/leagueActions'
 import {
   Dialog,
   DialogTitle,
   DialogContent,
-  Button,
   Box,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
   SelectChangeEvent,
-} from "@mui/material";
-import type { Player } from "@/types/player";
-import { League } from "@/types/league";
+} from '@mui/material'
+import type { Player } from '@/types/player'
+import { League } from '@/types/league'
+import Button from '@/components/UI/Button/Button'
 
 interface LeaguePlayerAssignmentModalProps {
-  league: League;
-  players: Player[];
-  open: boolean;
-  onClose: () => void;
-  showSnackbar: (message: string, severity: "success" | "error") => void;
-  onLeagueUpdate: () => void;
+  league: League
+  players: Player[]
+  open: boolean
+  onClose: () => void
+  showSnackbar: (message: string, severity: 'success' | 'error') => void
+  onLeagueUpdate: () => void
 }
 
 export default function LeaguePlayerAssignmentModal({
@@ -34,51 +34,53 @@ export default function LeaguePlayerAssignmentModal({
   showSnackbar,
   onLeagueUpdate,
 }: LeaguePlayerAssignmentModalProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [playerId, setPlayerId] = useState("");
-  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [playerId, setPlayerId] = useState('')
+  const [error, setError] = useState('')
 
   const availablePlayers = useMemo(() => {
     return players.filter(
       (player) => !league.players.some((lp) => lp.player.id === player.id)
-    );
-  }, [players, league.players]);
+    )
+  }, [players, league.players])
 
   const handleChange = (event: SelectChangeEvent<string>) => {
-    setPlayerId(event.target.value);
-    setError("");
-  };
+    setPlayerId(event.target.value)
+    setError('')
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!playerId) {
-      setError("Por favor, seleccione un jugador.");
-      return;
+      setError('Por favor, seleccione un jugador.')
+      return
     }
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
     try {
-      await addPlayerToLeague({ leagueId: league.id, playerId, points: 0 });
-      showSnackbar("Jugador añadido a la liga correctamente", "success");
-      onLeagueUpdate();
-      onClose();
+      await addPlayerToLeague({ leagueId: league.id, playerId, points: 0 })
+      showSnackbar('Jugador añadido a la liga correctamente', 'success')
+      onLeagueUpdate()
+      onClose()
     } catch {
-      showSnackbar("Error al añadir jugador a la liga", "error");
+      showSnackbar('Error al añadir jugador a la liga', 'error')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Añadir Jugador a la Liga</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 'bold' }}>
+        Añadir Jugador a la Liga
+      </DialogTitle>
       <DialogContent>
         <Box
           component="form"
           onSubmit={handleSubmit}
           sx={{
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
             gap: 2,
             pt: 2,
           }}
@@ -94,7 +96,7 @@ export default function LeaguePlayerAssignmentModal({
               onChange={handleChange}
             >
               <MenuItem value="">
-                <em>-- Seleccione un Jugador --</em>
+                <em>-- Selecciona un Jugador --</em>
               </MenuItem>
               {availablePlayers.length > 0 ? (
                 availablePlayers.map((player) => (
@@ -111,7 +113,7 @@ export default function LeaguePlayerAssignmentModal({
             {error && (
               <Box
                 component="span"
-                sx={{ color: "error.main", fontSize: "0.75rem", mt: 0.5 }}
+                sx={{ color: 'error.main', fontSize: '0.75rem', mt: 0.5 }}
               >
                 {error}
               </Box>
@@ -119,14 +121,12 @@ export default function LeaguePlayerAssignmentModal({
           </FormControl>
           <Button
             type="submit"
-            variant="contained"
+            variant="primary"
             disabled={isSubmitting || availablePlayers.length === 0}
-            sx={{ mt: 2 }}
-          >
-            {isSubmitting ? "Añadiendo..." : "Añadir Jugador a la Liga"}
-          </Button>
+            label={isSubmitting ? 'Añadiendo...' : 'Añadir Jugador a la Liga'}
+          />
         </Box>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

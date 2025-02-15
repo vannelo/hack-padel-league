@@ -12,7 +12,7 @@ const NavSidebar = () => {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed left-0 top-0 z-10 flex h-screen w-64 flex-col bg-white p-4 transition-all duration-300">
+    <nav className="left-0 top-0 z-10 hidden h-screen w-64 flex-col bg-white p-4 transition-all duration-300 md:fixed md:flex">
       <div className="h-screen rounded-lg border border-gray-200 px-4 py-8">
         <div className="mb-6 text-center">
           <Link href={appRoutes.admin.players}>
@@ -31,8 +31,6 @@ const NavSidebar = () => {
             {isOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
-
-        {/* Navigation Links */}
         <ul className={`space-y-4 ${isOpen ? 'block' : 'hidden'} lg:block`}>
           <li>
             <Link
