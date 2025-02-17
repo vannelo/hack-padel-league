@@ -1,6 +1,5 @@
 'use client'
 
-import { deletePlayer } from '@/app/actions/playerActions'
 import Button from '@/components/UI/Button/Button'
 import { levelMap, genderMap } from '@/constants/playerEnums'
 import { Player } from '@/types/player'
@@ -14,13 +13,11 @@ import { useState } from 'react'
 
 interface PlayerTableProps {
   players: Player[]
-  onPlayerDeleted: () => void
   onPlayerEdit: (playerId: string) => void
 }
 
 export default function PlayerTable({
   players,
-  onPlayerDeleted,
   onPlayerEdit,
 }: PlayerTableProps) {
   const [paginationModel, setPaginationModel] = useState({
@@ -78,14 +75,6 @@ export default function PlayerTable({
             size="small"
             label="Editar"
           />
-          <Button
-            onClick={() =>
-              handleDelete(params.id as string, params.row.name as string)
-            }
-            size="small"
-            label="Eliminar"
-            variant="danger"
-          />
         </Stack>
       ),
     },
@@ -100,14 +89,6 @@ export default function PlayerTable({
     gender: player.gender,
     level: player.level,
   }))
-
-  async function handleDelete(id: string, name: string) {
-    if (window.confirm(`¿Estás seguro de que quieres eliminar a ${name}?`)) {
-      await deletePlayer(id)
-      alert('Jugador eliminado exitosamente')
-      onPlayerDeleted()
-    }
-  }
 
   return (
     <div>

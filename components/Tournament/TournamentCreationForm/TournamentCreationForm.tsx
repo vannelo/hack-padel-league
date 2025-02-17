@@ -1,84 +1,84 @@
-"use client";
+'use client'
 
-import { createTournament } from "@/app/actions/tournamentActions";
-import { useState } from "react";
-import { Button, TextField, Box, Stack } from "@mui/material";
+import { createTournament } from '@/app/actions/tournamentActions'
+import { useState } from 'react'
+import { Button, TextField, Box, Stack } from '@mui/material'
 
 interface TournamentCreationFormProps {
-  onTournamentCreated: (message: string) => void;
-  onError: (message: string) => void;
+  onTournamentCreated: (message: string) => void
+  onError: (message: string) => void
 }
 
 export default function TournamentCreationForm({
   onTournamentCreated,
   onError,
 }: TournamentCreationFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
-    name: "",
-    availableCourts: "1",
-  });
+    name: '',
+    availableCourts: '1',
+  })
   const [errors, setErrors] = useState({
-    name: "",
-    availableCourts: "",
-  });
+    name: '',
+    availableCourts: '',
+  })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" }));
-  };
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+    setErrors((prev) => ({ ...prev, [name]: '' }))
+  }
 
   const validateForm = () => {
-    let isValid = true;
-    const newErrors = { name: "", startDate: "", availableCourts: "" };
+    let isValid = true
+    const newErrors = { name: '', startDate: '', availableCourts: '' }
 
     if (formData.name.length < 2) {
-      newErrors.name = "El nombre del torneo debe tener al menos 2 caracteres.";
-      isValid = false;
+      newErrors.name = 'El nombre del torneo debe tener al menos 2 caracteres.'
+      isValid = false
     }
 
-    const availableCourts = Number(formData.availableCourts);
+    const availableCourts = Number(formData.availableCourts)
     if (isNaN(availableCourts) || availableCourts < 1) {
       newErrors.availableCourts =
-        "El número de canchas disponibles debe ser al menos 1.";
-      isValid = false;
+        'El número de canchas disponibles debe ser al menos 1.'
+      isValid = false
     }
 
-    setErrors(newErrors);
-    return isValid;
-  };
+    setErrors(newErrors)
+    return isValid
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+    e.preventDefault()
+    if (!validateForm()) return
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
     try {
       await createTournament({
         name: formData.name,
         availableCourts: Number(formData.availableCourts),
-      });
+      })
       onTournamentCreated(
         `Torneo "${formData.name}" ha sido añadido al sistema.`
-      );
+      )
     } catch {
-      onError("Error al crear el torneo. Por favor, inténtalo de nuevo.");
+      onError('Error al crear el torneo. Por favor, inténtalo de nuevo.')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <Box
       component="form"
       onSubmit={handleSubmit}
       sx={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         gap: 2,
-        maxWidth: "500px",
-        margin: "auto",
+        maxWidth: '500px',
+        margin: 'auto',
         paddingTop: 2,
       }}
     >
@@ -116,8 +116,8 @@ export default function TournamentCreationForm({
         disabled={isSubmitting}
         sx={{ mt: 2 }}
       >
-        {isSubmitting ? "Creando..." : "Crear Torneo"}
+        {isSubmitting ? 'Creando...' : 'Crear Torneo'}
       </Button>
     </Box>
-  );
+  )
 }

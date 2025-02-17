@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Gender, Level } from '@prisma/client'
-import { updatePlayer } from '@/app/actions/playerActions'
+import { createPlayer } from '@/app/actions/playerActions'
 import { genderMap, levelMap } from '@/constants/playerEnums'
 import {
   TextField,
@@ -14,23 +14,15 @@ import {
   Box,
   Stack,
 } from '@mui/material'
-import { Player } from '@/types/player'
 import Button from '@/components/UI/Button/Button'
 
-interface PlayerEditFormProps {
-  onPlayerUpdated: (message: string) => void
-  onError: (message: string) => void
-  initialData: Player
+interface PlayerCreateProps {
+  onPlayerCreated: (message: string) => void
 }
 
-export default function PlayerEditForm({
-  onPlayerUpdated,
-  onError,
-  initialData,
-}: PlayerEditFormProps) {
+export default function PlayerCreate({ onPlayerCreated }: PlayerCreateProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
-    id: '',
     name: '',
     email: '',
     age: '',
@@ -44,20 +36,6 @@ export default function PlayerEditForm({
     age: '',
     phone: '',
   })
-
-  useEffect(() => {
-    if (initialData) {
-      setFormData({
-        id: initialData.id,
-        name: initialData.name,
-        email: initialData.email ?? '',
-        age: initialData.age ? initialData.age.toString() : '',
-        phone: initialData.phone ?? '',
-        gender: initialData.gender,
-        level: initialData.level,
-      })
-    }
-  }, [initialData])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -89,16 +67,15 @@ export default function PlayerEditForm({
 
     setIsSubmitting(true)
     try {
-      const playerId = formData.id
       const playerData = {
         ...formData,
         age: Number.parseInt(formData.age, 10),
       }
 
-      await updatePlayer(playerId, playerData)
-      onPlayerUpdated(`${formData.name} ha sido actualizado exitosamente.`)
+      await createPlayer(playerData)
+      onPlayerCreated(`${formData.name} ha sido añadido al sistema.`)
     } catch {
-      onError('Error al actualizar el jugador. Por favor, inténtalo de nuevo.')
+      alert('Error al crear jugador')
     } finally {
       setIsSubmitting(false)
     }
@@ -201,7 +178,7 @@ export default function PlayerEditForm({
       <Button
         type="submit"
         disabled={isSubmitting}
-        label={isSubmitting ? 'Guardando...' : 'Actualizar Jugador'}
+        label={isSubmitting ? 'Guardando...' : 'Crear Jugador'}
       />
     </Box>
   )

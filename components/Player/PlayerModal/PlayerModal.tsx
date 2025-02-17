@@ -6,8 +6,8 @@ import {
   DialogTitle,
   DialogContent,
 } from '@mui/material'
-import PlayerCreationForm from '../PlayerCreationForm/PlayerCreationForm'
-import PlayerEditForm from '../PlayerEditForm/PlayerEditForm'
+import PlayerCreationForm from '../../Admin/Player/PlayerCreate/PlayerCreate'
+import PlayerEditForm from '../../Admin/Player/PlayerEdit/PlayerEdit'
 import { getPlayerById } from '@/app/actions/playerActions'
 import { Player } from '@/types/player'
 
@@ -85,10 +85,7 @@ export default function PlayerModal({
               initialData={playerData}
             />
           ) : (
-            <PlayerCreationForm
-              onPlayerCreated={handlePlayerCreated}
-              onError={handleError}
-            />
+            <PlayerCreationForm onPlayerCreated={handlePlayerCreated} />
           )}
         </DialogContent>
       </Dialog>

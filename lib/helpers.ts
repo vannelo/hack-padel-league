@@ -6,3 +6,7 @@ export const formatDate = (date: Date) => {
     year: 'numeric',
   }).format(date)
 }
+
+export const startsWithRoute = (pathname: string, href: string) => {
+  return pathname.startsWith(href)
+}

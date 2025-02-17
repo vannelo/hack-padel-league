@@ -1,28 +1,24 @@
-"use server";
+'use server'
 
-import { appRoutes } from "@/constants/appRoutes";
-import { playerService } from "@/domain";
-import { CreatePlayerData, Player } from "@/types/player";
-import { revalidatePath } from "next/cache";
+import { playerService } from '@/domain'
+import { CreatePlayerData, Player } from '@/types/player'
 
 export async function createPlayer(playerData: CreatePlayerData) {
-  await playerService.createPlayer(playerData);
+  await playerService.createPlayer(playerData)
 }
 
 export async function updatePlayer(playerId: string, data: Partial<Player>) {
-  await playerService.updatePlayer(playerId, data);
-  revalidatePath(appRoutes.players.index);
+  await playerService.updatePlayer(playerId, data)
 }
 
 export async function deletePlayer(playerId: string) {
-  await playerService.deletePlayer(playerId);
-  revalidatePath(appRoutes.players.index);
+  await playerService.deletePlayer(playerId)
 }
 
 export async function getAllPlayers(): Promise<Player[]> {
-  return await playerService.getAllPlayers();
+  return await playerService.getAllPlayers()
 }
 
 export async function getPlayerById(playerId: string): Promise<Player> {
-  return await playerService.getPlayerById(playerId);
+  return await playerService.getPlayerById(playerId)
 }

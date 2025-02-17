@@ -1,11 +1,11 @@
 'use client'
 
-import NavSidebar from '@/components/Layout/Admin/NavSidebar/NavSidebar'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from '@/lib/theme'
-import NavMobile from '@/components/Layout/Admin/NavMobile/NavMobile'
+import NavMobile from '@/components/Admin/Layout/NavMobile/NavMobile'
+import NavSidebar from '@/components/Admin/Layout/NavSidebar/NavSidebar'
 
-export default function AdminLayout({
+export default function PageLayout({
   children,
 }: {
   children: React.ReactNode
