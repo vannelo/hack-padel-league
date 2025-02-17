@@ -1,13 +1,14 @@
 'use client'
 
+import { CircularProgress } from '@mui/material'
+import { useEffect, useState } from 'react'
+
 import { getAllTournaments } from '@/app/actions/tournamentActions'
 import TournamentModal from '@/components/Tournament/TournamentModal/TournamentModal'
 import TournamentTable from '@/components/Tournament/TournamentTable/TournamentTable'
 import Breadcrumbs from '@/components/UI/Breadcrumbs/Breadcrumbs'
 import Button from '@/components/UI/Button/Button'
 import { Tournament } from '@/types/tournament'
-import { CircularProgress } from '@mui/material'
-import { useEffect, useState } from 'react'
 
 export default function AdminTournaments() {
   const [isModalOpen, setIsModalOpen] = useState(false)

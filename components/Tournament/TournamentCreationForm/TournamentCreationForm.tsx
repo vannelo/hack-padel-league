@@ -1,8 +1,9 @@
 'use client'
 
-import { createTournament } from '@/app/actions/tournamentActions'
+import { Box, Button, Stack, TextField } from '@mui/material'
 import { useState } from 'react'
-import { Button, TextField, Box, Stack } from '@mui/material'
+
+import { createTournament } from '@/app/actions/tournamentActions'
 
 interface TournamentCreationFormProps {
   onTournamentCreated: (message: string) => void

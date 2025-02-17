@@ -1,9 +1,10 @@
 'use client'
 
 import { ThemeProvider } from '@mui/material/styles'
-import theme from '@/lib/theme'
+
 import NavMobile from '@/components/Admin/Layout/NavMobile/NavMobile'
 import NavSidebar from '@/components/Admin/Layout/NavSidebar/NavSidebar'
+import theme from '@/lib/theme'
 
 export default function PageLayout({
   children,

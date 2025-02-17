@@ -1,7 +1,9 @@
-import type { Metadata } from 'next'
-import { SnackbarProvider } from '@/hooks/useSnackBar'
-import { Montserrat } from 'next/font/google'
 import './globals.css'
+
+import type { Metadata } from 'next'
+import { Montserrat } from 'next/font/google'
+
+import { SnackbarProvider } from '@/hooks/useSnackBar'
 
 const montserrat = Montserrat({
   subsets: ['latin'],

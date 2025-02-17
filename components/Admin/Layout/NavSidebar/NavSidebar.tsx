@@ -1,10 +1,12 @@
 'use client'
 
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
+import React from 'react'
+
 import { appRoutes } from '@/constants/appRoutes'
 import { adminMenuItems } from '@/constants/menuItems'
-import React from 'react'
+
 import NavSidebarItem from './NavSidebarItem'
 
 const NavSidebar = () => {

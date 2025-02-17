@@ -1,14 +1,15 @@
 'use client'
 
-import { useState } from 'react'
 import { LeagueStatus } from '@prisma/client'
-import { League, LeaguePlayer } from '@/types/league'
+import Link from 'next/link'
+import { useState } from 'react'
+
 import { finishLeague, startLeague } from '@/app/actions/leagueActions'
 import Button from '@/components/UI/Button/Button'
 import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
 import { leagueStatusMap } from '@/constants/leagueEnums'
 import { formatDate } from '@/lib/helpers'
-import Link from 'next/link'
+import { League, LeaguePlayer } from '@/types/league'
 
 interface LeagueContentHeaderProps {
   league: League

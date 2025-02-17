@@ -1,21 +1,22 @@
 'use client'
 
-import { useState, useMemo } from 'react'
-import { addPlayerToLeague } from '@/app/actions/leagueActions'
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
   Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
+  Select,
   SelectChangeEvent,
 } from '@mui/material'
-import type { Player } from '@/types/player'
-import { League } from '@/types/league'
+import { useMemo, useState } from 'react'
+
+import { addPlayerToLeague } from '@/app/actions/leagueActions'
 import Button from '@/components/UI/Button/Button'
+import { League } from '@/types/league'
+import type { Player } from '@/types/player'
 
 interface LeaguePlayerAssignmentModalProps {
   league: League

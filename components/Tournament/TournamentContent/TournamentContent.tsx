@@ -1,14 +1,16 @@
 'use client'
 
-import { useCallback } from 'react'
 import { CircularProgress } from '@mui/material'
 import { notFound } from 'next/navigation'
-import type { Tournament } from '@/types/tournament'
-import type { Player } from '@/types/player'
+import { useCallback } from 'react'
+
 import { useSnackbar } from '@/hooks/useSnackBar'
-import TournamentContentRounds from './TournamentContentRounds'
 import { useTournament } from '@/hooks/useTournament'
+import type { Player } from '@/types/player'
+import type { Tournament } from '@/types/tournament'
+
 import TournamentContentHeader from './TournamentContentHeader'
+import TournamentContentRounds from './TournamentContentRounds'
 import TournamentContentScores from './TournamentContentScores'
 
 interface TournamentContentProps {

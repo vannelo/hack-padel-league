@@ -1,11 +1,13 @@
 'use client'
 
-import { useState, useMemo } from 'react'
-import { Player } from '@/types/player'
 import { LeagueStatus } from '@prisma/client'
-import { League, LeaguePlayer } from '@/types/league'
-import LeaguePlayerAssignmentModal from '../LeaguePlayerAssignmentModal/LeaguePlayerAssignmentModal'
+import { useMemo, useState } from 'react'
+
 import Button from '@/components/UI/Button/Button'
+import { League, LeaguePlayer } from '@/types/league'
+import { Player } from '@/types/player'
+
+import LeaguePlayerAssignmentModal from '../LeaguePlayerAssignmentModal/LeaguePlayerAssignmentModal'
 
 interface LeagueContentRankingProps {
   league: League

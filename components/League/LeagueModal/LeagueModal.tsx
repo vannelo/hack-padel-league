@@ -1,13 +1,14 @@
 'use client'
 
-import { useState } from 'react'
 import {
-  Snackbar,
   Alert,
   Dialog,
-  DialogTitle,
   DialogContent,
+  DialogTitle,
+  Snackbar,
 } from '@mui/material'
+import { useState } from 'react'
+
 import LeagueCreationForm from '../LeagueCreationForm/LeagueCreationForm'
 
 interface LeagueModalProps {

@@ -1,42 +1,42 @@
-"use client";
+'use client'
 
-import { createContext, useContext, useState, type ReactNode } from "react";
-import { Snackbar, Alert } from "@mui/material";
+import { Alert, Snackbar } from '@mui/material'
+import { createContext, type ReactNode, useContext, useState } from 'react'
 
 interface SnackbarContextType {
-  showSnackbar: (message: string, severity: "success" | "error") => void;
+  showSnackbar: (message: string, severity: 'success' | 'error') => void
 }
 
 const SnackbarContext = createContext<SnackbarContextType | undefined>(
   undefined
-);
+)
 
 export const SnackbarProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [snackbar, setSnackbar] = useState({
     open: false,
-    message: "",
-    severity: "success" as "success" | "error",
-  });
+    message: '',
+    severity: 'success' as 'success' | 'error',
+  })
 
-  const showSnackbar = (message: string, severity: "success" | "error") => {
+  const showSnackbar = (message: string, severity: 'success' | 'error') => {
     setSnackbar({
       open: true,
       message,
       severity,
-    });
-  };
+    })
+  }
 
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
-    if (reason === "clickaway") {
-      return;
+    if (reason === 'clickaway') {
+      return
     }
-    setSnackbar((prev) => ({ ...prev, open: false }));
-  };
+    setSnackbar((prev) => ({ ...prev, open: false }))
+  }
 
   return (
     <SnackbarContext.Provider value={{ showSnackbar }}>
@@ -45,24 +45,24 @@ export const SnackbarProvider: React.FC<{ children: ReactNode }> = ({
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert
           onClose={handleCloseSnackbar}
           severity={snackbar.severity}
-          sx={{ width: "100%" }}
+          sx={{ width: '100%' }}
         >
           {snackbar.message}
         </Alert>
       </Snackbar>
     </SnackbarContext.Provider>
-  );
-};
+  )
+}
 
 export const useSnackbar = () => {
-  const context = useContext(SnackbarContext);
+  const context = useContext(SnackbarContext)
   if (context === undefined) {
-    throw new Error("useSnackbar must be used within a SnackbarProvider");
+    throw new Error('useSnackbar must be used within a SnackbarProvider')
   }
-  return context;
-};
+  return context
+}

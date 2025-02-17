@@ -1,5 +1,6 @@
-import PageLayout from '@/components/Admin/Layout/PageLayout/PageLayout'
 import type { Metadata } from 'next'
+
+import PageLayout from '@/components/Admin/Layout/PageLayout/PageLayout'
 
 export const metadata: Metadata = {
   title: 'Admin | Hack Padel',

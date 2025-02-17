@@ -1,8 +1,9 @@
 'use client'
 
-import { createLeague } from '@/app/actions/leagueActions'
-import { useState } from 'react'
 import { Box, TextField } from '@mui/material'
+import { useState } from 'react'
+
+import { createLeague } from '@/app/actions/leagueActions'
 import Button from '@/components/UI/Button/Button'
 
 interface LeagueCreationFormProps {

@@ -1,17 +1,18 @@
 'use client'
 
-import {
-  startTournament,
-  finishTournament,
-} from '@/app/actions/tournamentActions'
-import { useState } from 'react'
-import type { Tournament } from '@/types/tournament'
 import { TournamentStatus } from '@prisma/client'
+import Link from 'next/link'
+import { useState } from 'react'
+
+import {
+  finishTournament,
+  startTournament,
+} from '@/app/actions/tournamentActions'
+import Button from '@/components/UI/Button/Button'
 import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
 import { tournamentStatusMap } from '@/constants/tournamentEnums'
-import Link from 'next/link'
 import { formatDate } from '@/lib/helpers'
-import Button from '@/components/UI/Button/Button'
+import type { Tournament } from '@/types/tournament'
 
 interface TournamentDetailsHeaderProps {
   tournament: Tournament

@@ -1,10 +1,11 @@
 'use client'
 
-import Link from 'next/link'
-import { useState } from 'react'
-import { usePathname } from 'next/navigation'
-import { Home, Users, Trophy, Menu, X } from 'lucide-react'
+import { Home, Menu, Trophy, Users, X } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+
 import { appRoutes } from '@/constants/appRoutes'
 
 const NavMobile = () => {

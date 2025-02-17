@@ -1,4 +1,5 @@
 import { Award, Trophy, Users } from 'lucide-react'
+
 import { appRoutes } from './appRoutes'
 
 export const adminMenuItems = [

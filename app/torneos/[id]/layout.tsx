@@ -1,16 +1,16 @@
-import NavHeader from "@/components/Layout/NavHeader/NavHeader";
+import NavHeader from '@/components/Layout/NavHeader/NavHeader'
 
 export default function LeaguesLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <div className="bg-black text-white min-h-[100vh]">
-      <div className="container mx-auto py-16 px-4">
+    <div className="min-h-[100vh] bg-black text-white">
+      <div className="container mx-auto px-4 py-16">
         <NavHeader />
         {children}
       </div>
     </div>
-  );
+  )
 }

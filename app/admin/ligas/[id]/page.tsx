@@ -1,9 +1,9 @@
+import { notFound } from 'next/navigation'
+
 import { getLeagueById } from '@/app/actions/leagueActions'
 import { getAllPlayers } from '@/app/actions/playerActions'
 import LeagueContent from '@/components/League/LeagueContent/LeagueContent'
-
 import { League } from '@/types/league'
-import { notFound } from 'next/navigation'
 
 export default async function LeagueDetailsPage({
   params,

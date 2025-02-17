@@ -1,19 +1,20 @@
-"use client";
+'use client'
 
-import { useState } from "react";
 import {
-  Snackbar,
   Alert,
   Dialog,
-  DialogTitle,
   DialogContent,
-} from "@mui/material";
-import TournamentCreationForm from "../TournamentCreationForm/TournamentCreationForm";
+  DialogTitle,
+  Snackbar,
+} from '@mui/material'
+import { useState } from 'react'
+
+import TournamentCreationForm from '../TournamentCreationForm/TournamentCreationForm'
 
 interface TournamentModalProps {
-  open: boolean;
-  onClose: () => void;
-  onTournamentCreated: () => void;
+  open: boolean
+  onClose: () => void
+  onTournamentCreated: () => void
 }
 
 export default function TournamentModal({
@@ -23,37 +24,37 @@ export default function TournamentModal({
 }: TournamentModalProps) {
   const [snackbar, setSnackbar] = useState({
     open: false,
-    message: "",
-    severity: "success" as "success" | "error",
-  });
+    message: '',
+    severity: 'success' as 'success' | 'error',
+  })
 
   const handleTournamentCreated = (message: string) => {
     setSnackbar({
       open: true,
       message,
-      severity: "success",
-    });
-    onTournamentCreated();
-    onClose();
-  };
+      severity: 'success',
+    })
+    onTournamentCreated()
+    onClose()
+  }
 
   const handleError = (message: string) => {
     setSnackbar({
       open: true,
       message,
-      severity: "error",
-    });
-  };
+      severity: 'error',
+    })
+  }
 
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
-    if (reason === "clickaway") {
-      return;
+    if (reason === 'clickaway') {
+      return
     }
-    setSnackbar((prev) => ({ ...prev, open: false }));
-  };
+    setSnackbar((prev) => ({ ...prev, open: false }))
+  }
 
   return (
     <>
@@ -70,16 +71,16 @@ export default function TournamentModal({
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert
           onClose={handleCloseSnackbar}
           severity={snackbar.severity}
-          sx={{ width: "100%" }}
+          sx={{ width: '100%' }}
         >
           {snackbar.message}
         </Alert>
       </Snackbar>
     </>
-  );
+  )
 }

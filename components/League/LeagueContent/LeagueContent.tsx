@@ -1,14 +1,16 @@
 'use client'
 
-import { useCallback, useState } from 'react'
 import { CircularProgress } from '@mui/material'
+import { useCallback, useState } from 'react'
+
 import { getLeagueById } from '@/app/actions/leagueActions'
 import { useSnackbar } from '@/hooks/useSnackBar'
 import { League } from '@/types/league'
-import LeagueContentCouples from './LeagueContentRanking'
 import { Player } from '@/types/player'
-import LeagueContentRounds from './LeagueContentRounds'
+
 import LeagueContentHeader from './LeagueContentHeader'
+import LeagueContentCouples from './LeagueContentRanking'
+import LeagueContentRounds from './LeagueContentRounds'
 
 interface LeagueContentProps {
   initialLeague: League

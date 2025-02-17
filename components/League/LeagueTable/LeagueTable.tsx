@@ -1,13 +1,14 @@
 'use client'
 
+import { TextField } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import Link from 'next/link'
 import { useState } from 'react'
-import { TextField } from '@mui/material'
-import { League } from '@/types/league'
-import { leagueStatusMap } from '@/constants/leagueEnums'
+
 import Button from '@/components/UI/Button/Button'
 import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
+import { leagueStatusMap } from '@/constants/leagueEnums'
+import { League } from '@/types/league'
 
 interface LeagueTableProps {
   leagues: League[]

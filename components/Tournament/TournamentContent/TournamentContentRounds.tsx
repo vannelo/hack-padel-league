@@ -1,15 +1,16 @@
 'use client'
 
-import { useState } from 'react'
-import { updateMatchScore } from '@/app/actions/tournamentActions'
 import { TextField } from '@mui/material'
+import { TournamentMatchStatus, TournamentStatus } from '@prisma/client'
+import { useState } from 'react'
+
+import { updateMatchScore } from '@/app/actions/tournamentActions'
+import Button from '@/components/UI/Button/Button'
 import type {
   Tournament,
   TournamentMatch,
   TournamentRound,
 } from '@/types/tournament'
-import Button from '@/components/UI/Button/Button'
-import { TournamentMatchStatus, TournamentStatus } from '@prisma/client'
 
 interface TournamentContentRoundsProps {
   tournament: Tournament

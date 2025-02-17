@@ -19,6 +19,6 @@ export async function getAllPlayers(): Promise<Player[]> {
   return await playerService.getAllPlayers()
 }
 
-export async function getPlayerById(playerId: string): Promise<Player> {
+export async function getPlayerById(playerId: string): Promise<Player | null> {
   return await playerService.getPlayerById(playerId)
 }

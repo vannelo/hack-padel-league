@@ -1,16 +1,17 @@
-import { prisma } from "@/lib/prisma";
-import { CreateTournamentData, TournamentCoupleData } from "@/types/tournament";
 import {
   TournamentMatchStatus,
   TournamentRoundStatus,
   TournamentStatus,
-} from "@prisma/client";
+} from '@prisma/client'
+
+import { prisma } from '@/lib/prisma'
+import { CreateTournamentData, TournamentCoupleData } from '@/types/tournament'
 
 export class TournamentRepository {
   async createTournament(data: CreateTournamentData) {
     return prisma.tournament.create({
       data,
-    });
+    })
   }
 
   async getAllTournaments() {
@@ -24,8 +25,8 @@ export class TournamentRepository {
           include: { player1: true, player2: true },
         },
       },
-      orderBy: { createdAt: "desc" },
-    });
+      orderBy: { createdAt: 'desc' },
+    })
   }
 
   async getTournamentById(id: string) {
@@ -34,7 +35,7 @@ export class TournamentRepository {
       include: {
         couples: {
           include: { player1: true, player2: true },
-          orderBy: { score: "desc" },
+          orderBy: { score: 'desc' },
         },
         rounds: {
           include: {
@@ -55,7 +56,7 @@ export class TournamentRepository {
         },
         league: true,
       },
-    });
+    })
   }
 
   async addCoupleToTournament(
@@ -68,23 +69,23 @@ export class TournamentRepository {
           some: { id: tournamentId },
         },
       },
-    });
+    })
 
     const playersInCouples = new Set(
       existingCouples.flatMap((couple) => [couple.player1Id, couple.player2Id])
-    );
+    )
 
     if (
       playersInCouples.has(data.player1Id) ||
       playersInCouples.has(data.player2Id)
     ) {
       throw new Error(
-        "One or both players are already part of another couple in this tournament."
-      );
+        'One or both players are already part of another couple in this tournament.'
+      )
     }
 
     if (data.player1Id === data.player2Id) {
-      throw new Error("A player cannot be both Player 1 and Player 2.");
+      throw new Error('A player cannot be both Player 1 and Player 2.')
     }
 
     return prisma.tournamentCouple.create({
@@ -95,7 +96,7 @@ export class TournamentRepository {
           connect: { id: tournamentId },
         },
       },
-    });
+    })
   }
 
   async updateTournamentStatus(id: string, status: TournamentStatus) {
@@ -105,7 +106,7 @@ export class TournamentRepository {
       include: {
         couples: {
           include: { player1: true, player2: true },
-          orderBy: { score: "desc" },
+          orderBy: { score: 'desc' },
         },
         rounds: {
           include: {
@@ -126,7 +127,7 @@ export class TournamentRepository {
         },
         league: true,
       },
-    });
+    })
   }
 
   async createRoundsAndMatches(
@@ -140,7 +141,7 @@ export class TournamentRepository {
           number: i + 1,
           status: TournamentRoundStatus.Upcoming,
         },
-      });
+      })
 
       await prisma.tournamentMatch.createMany({
         data: rounds[i].matches.map((match) => ({
@@ -149,14 +150,14 @@ export class TournamentRepository {
           couple2Id: match.couple2Id,
           status: TournamentMatchStatus.Scheduled,
         })),
-      });
+      })
     }
   }
 
   async updateMatchScore(data: {
-    matchId: string;
-    couple1Score: number;
-    couple2Score: number;
+    matchId: string
+    couple1Score: number
+    couple2Score: number
   }) {
     const updatedMatch = await prisma.$transaction(async (tx) => {
       const match = await tx.tournamentMatch.update({
@@ -170,7 +171,7 @@ export class TournamentRepository {
           couple1: true,
           couple2: true,
         },
-      });
+      })
 
       await tx.tournamentCouple.update({
         where: { id: match.couple1Id },
@@ -179,7 +180,7 @@ export class TournamentRepository {
             increment: data.couple1Score,
           },
         },
-      });
+      })
 
       await tx.tournamentCouple.update({
         where: { id: match.couple2Id },
@@ -188,12 +189,12 @@ export class TournamentRepository {
             increment: data.couple2Score,
           },
         },
-      });
+      })
 
-      return match;
-    });
+      return match
+    })
 
-    return updatedMatch;
+    return updatedMatch
   }
 
   async finishTournament(tournamentId: string, winnerCoupleIds: string[]) {
@@ -209,7 +210,7 @@ export class TournamentRepository {
       include: {
         couples: {
           include: { player1: true, player2: true },
-          orderBy: { score: "desc" },
+          orderBy: { score: 'desc' },
         },
         rounds: {
           include: {
@@ -230,6 +231,6 @@ export class TournamentRepository {
         },
         league: true,
       },
-    });
+    })
   }
 }

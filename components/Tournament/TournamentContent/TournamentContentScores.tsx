@@ -1,11 +1,13 @@
 'use client'
 
-import type { Tournament, TournamentCouple } from '@/types/tournament'
-import TournamentCoupleAssignmentModal from '../TournamentCoupleAssignmentModal/TournamentCoupleAssignmentModal'
-import { useState } from 'react'
-import { Player } from '@/types/player'
 import { TournamentStatus, TournamentType } from '@prisma/client'
+import { useState } from 'react'
+
 import Button from '@/components/UI/Button/Button'
+import { Player } from '@/types/player'
+import type { Tournament, TournamentCouple } from '@/types/tournament'
+
+import TournamentCoupleAssignmentModal from '../TournamentCoupleAssignmentModal/TournamentCoupleAssignmentModal'
 
 interface TournamentContentScoresProps {
   tournament: Tournament

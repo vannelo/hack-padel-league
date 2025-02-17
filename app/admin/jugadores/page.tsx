@@ -1,17 +1,18 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { getAllPlayers } from '@/app/actions/playerActions'
-import PlayerTable from '@/components/Player/PlayerTable/PlayerTable'
 import { CircularProgress } from '@mui/material'
-import type { Player } from '@/types/player'
-import Button from '@/components/UI/Button/Button'
-import Breadcrumbs from '@/components/UI/Breadcrumbs/Breadcrumbs'
-import Modal from '@/components/Admin/UI/Modal/Modal'
+import { useCallback, useEffect, useState } from 'react'
+
+import { getAllPlayers } from '@/app/actions/playerActions'
 import PlayerCreation from '@/components/Admin/Player/PlayerCreate/PlayerCreate'
 import PlayerEdit from '@/components/Admin/Player/PlayerEdit/PlayerEdit'
-import { useSnackbar } from '@/hooks/useSnackBar'
+import PlayerTable from '@/components/Admin/Player/PlayerTable/PlayerTable'
+import Modal from '@/components/Admin/UI/Modal/Modal'
+import Breadcrumbs from '@/components/UI/Breadcrumbs/Breadcrumbs'
+import Button from '@/components/UI/Button/Button'
 import { TEXT } from '@/constants/text'
+import { useSnackbar } from '@/hooks/useSnackBar'
+import type { Player } from '@/types/player'
 
 export default function AdminPlayers() {
   const [isModalOpen, setIsModalOpen] = useState(false)

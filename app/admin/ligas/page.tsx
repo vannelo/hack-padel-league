@@ -1,13 +1,14 @@
 'use client'
 
+import { CircularProgress } from '@mui/material'
+import { useEffect, useState } from 'react'
+
 import { getAllLeagues } from '@/app/actions/leagueActions'
 import LeagueModal from '@/components/League/LeagueModal/LeagueModal'
 import LeagueTable from '@/components/League/LeagueTable/LeagueTable'
 import Breadcrumbs from '@/components/UI/Breadcrumbs/Breadcrumbs'
 import Button from '@/components/UI/Button/Button'
 import { League } from '@/types/league'
-import { CircularProgress } from '@mui/material'
-import { useEffect, useState } from 'react'
 
 export default function AdminLeagues() {
   const [isModalOpen, setIsModalOpen] = useState(false)

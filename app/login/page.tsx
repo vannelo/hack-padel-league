@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
+import { useState } from 'react'
+
 import { appRoutes } from '@/constants/appRoutes'
 
 export default function LoginPage() {

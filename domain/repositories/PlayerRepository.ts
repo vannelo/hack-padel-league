@@ -1,35 +1,10 @@
-import { prisma } from '@/lib/prisma'
-import { CreatePlayerData, Player } from '@/types/player'
 import { PlayerStatus } from '@prisma/client'
 
+import { prisma } from '@/lib/prisma'
+import { CreatePlayerData, Player } from '@/types/player'
+
 export class PlayerRepository {
-  async createPlayer(data: CreatePlayerData): Promise<Player> {
-    return prisma.player.create({
-      data,
-    })
-  }
-
-  // eslint-disable-next-line
-  async updatePlayer(id: string, playerData: any): Promise<any> {
-    return prisma.player.update({
-      where: { id },
-      data: playerData,
-    })
-  }
-
-  async deletePlayer(id: string) {
-    return this.updatePlayer(id, { status: PlayerStatus.Deleted })
-  }
-
-  // eslint-disable-next-line
-  async getPlayerById(id: string): Promise<any> {
-    return prisma.player.findUnique({
-      where: { id },
-    })
-  }
-
-  // eslint-disable-next-line
-  async getAllPlayers(): Promise<any[]> {
+  async getAllPlayers(): Promise<Player[]> {
     return prisma.player.findMany({
       where: {
         status: 'Active',
@@ -38,5 +13,28 @@ export class PlayerRepository {
         createdAt: 'desc',
       },
     })
+  }
+
+  async getPlayerById(id: string): Promise<Player | null> {
+    return prisma.player.findUnique({
+      where: { id },
+    })
+  }
+
+  async createPlayer(data: CreatePlayerData): Promise<Player> {
+    return prisma.player.create({
+      data,
+    })
+  }
+
+  async updatePlayer(id: string, playerData: Partial<Player>): Promise<Player> {
+    return prisma.player.update({
+      where: { id },
+      data: playerData,
+    })
+  }
+
+  async deletePlayer(id: string): Promise<Player> {
+    return this.updatePlayer(id, { status: PlayerStatus.Deleted })
   }
 }

@@ -1,15 +1,16 @@
 'use client'
 
-import Button from '@/components/UI/Button/Button'
-import { levelMap, genderMap } from '@/constants/playerEnums'
-import { Player } from '@/types/player'
-import { Stack, TextField } from '@mui/material'
+import { TextField } from '@mui/material'
 import {
   DataGrid,
   type GridColDef,
   type GridRenderCellParams,
 } from '@mui/x-data-grid'
 import { useState } from 'react'
+
+import Button from '@/components/UI/Button/Button'
+import { genderMap, levelMap } from '@/constants/playerEnums'
+import { Player } from '@/types/player'
 
 interface PlayerTableProps {
   players: Player[]
@@ -60,22 +61,11 @@ export default function PlayerTable({
       width: 200,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
-        <Stack
-          direction="row"
-          spacing={1}
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >
-          <Button
-            onClick={() => onPlayerEdit(params.id as string)}
-            size="small"
-            label="Editar"
-          />
-        </Stack>
+        <Button
+          onClick={() => onPlayerEdit(params.id as string)}
+          size="small"
+          label="Editar"
+        />
       ),
     },
   ]
@@ -91,7 +81,7 @@ export default function PlayerTable({
   }))
 
   return (
-    <div>
+    <>
       <div style={{ marginBottom: '1rem' }}>
         <TextField
           label="Buscar jugador"
@@ -110,7 +100,7 @@ export default function PlayerTable({
           </p>
         </div>
       ) : (
-        <div style={{ height: 600, width: '100%' }}>
+        <div className="h-[600px] w-full">
           <DataGrid
             rows={rows}
             columns={columns}
@@ -122,6 +112,6 @@ export default function PlayerTable({
           />
         </div>
       )}
-    </div>
+    </>
   )
 }

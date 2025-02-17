@@ -1,16 +1,17 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import { TextField } from '@mui/material'
-import { Tournament } from '@/types/tournament'
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
+import Link from 'next/link'
+import { useState } from 'react'
+
+import Button from '@/components/UI/Button/Button'
+import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
 import {
   tournamentStatusMap,
   tournamentTypeMap,
 } from '@/constants/tournamentEnums'
-import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
-import Button from '@/components/UI/Button/Button'
+import { Tournament } from '@/types/tournament'
 
 export default function TournamentTable({
   tournaments,

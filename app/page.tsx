@@ -1,20 +1,20 @@
-import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
+import type { Metadata } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `Hack Padel | Primera cancha de padel en Lindavista`,
     description: `Consulta la clasificación, jugadores y rondas de las ligas en Hack Padel.`,
-  };
+  }
 }
 
 export default async function HomePage() {
   return (
-    <div className="bg-black text-white min-h-[100vh] flex flex-col justify-center items-center">
+    <div className="flex min-h-[100vh] flex-col items-center justify-center bg-black text-white">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col justify-center items-center mb-8">
-          <Link href="/" className="text-primary font-bold text-2xl">
+        <div className="mb-8 flex flex-col items-center justify-center">
+          <Link href="/" className="text-2xl font-bold text-primary">
             <Image
               src="/img/hack-logo.png"
               width={160}
@@ -23,15 +23,15 @@ export default async function HomePage() {
               className="mx-auto mb-4"
             />
           </Link>
-          <h3 className="text-lg font-bold text-white uppercase text-center">
+          <h3 className="text-center text-lg font-bold uppercase text-white">
             Primera cancha de padel en Lindavista
           </h3>
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex items-center justify-center">
           <div className="text-center">
             <Link
               href="/ligas/"
-              className="text-primary font-bold text-2xl mb-4 hover:underline"
+              className="mb-4 text-2xl font-bold text-primary hover:underline"
             >
               Ver Ligas
             </Link>
@@ -39,5 +39,5 @@ export default async function HomePage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

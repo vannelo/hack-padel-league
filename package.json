@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -15,11 +16,13 @@
     "@mui/material": "^6.4.0",
     "@mui/x-data-grid": "^7.24.0",
     "@prisma/client": "^6.1.0",
+    "formik": "^2.4.6",
     "lucide-react": "^0.475.0",
     "next": "^14.2.23",
     "next-auth": "^4.24.11",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -27,8 +30,11 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.18",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "postcss": "^8",
-    "prettier": "^3.5.0",
+    "prettier": "^3.5.1",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "prisma": "^6.1.0",
     "tailwindcss": "^3.4.1",

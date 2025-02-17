@@ -4,26 +4,23 @@ import { CreatePlayerData, Player } from '@/types/player'
 export class PlayerService {
   private playerRepository = new PlayerRepository()
 
+  async getAllPlayers(): Promise<Player[]> {
+    return this.playerRepository.getAllPlayers()
+  }
+
+  async getPlayerById(id: string): Promise<Player | null> {
+    return this.playerRepository.getPlayerById(id)
+  }
+
   async createPlayer(playerData: CreatePlayerData): Promise<Player> {
     return this.playerRepository.createPlayer(playerData)
   }
 
-  // eslint-disable-next-line
-  async updatePlayer(id: string, playerData: any): Promise<any> {
+  async updatePlayer(id: string, playerData: Partial<Player>): Promise<Player> {
     return this.playerRepository.updatePlayer(id, playerData)
   }
 
   async deletePlayer(id: string): Promise<void> {
     await this.playerRepository.deletePlayer(id)
-  }
-
-  // eslint-disable-next-line
-  async getPlayerById(id: string): Promise<any> {
-    return this.playerRepository.getPlayerById(id)
-  }
-
-  // eslint-disable-next-line
-  async getAllPlayers(): Promise<any[]> {
-    return this.playerRepository.getAllPlayers()
   }
 }

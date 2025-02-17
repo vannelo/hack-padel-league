@@ -1,7 +1,8 @@
-import type { Metadata } from 'next'
-import { getLeagueById } from '@/app/actions/leagueActions'
 import { TournamentStatus } from '@prisma/client'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+
+import { getLeagueById } from '@/app/actions/leagueActions'
 
 export async function generateMetadata({
   params,

@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import type { LeagueRound } from '@/types/league'
+
+import Button from '@/components/UI/Button/Button'
 import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
 import { tournamentStatusMap } from '@/constants/tournamentEnums'
-import Button from '@/components/UI/Button/Button'
+import type { LeagueRound } from '@/types/league'
 
 interface LeagueContentRoundsProps {
   rounds: LeagueRound[]
