@@ -29,7 +29,6 @@ export default function TournamentContentRounds({
   const [loadingMatches, setLoadingMatches] = useState<Record<string, boolean>>(
     {}
   )
-  const [loading, setLoading] = useState(false)
 
   const handleScoreChange = (
     matchId: string,
@@ -50,14 +49,14 @@ export default function TournamentContentRounds({
   }
 
   const handleUpdateScore = async (matchId: string) => {
-    setLoading(true)
+    setLoadingMatches((prev) => ({ ...prev, [matchId]: true }))
+
     const matchScores = scores[matchId]
     if (
       matchScores &&
       matchScores.couple1Score !== null &&
       matchScores.couple2Score !== null
     ) {
-      setLoadingMatches((prev) => ({ ...prev, [matchId]: true }))
       try {
         await updateMatchScore({
           matchId,
@@ -66,20 +65,17 @@ export default function TournamentContentRounds({
         })
         showSnackbar('Resultado añadido correctamente', 'success')
         onTournamentUpdate()
-        setLoading(false)
       } catch {
         showSnackbar('Error al añadir el resultado', 'error')
-        setLoading(false)
       } finally {
         setLoadingMatches((prev) => ({ ...prev, [matchId]: false }))
-        setLoading(false)
       }
     } else {
       showSnackbar(
         'Por favor, ingrese puntuaciones válidas para ambas parejas',
         'error'
       )
-      setLoading(false)
+      setLoadingMatches((prev) => ({ ...prev, [matchId]: false }))
     }
   }
 
@@ -170,7 +166,11 @@ export default function TournamentContentRounds({
                           }
                           variant="primary"
                           size="small"
-                          label={loading ? 'Guardando...' : 'Guardar resultado'}
+                          label={
+                            loadingMatches[match.id]
+                              ? 'Guardando...'
+                              : 'Guardar resultado'
+                          }
                         />
                       </div>
                     )}
