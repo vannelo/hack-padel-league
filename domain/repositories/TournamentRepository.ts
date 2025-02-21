@@ -159,25 +159,37 @@ export class TournamentRepository {
     couple1Score: number
     couple2Score: number
   }) {
-    const updatedMatch = await prisma.$transaction(async (tx) => {
-      const match = await tx.tournamentMatch.update({
+    return prisma.$transaction(async (tx) => {
+      // Fetch existing match details
+      const match = await tx.tournamentMatch.findUnique({
+        where: { id: data.matchId },
+        include: { couple1: true, couple2: true },
+      })
+
+      if (!match) {
+        throw new Error('Match not found.')
+      }
+
+      // Get previous scores (if they exist)
+      const prevCouple1Score = match.couple1Score ?? 0
+      const prevCouple2Score = match.couple2Score ?? 0
+
+      // Update the match with the new scores
+      const updatedMatch = await tx.tournamentMatch.update({
         where: { id: data.matchId },
         data: {
           couple1Score: data.couple1Score,
           couple2Score: data.couple2Score,
           status: TournamentMatchStatus.Completed,
         },
-        include: {
-          couple1: true,
-          couple2: true,
-        },
       })
 
+      // Adjust couple scores correctly (subtract old score, add new score)
       await tx.tournamentCouple.update({
         where: { id: match.couple1Id },
         data: {
           score: {
-            increment: data.couple1Score,
+            increment: data.couple1Score - prevCouple1Score,
           },
         },
       })
@@ -186,15 +198,13 @@ export class TournamentRepository {
         where: { id: match.couple2Id },
         data: {
           score: {
-            increment: data.couple2Score,
+            increment: data.couple2Score - prevCouple2Score,
           },
         },
       })
 
-      return match
+      return updatedMatch
     })
-
-    return updatedMatch
   }
 
   async finishTournament(tournamentId: string, winnerCoupleIds: string[]) {

@@ -2,6 +2,7 @@
 
 import { TextField } from '@mui/material'
 import { TournamentMatchStatus, TournamentStatus } from '@prisma/client'
+import { Pencil, X } from 'lucide-react'
 import { useState } from 'react'
 
 import { updateMatchScore } from '@/app/actions/tournamentActions'
@@ -26,6 +27,9 @@ export default function TournamentContentRounds({
   const [scores, setScores] = useState<
     Record<string, { couple1Score: number | null; couple2Score: number | null }>
   >({})
+  const [editingMatches, setEditingMatches] = useState<Record<string, boolean>>(
+    {}
+  )
   const [loadingMatches, setLoadingMatches] = useState<Record<string, boolean>>(
     {}
   )
@@ -53,9 +57,8 @@ export default function TournamentContentRounds({
 
     const matchScores = scores[matchId]
     if (
-      matchScores &&
-      matchScores.couple1Score !== null &&
-      matchScores.couple2Score !== null
+      matchScores?.couple1Score !== null &&
+      matchScores?.couple2Score !== null
     ) {
       try {
         await updateMatchScore({
@@ -63,20 +66,39 @@ export default function TournamentContentRounds({
           couple1Score: matchScores.couple1Score,
           couple2Score: matchScores.couple2Score,
         })
-        showSnackbar('Resultado añadido correctamente', 'success')
+        showSnackbar('Resultado actualizado correctamente', 'success')
         onTournamentUpdate()
+        setEditingMatches((prev) => ({ ...prev, [matchId]: false }))
       } catch {
-        showSnackbar('Error al añadir el resultado', 'error')
+        showSnackbar('Error al actualizar el resultado', 'error')
       } finally {
         setLoadingMatches((prev) => ({ ...prev, [matchId]: false }))
       }
     } else {
-      showSnackbar(
-        'Por favor, ingrese puntuaciones válidas para ambas parejas',
-        'error'
-      )
+      showSnackbar('Ingrese puntuaciones válidas para ambas parejas', 'error')
       setLoadingMatches((prev) => ({ ...prev, [matchId]: false }))
     }
+  }
+
+  const handleEditClick = (matchId: string) => {
+    setEditingMatches((prev) => ({ ...prev, [matchId]: true }))
+    setScores((prevScores) => ({
+      ...prevScores,
+      [matchId]: {
+        couple1Score:
+          tournament.rounds
+            .flatMap((round) => round.matches)
+            .find((m) => m.id === matchId)?.couple1Score ?? 0,
+        couple2Score:
+          tournament.rounds
+            .flatMap((round) => round.matches)
+            .find((m) => m.id === matchId)?.couple2Score ?? 0,
+      },
+    }))
+  }
+
+  const handleCancelEdit = (matchId: string) => {
+    setEditingMatches((prev) => ({ ...prev, [matchId]: false }))
   }
 
   return (
@@ -85,67 +107,65 @@ export default function TournamentContentRounds({
         PARTIDOS
       </h4>
       {tournament.rounds.length > 0 ? (
-        <>
-          {tournament.rounds.map((round: TournamentRound) => (
-            <div
-              className="mb-4 border-b border-gray-200 pb-4 text-center last:border-b-0 last:pb-0"
-              key={round.id}
-            >
-              <h4 className="text-md m-0 mb-4 font-bold">
-                Ronda {round.number}
-              </h4>
-              {round.matches.map((match: TournamentMatch) => (
+        tournament.rounds.map((round: TournamentRound) => (
+          <div
+            className="mb-4 border-b border-gray-200 pb-4 text-center last:border-b-0 last:pb-0"
+            key={round.id}
+          >
+            <h4 className="text-md m-0 mb-4 font-bold">Ronda {round.number}</h4>
+            {round.matches.map((match: TournamentMatch) => {
+              const isCompleted =
+                match.status === TournamentMatchStatus.Completed
+              const isEditable = !isCompleted
+
+              return (
                 <div key={match.id} className="mb-8 md:mb-4">
-                  <div
-                    className="mb-2 block items-center text-center md:flex"
-                    key={match.id}
-                  >
+                  <div className="mb-2 block items-center text-center md:flex">
                     <div className="mb-2 flex-1 text-right md:mb-0">
                       {match.couple1.player1.name} /{' '}
                       {match.couple1.player2.name}
                     </div>
                     <div className="mx-4 mb-2 inline-block md:mb-0 md:block">
-                      {match.status === TournamentMatchStatus.Completed ||
-                      tournament.status === TournamentStatus.Completed ? (
-                        <div>
-                          <p className="text-xl font-bold">
-                            {match.couple1Score ?? 0} -{' '}
-                            {match.couple2Score ?? 0}
-                          </p>
-                        </div>
-                      ) : (
+                      {editingMatches[match.id] || isEditable ? (
                         <div className="flex items-center justify-center gap-2">
                           <TextField
                             type="number"
-                            placeholder={match.couple1Score?.toString() ?? '0'}
-                            value={scores[match.id]?.couple1Score ?? ''}
+                            value={
+                              scores[match.id]?.couple1Score ??
+                              match.couple1Score ??
+                              ''
+                            }
                             onChange={(e) =>
                               handleScoreChange(match.id, 1, e.target.value)
                             }
                             disabled={loadingMatches[match.id]}
-                            inputProps={{
-                              min: 0,
-                              max: 20,
-                            }}
+                            inputProps={{ min: 0, max: 20 }}
                             size="small"
                             sx={{ width: 60 }}
                           />
                           <span>-</span>
                           <TextField
                             type="number"
-                            placeholder={match.couple2Score?.toString() ?? '0'}
-                            value={scores[match.id]?.couple2Score ?? ''}
+                            value={
+                              scores[match.id]?.couple2Score ??
+                              match.couple2Score ??
+                              ''
+                            }
                             onChange={(e) =>
                               handleScoreChange(match.id, 2, e.target.value)
                             }
                             disabled={loadingMatches[match.id]}
-                            inputProps={{
-                              min: 0,
-                              max: 20,
-                            }}
+                            inputProps={{ min: 0, max: 20 }}
                             size="small"
                             sx={{ width: 60 }}
                           />
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center gap-2">
+                          <p className="text-xl font-bold">
+                            {match.couple1Score ?? 0} -{' '}
+                            {match.couple2Score ?? 0}
+                          </p>
                         </div>
                       )}
                     </div>
@@ -154,6 +174,31 @@ export default function TournamentContentRounds({
                       {match.couple2.player2.name}
                     </div>
                   </div>
+                  {!isEditable && !editingMatches[match.id] && (
+                    <div className="mb-8 text-center">
+                      <button onClick={() => handleEditClick(match.id)}>
+                        <Pencil size={16} />
+                      </button>
+                    </div>
+                  )}
+                  {editingMatches[match.id] && (
+                    <div className="mb-8 flex items-center justify-center gap-2">
+                      <Button
+                        onClick={() => handleUpdateScore(match.id)}
+                        disabled={loadingMatches[match.id]}
+                        variant="primary"
+                        size="small"
+                        label={
+                          loadingMatches[match.id]
+                            ? 'Actualizando...'
+                            : 'Actualizar resultado'
+                        }
+                      />
+                      <button onClick={() => handleCancelEdit(match.id)}>
+                        <X size={20} color="red" />
+                      </button>
+                    </div>
+                  )}
                   {match.status !== TournamentMatchStatus.Completed &&
                     tournament.status === TournamentStatus.InProgress && (
                       <div className="mb-8 text-center">
@@ -175,10 +220,10 @@ export default function TournamentContentRounds({
                       </div>
                     )}
                 </div>
-              ))}
-            </div>
-          ))}
-        </>
+              )
+            })}
+          </div>
+        ))
       ) : (
         <p className="mb-4 text-center text-sm text-gray-500">
           No hay rondas creadas para este torneo.
