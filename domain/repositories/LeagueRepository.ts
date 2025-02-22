@@ -25,6 +25,9 @@ export class LeagueRepository {
           },
         },
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
     })
   }
 

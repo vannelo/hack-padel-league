@@ -16,7 +16,7 @@ interface LeagueTableProps {
 
 export default function LeagueTable({ leagues }: LeagueTableProps) {
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 5,
+    pageSize: 50,
     page: 0,
   })
   const [searchTerm, setSearchTerm] = useState('')
@@ -62,7 +62,6 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
 
   return (
     <div>
-      {/* Search input */}
       <div style={{ marginBottom: '1rem' }}>
         <TextField
           label="Buscar liga"
@@ -72,7 +71,6 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-
       {filteredLeagues.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '1rem' }}>
           <p>
@@ -82,7 +80,7 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
           </p>
         </div>
       ) : (
-        <div style={{ height: 400, width: '100%' }}>
+        <div className="h-[600px] w-full">
           <DataGrid
             rows={rows}
             columns={columns}

@@ -1,14 +1,14 @@
 'use client'
 
-import { CircularProgress } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 
 import { getAllPlayers } from '@/app/actions/playerActions'
-import PlayerCreation from '@/components/Admin/Player/PlayerCreate/PlayerCreate'
+import AdminTablePageLayout from '@/components/Admin/Layout/AdminTablePageLayout/AdminTablePageLayout'
+import PlayerCreate from '@/components/Admin/Player/PlayerCreate/PlayerCreate'
 import PlayerEdit from '@/components/Admin/Player/PlayerEdit/PlayerEdit'
 import PlayerTable from '@/components/Admin/Player/PlayerTable/PlayerTable'
 import Modal from '@/components/Admin/UI/Modal/Modal'
-import Breadcrumbs from '@/components/UI/Breadcrumbs/Breadcrumbs'
+import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader'
 import Button from '@/components/UI/Button/Button'
 import { TEXT } from '@/constants/text'
 import { useSnackbar } from '@/hooks/useSnackBar'
@@ -49,29 +49,24 @@ export default function AdminPlayers() {
   }
 
   return (
-    <div className="container mx-auto py-16">
-      <Breadcrumbs />
-      <h1 className="my-0 mb-4 text-2xl font-bold text-gray-800">
-        {TEXT.admin.players.playersTitle}
-      </h1>
-      <section className="mb-8">
+    <AdminTablePageLayout
+      title={TEXT.admin.players.playersTitle}
+      ctaButton={
         <Button
           label={TEXT.admin.players.createPlayer}
           onClick={() => openModal()}
           variant="primary"
           size="medium"
         />
-      </section>
-      <section className="mb-8">
-        {isLoading ? (
-          <div className="flex h-64 items-center justify-center">
-            <CircularProgress />
-          </div>
+      }
+      table={
+        isLoading ? (
+          <TableLoader />
         ) : (
           <PlayerTable players={players} onPlayerEdit={openModal} />
-        )}
-      </section>
-      <section className="mb-8">
+        )
+      }
+      modal={
         <Modal
           open={isModalOpen}
           onClose={() => setIsModalOpen(false)}
@@ -92,14 +87,14 @@ export default function AdminPlayers() {
               }
             />
           ) : (
-            <PlayerCreation
-              onPlayerCreated={() =>
-                handlePlayerAction(TEXT.admin.players.playerCreated)
+            <PlayerCreate
+              onPlayerCreated={(name) =>
+                handlePlayerAction(TEXT.admin.players.playerCreated(name))
               }
             />
           )}
         </Modal>
-      </section>
-    </div>
+      }
+    />
   )
 }

@@ -12,22 +12,56 @@ import { genderMap, levelMap } from '@/constants/playerEnums'
 
 interface PlayerCreateFieldsProps {
   values: {
+    name: string
+    email: string
+    age: string
+    phone: string
     gender: string
     level: string
   }
   handleChange: (
     e: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>
   ) => void
+  touched: {
+    name?: boolean
+    email?: boolean
+    age?: boolean
+    phone?: boolean
+    gender?: boolean
+    level?: boolean
+  }
+  errors: {
+    name?: string
+    email?: string
+    age?: string
+    phone?: string
+    gender?: string
+    level?: string
+  }
 }
 
 export default function PlayerCreateFields({
   values,
   handleChange,
+  touched,
+  errors,
 }: PlayerCreateFieldsProps) {
   return (
     <>
       <div className="mb-4 flex items-center justify-between gap-4">
-        <Field as={TextField} fullWidth id="name" name="name" label="Nombre" />
+        <Field
+          as={TextField}
+          fullWidth
+          id="name"
+          name="name"
+          label="Nombre"
+          value={values.name}
+          onChange={handleChange}
+          error={touched.name && !!errors.name}
+          helperText={
+            touched.name && errors.name ? <ErrorMessage name="name" /> : ''
+          }
+        />
         <Field
           as={TextField}
           fullWidth
@@ -35,8 +69,15 @@ export default function PlayerCreateFields({
           name="email"
           label="Email"
           type="email"
+          value={values.email}
+          onChange={handleChange}
+          error={touched.email && !!errors.email}
+          helperText={
+            touched.email && errors.email ? <ErrorMessage name="email" /> : ''
+          }
         />
       </div>
+
       <div className="mb-4 flex items-center justify-between gap-4">
         <Field
           as={TextField}
@@ -45,6 +86,12 @@ export default function PlayerCreateFields({
           name="age"
           label="Edad"
           type="number"
+          value={values.age}
+          onChange={handleChange}
+          error={touched.age && !!errors.age}
+          helperText={
+            touched.age && errors.age ? <ErrorMessage name="age" /> : ''
+          }
         />
         <Field
           as={TextField}
@@ -52,10 +99,17 @@ export default function PlayerCreateFields({
           id="phone"
           name="phone"
           label="Teléfono"
+          value={values.phone}
+          onChange={handleChange}
+          error={touched.phone && !!errors.phone}
+          helperText={
+            touched.phone && errors.phone ? <ErrorMessage name="phone" /> : ''
+          }
         />
       </div>
+
       <div className="mb-4 flex items-center justify-between gap-4">
-        <FormControl fullWidth>
+        <FormControl fullWidth error={touched.gender && !!errors.gender}>
           <InputLabel id="gender-label">Género</InputLabel>
           <Select
             labelId="gender-label"
@@ -71,8 +125,14 @@ export default function PlayerCreateFields({
               </MenuItem>
             ))}
           </Select>
+          <ErrorMessage
+            name="gender"
+            component="div"
+            className="mt-1 text-sm text-red-500"
+          />
         </FormControl>
-        <FormControl fullWidth>
+
+        <FormControl fullWidth error={touched.level && !!errors.level}>
           <InputLabel id="level-label">Nivel</InputLabel>
           <Select
             labelId="level-label"

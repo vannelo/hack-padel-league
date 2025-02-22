@@ -1,77 +1,71 @@
 'use client'
 
-import { CircularProgress } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { getAllLeagues } from '@/app/actions/leagueActions'
-import LeagueModal from '@/components/League/LeagueModal/LeagueModal'
+import AdminTablePageLayout from '@/components/Admin/Layout/AdminTablePageLayout/AdminTablePageLayout'
+import LeagueCreation from '@/components/Admin/League/LeagueCreate/LeagueCreate'
+import Modal from '@/components/Admin/UI/Modal/Modal'
+import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader'
 import LeagueTable from '@/components/League/LeagueTable/LeagueTable'
-import Breadcrumbs from '@/components/UI/Breadcrumbs/Breadcrumbs'
 import Button from '@/components/UI/Button/Button'
+import { TEXT } from '@/constants/text'
+import { useSnackbar } from '@/hooks/useSnackBar'
 import { League } from '@/types/league'
 
 export default function AdminLeagues() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [leagues, setLeagues] = useState<League[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const { showSnackbar } = useSnackbar()
 
-  const fetchLeagues = async () => {
+  const fetchLeagues = useCallback(async () => {
     setIsLoading(true)
     try {
       const fetchedLeagues = await getAllLeagues()
       setLeagues(fetchedLeagues as League[])
     } catch {
-      console.error('Error fetching leagues')
+      showSnackbar(TEXT.admin.leagues.errorFetching, 'error')
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [showSnackbar])
 
   useEffect(() => {
     fetchLeagues()
-  }, [])
+  }, [fetchLeagues])
 
-  const handleOpenModal = () => {
+  const openModal = () => {
     setIsModalOpen(true)
   }
 
-  const handleCloseModal = () => {
+  const handleLeagueAction = (name: string) => {
+    fetchLeagues()
+    showSnackbar(TEXT.admin.leagues.leagueCreated(name), 'success')
     setIsModalOpen(false)
   }
 
-  const handleLeagueCreated = () => {
-    fetchLeagues()
-    handleCloseModal()
-  }
-
   return (
-    <div className="container mx-auto py-16">
-      <Breadcrumbs />
-      <h1 className="mb-4 text-2xl font-bold text-gray-800">Ligas</h1>
-      <section className="mb-8">
+    <AdminTablePageLayout
+      title={TEXT.admin.leagues.leaguesTitle}
+      ctaButton={
         <Button
-          label="Crear Liga"
-          onClick={handleOpenModal}
+          label={TEXT.admin.leagues.createLeague}
+          onClick={openModal}
           variant="primary"
           size="medium"
         />
-      </section>
-      <section className="mb-8">
-        {isLoading ? (
-          <div className="flex h-64 items-center justify-center">
-            <CircularProgress />
-          </div>
-        ) : (
-          <LeagueTable leagues={leagues} />
-        )}
-      </section>
-      <section className="mb-8">
-        <LeagueModal
+      }
+      table={isLoading ? <TableLoader /> : <LeagueTable leagues={leagues} />}
+      modal={
+        <Modal
           open={isModalOpen}
-          onClose={handleCloseModal}
-          onLeagueCreated={handleLeagueCreated}
-        />
-      </section>
-    </div>
+          onClose={() => setIsModalOpen(false)}
+          title={TEXT.admin.leagues.createLeague}
+        >
+          <LeagueCreation onLeagueCreated={handleLeagueAction} />
+        </Modal>
+      }
+    />
   )
 }

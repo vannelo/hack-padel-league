@@ -5,12 +5,13 @@ import { Form, Formik } from 'formik'
 
 import { createPlayer } from '@/app/actions/playerActions'
 import Button from '@/components/UI/Button/Button'
+import { TEXT } from '@/constants/text'
 import { playerValidationSchema } from '@/formik/playerValidations'
 
 import PlayerCreateFields from './PlayerCreateFields'
 
 interface PlayerCreateProps {
-  onPlayerCreated: (message: string) => void
+  onPlayerCreated: (name: string) => void
 }
 
 export default function PlayerCreate({ onPlayerCreated }: PlayerCreateProps) {
@@ -25,28 +26,38 @@ export default function PlayerCreate({ onPlayerCreated }: PlayerCreateProps) {
         level: Level.Six,
       }}
       validationSchema={playerValidationSchema}
+      validateOnBlur
       onSubmit={async (values, { setSubmitting }) => {
         try {
           await createPlayer({
             ...values,
             age: values.age ? Number(values.age) : undefined,
           })
-          onPlayerCreated(`${values.name} ha sido añadido al sistema.`)
+          onPlayerCreated(values.name)
         } catch {
-          alert('Error al crear jugador')
+          alert(TEXT.admin.players.errorCreating)
         } finally {
           setSubmitting(false)
         }
       }}
     >
-      {({ isSubmitting, handleChange, values }) => (
+      {({ isSubmitting, handleChange, values, touched, errors }) => (
         <Form className="pt-2">
-          <PlayerCreateFields values={values} handleChange={handleChange} />
+          <PlayerCreateFields
+            values={values}
+            handleChange={handleChange}
+            touched={touched}
+            errors={errors}
+          />
           <div className="w-full">
             <Button
               type="submit"
               disabled={isSubmitting}
-              label={isSubmitting ? 'Guardando...' : 'Crear Jugador'}
+              label={
+                isSubmitting
+                  ? TEXT.admin.players.submitButton.saving
+                  : TEXT.admin.players.submitButton.create
+              }
               className="w-full"
             />
           </div>
