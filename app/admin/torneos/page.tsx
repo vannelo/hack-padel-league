@@ -7,7 +7,10 @@ import { getAllTournaments } from '@/app/actions/tournamentActions'
 import TournamentModal from '@/components/Tournament/TournamentModal/TournamentModal'
 import TournamentTable from '@/components/Tournament/TournamentTable/TournamentTable'
 import Breadcrumbs from '@/components/UI/Breadcrumbs/Breadcrumbs'
-import Button from '@/components/UI/Button/Button'
+import Button, {
+  ButtonSize,
+  ButtonVariant,
+} from '@/components/UI/Button/Button'
 import { Tournament } from '@/types/tournament'
 
 export default function AdminTournaments() {
@@ -52,8 +55,8 @@ export default function AdminTournaments() {
         <Button
           label="Crear Torneo"
           onClick={handleOpenModal}
-          variant="primary"
-          size="medium"
+          variant={ButtonVariant.PRIMARY}
+          size={ButtonSize.MEDIUM}
         />
       </section>
       <section className="mb-8">

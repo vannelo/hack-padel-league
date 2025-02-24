@@ -1,6 +1,5 @@
 'use client'
 
-import { Box } from '@mui/material'
 import { Gender, Level } from '@prisma/client'
 import { Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
@@ -10,7 +9,8 @@ import {
   getPlayerById,
   updatePlayer,
 } from '@/app/actions/playerActions'
-import Button from '@/components/UI/Button/Button'
+import Button, { ButtonType } from '@/components/UI/Button/Button'
+import { TEXT } from '@/constants/text'
 import { playerValidationSchema } from '@/formik/playerValidations'
 
 import PlayerEditFields from './PlayerEditFields'
@@ -54,16 +54,12 @@ export default function PlayerEdit({
   }, [playerId])
 
   const handleDelete = async () => {
-    if (
-      window.confirm(
-        `¿Estás seguro de que quieres eliminar a ${initialValues.name}?`
-      )
-    ) {
+    if (window.confirm(TEXT.admin.players.confirmDelete(initialValues.name))) {
       try {
         await deletePlayer(playerId)
-        onPlayerDeleted(`${initialValues.name} ha sido eliminado exitosamente.`)
+        onPlayerDeleted(TEXT.admin.players.playerDeleted(initialValues.name))
       } catch {
-        alert('Error al eliminar el jugador. Por favor, intenta de nuevo.')
+        alert(TEXT.admin.players.errorDeleting)
       }
     }
   }
@@ -82,11 +78,9 @@ export default function PlayerEdit({
               gender: values.gender as Gender,
               level: values.level as Level,
             })
-            onPlayerUpdated(`${values.name} ha sido actualizado exitosamente.`)
+            onPlayerUpdated(TEXT.admin.players.playerUpdated(values.name))
           } catch {
-            alert(
-              'Error al actualizar el jugador. Por favor, intenta de nuevo.'
-            )
+            alert(TEXT.admin.players.errorUpdating)
           } finally {
             setSubmitting(false)
           }
@@ -94,28 +88,25 @@ export default function PlayerEdit({
       >
         {({ isSubmitting, handleChange, values }) => (
           <Form className="pt-2">
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-                paddingTop: 2,
-                marginBottom: 1,
-              }}
-            >
-              <PlayerEditFields values={values} handleChange={handleChange} />
+            <PlayerEditFields values={values} handleChange={handleChange} />
+            <div className="w-full">
               <Button
-                type="submit"
+                type={ButtonType.SUBMIT}
                 disabled={isSubmitting}
-                label={isSubmitting ? 'Guardando...' : 'Actualizar Jugador'}
+                label={
+                  isSubmitting
+                    ? TEXT.admin.players.submitButton.updating
+                    : TEXT.admin.players.submitButton.update
+                }
+                className="w-full"
               />
-            </Box>
+            </div>
           </Form>
         )}
       </Formik>
-      <div className="text-center">
+      <div className="mt-2 text-center">
         <button className="text-sm text-red-500" onClick={handleDelete}>
-          Eliminar Jugador
+          {TEXT.admin.players.submitButton.delete}
         </button>
       </div>
     </>

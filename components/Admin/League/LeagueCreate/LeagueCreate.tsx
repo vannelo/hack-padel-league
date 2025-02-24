@@ -4,13 +4,13 @@ import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 
 import { createLeague } from '@/app/actions/leagueActions'
-import Button from '@/components/UI/Button/Button'
+import Button, { ButtonType } from '@/components/UI/Button/Button'
 import { TEXT } from '@/constants/text'
 
 import LeagueCreateFields from './LeagueCreateFields'
 
 interface LeagueCreateProps {
-  onLeagueCreated: (name: string) => void // Accepts only the name
+  onLeagueCreated: (name: string) => void
 }
 
 const leagueValidationSchema = Yup.object({
@@ -28,7 +28,7 @@ export default function LeagueCreate({ onLeagueCreated }: LeagueCreateProps) {
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         try {
           await createLeague({ name: values.name })
-          onLeagueCreated(values.name) // Pass only the name, not the whole message
+          onLeagueCreated(values.name)
           resetForm()
         } catch {
           alert(TEXT.admin.leagues.errorCreating)
@@ -47,7 +47,7 @@ export default function LeagueCreate({ onLeagueCreated }: LeagueCreateProps) {
           />
           <div className="w-full">
             <Button
-              type="submit"
+              type={ButtonType.SUBMIT}
               disabled={isSubmitting}
               label={
                 isSubmitting

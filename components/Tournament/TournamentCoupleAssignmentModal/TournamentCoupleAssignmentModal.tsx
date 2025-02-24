@@ -16,6 +16,7 @@ import {
 import { useState } from 'react'
 
 import { addCoupleToTournament } from '@/app/actions/tournamentActions'
+import { SnackbarSeverity } from '@/hooks/useSnackBar'
 import type { Player } from '@/types/player'
 import type { Tournament } from '@/types/tournament'
 
@@ -24,7 +25,7 @@ interface TournamentCoupleAssignmentModalProps {
   players: Player[]
   open: boolean
   onClose: () => void
-  showSnackbar: (message: string, severity: 'success' | 'error') => void
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void
   onTournamentUpdate: () => void
 }
 
@@ -93,11 +94,11 @@ export default function TournamentCoupleAssignmentModal({
     setIsSubmitting(true)
     try {
       await addCoupleToTournament(tournament.id, formData)
-      showSnackbar('Pareja añadida correctamente', 'success')
+      showSnackbar('Pareja añadida correctamente', SnackbarSeverity.SUCCESS)
       onTournamentUpdate()
       onClose()
     } catch {
-      showSnackbar('Error al añadir pareja', 'error')
+      showSnackbar('Error al añadir pareja', SnackbarSeverity.ERROR)
     } finally {
       setIsSubmitting(false)
     }

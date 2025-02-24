@@ -8,15 +8,16 @@ import {
   finishTournament,
   startTournament,
 } from '@/app/actions/tournamentActions'
-import Button from '@/components/UI/Button/Button'
+import Button, { ButtonVariant } from '@/components/UI/Button/Button'
 import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
 import { tournamentStatusMap } from '@/constants/tournamentEnums'
+import { SnackbarSeverity } from '@/hooks/useSnackBar'
 import { formatDate } from '@/lib/helpers'
 import type { Tournament } from '@/types/tournament'
 
 interface TournamentDetailsHeaderProps {
   tournament: Tournament
-  showSnackbar: (message: string, severity: 'success' | 'error') => void
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void
   onTournamentUpdate: (updatedTournament: Tournament) => void
 }
 
@@ -31,10 +32,13 @@ export default function TournamentContentHeader({
     setIsLoading(true)
     try {
       const updatedTournament = await startTournament(tournament.id)
-      showSnackbar('¡Torneo iniciado con éxito!', 'success')
+      showSnackbar('¡Torneo iniciado con éxito!', SnackbarSeverity.SUCCESS)
       onTournamentUpdate(updatedTournament as Tournament)
     } catch {
-      showSnackbar('Ocurrió un error al iniciar el torneo.', 'error')
+      showSnackbar(
+        'Ocurrió un error al iniciar el torneo.',
+        SnackbarSeverity.ERROR
+      )
     } finally {
       setIsLoading(false)
     }
@@ -44,10 +48,13 @@ export default function TournamentContentHeader({
     setIsLoading(true)
     try {
       const updatedTournament = await finishTournament(tournament.id)
-      showSnackbar('¡Torneo finalizado con éxito!', 'success')
+      showSnackbar('¡Torneo finalizado con éxito!', SnackbarSeverity.SUCCESS)
       onTournamentUpdate(updatedTournament as Tournament)
     } catch {
-      showSnackbar('Ocurrió un error al finalizar el torneo.', 'error')
+      showSnackbar(
+        'Ocurrió un error al finalizar el torneo.',
+        SnackbarSeverity.ERROR
+      )
     } finally {
       setIsLoading(false)
     }
@@ -92,7 +99,7 @@ export default function TournamentContentHeader({
       )}
       {tournament.status === TournamentStatus.InProgress && (
         <Button
-          variant="danger"
+          variant={ButtonVariant.DANGER}
           onClick={handleFinishTournament}
           disabled={isLoading}
           label={isLoading ? 'Finalizando...' : 'Finalizar Torneo'}

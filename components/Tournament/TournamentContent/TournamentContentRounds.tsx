@@ -6,7 +6,11 @@ import { Pencil, X } from 'lucide-react'
 import { useState } from 'react'
 
 import { updateMatchScore } from '@/app/actions/tournamentActions'
-import Button from '@/components/UI/Button/Button'
+import Button, {
+  ButtonSize,
+  ButtonVariant,
+} from '@/components/UI/Button/Button'
+import { SnackbarSeverity } from '@/hooks/useSnackBar'
 import type {
   Tournament,
   TournamentMatch,
@@ -15,7 +19,7 @@ import type {
 
 interface TournamentContentRoundsProps {
   tournament: Tournament
-  showSnackbar: (message: string, severity: 'success' | 'error') => void
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void
   onTournamentUpdate: () => void
 }
 
@@ -66,16 +70,22 @@ export default function TournamentContentRounds({
           couple1Score: matchScores.couple1Score,
           couple2Score: matchScores.couple2Score,
         })
-        showSnackbar('Resultado actualizado correctamente', 'success')
+        showSnackbar(
+          'Resultado actualizado correctamente',
+          SnackbarSeverity.SUCCESS
+        )
         onTournamentUpdate()
         setEditingMatches((prev) => ({ ...prev, [matchId]: false }))
       } catch {
-        showSnackbar('Error al actualizar el resultado', 'error')
+        showSnackbar('Error al actualizar el resultado', SnackbarSeverity.ERROR)
       } finally {
         setLoadingMatches((prev) => ({ ...prev, [matchId]: false }))
       }
     } else {
-      showSnackbar('Ingrese puntuaciones válidas para ambas parejas', 'error')
+      showSnackbar(
+        'Ingrese puntuaciones válidas para ambas parejas',
+        SnackbarSeverity.ERROR
+      )
       setLoadingMatches((prev) => ({ ...prev, [matchId]: false }))
     }
   }
@@ -186,8 +196,8 @@ export default function TournamentContentRounds({
                       <Button
                         onClick={() => handleUpdateScore(match.id)}
                         disabled={loadingMatches[match.id]}
-                        variant="primary"
-                        size="small"
+                        variant={ButtonVariant.PRIMARY}
+                        size={ButtonSize.SMALL}
                         label={
                           loadingMatches[match.id]
                             ? 'Actualizando...'
@@ -209,8 +219,8 @@ export default function TournamentContentRounds({
                             scores[match.id]?.couple1Score === null ||
                             scores[match.id]?.couple2Score === null
                           }
-                          variant="primary"
-                          size="small"
+                          variant={ButtonVariant.PRIMARY}
+                          size={ButtonSize.SMALL}
                           label={
                             loadingMatches[match.id]
                               ? 'Guardando...'

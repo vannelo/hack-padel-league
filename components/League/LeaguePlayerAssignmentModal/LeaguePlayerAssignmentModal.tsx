@@ -14,7 +14,11 @@ import {
 import { useMemo, useState } from 'react'
 
 import { addPlayerToLeague } from '@/app/actions/leagueActions'
-import Button from '@/components/UI/Button/Button'
+import Button, {
+  ButtonType,
+  ButtonVariant,
+} from '@/components/UI/Button/Button'
+import { SnackbarSeverity } from '@/hooks/useSnackBar'
 import { League } from '@/types/league'
 import type { Player } from '@/types/player'
 
@@ -23,7 +27,7 @@ interface LeaguePlayerAssignmentModalProps {
   players: Player[]
   open: boolean
   onClose: () => void
-  showSnackbar: (message: string, severity: 'success' | 'error') => void
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void
   onLeagueUpdate: () => void
 }
 
@@ -60,11 +64,14 @@ export default function LeaguePlayerAssignmentModal({
     setIsSubmitting(true)
     try {
       await addPlayerToLeague({ leagueId: league.id, playerId, points: 0 })
-      showSnackbar('Jugador añadido a la liga correctamente', 'success')
+      showSnackbar(
+        'Jugador añadido a la liga correctamente',
+        SnackbarSeverity.SUCCESS
+      )
       onLeagueUpdate()
       onClose()
     } catch {
-      showSnackbar('Error al añadir jugador a la liga', 'error')
+      showSnackbar('Error al añadir jugador a la liga', SnackbarSeverity.ERROR)
     } finally {
       setIsSubmitting(false)
     }
@@ -121,8 +128,8 @@ export default function LeaguePlayerAssignmentModal({
             )}
           </FormControl>
           <Button
-            type="submit"
-            variant="primary"
+            type={ButtonType.SUBMIT}
+            variant={ButtonVariant.PRIMARY}
             disabled={isSubmitting || availablePlayers.length === 0}
             label={isSubmitting ? 'Añadiendo...' : 'Añadir Jugador a la Liga'}
           />

@@ -4,7 +4,7 @@ import { Gender, Level } from '@prisma/client'
 import { Form, Formik } from 'formik'
 
 import { createPlayer } from '@/app/actions/playerActions'
-import Button from '@/components/UI/Button/Button'
+import Button, { ButtonType } from '@/components/UI/Button/Button'
 import { TEXT } from '@/constants/text'
 import { playerValidationSchema } from '@/formik/playerValidations'
 
@@ -51,11 +51,11 @@ export default function PlayerCreate({ onPlayerCreated }: PlayerCreateProps) {
           />
           <div className="w-full">
             <Button
-              type="submit"
+              type={ButtonType.SUBMIT}
               disabled={isSubmitting}
               label={
                 isSubmitting
-                  ? TEXT.admin.players.submitButton.saving
+                  ? TEXT.admin.players.submitButton.creating
                   : TEXT.admin.players.submitButton.create
               }
               className="w-full"

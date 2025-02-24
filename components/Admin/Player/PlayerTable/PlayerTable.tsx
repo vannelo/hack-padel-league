@@ -8,8 +8,9 @@ import {
 } from '@mui/x-data-grid'
 import { useState } from 'react'
 
-import Button from '@/components/UI/Button/Button'
+import Button, { ButtonSize } from '@/components/UI/Button/Button'
 import { genderMap, levelMap } from '@/constants/playerEnums'
+import { TEXT } from '@/constants/text'
 import { Player } from '@/types/player'
 
 interface PlayerTableProps {
@@ -35,13 +36,29 @@ export default function PlayerTable({
   )
 
   const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Nombre', flex: 1 },
-    { field: 'email', headerName: 'Email', flex: 1 },
-    { field: 'age', headerName: 'Edad', width: 70 },
-    { field: 'phone', headerName: 'Teléfono', flex: 1 },
+    {
+      field: 'name',
+      headerName: TEXT.admin.players.tableHeaders.name,
+      flex: 1,
+    },
+    {
+      field: 'email',
+      headerName: TEXT.admin.players.tableHeaders.email,
+      flex: 1,
+    },
+    {
+      field: 'age',
+      headerName: TEXT.admin.players.tableHeaders.age,
+      width: 70,
+    },
+    {
+      field: 'phone',
+      headerName: TEXT.admin.players.tableHeaders.phone,
+      flex: 1,
+    },
     {
       field: 'gender',
-      headerName: 'Género',
+      headerName: TEXT.admin.players.tableHeaders.gender,
       width: 100,
       renderCell: (params: GridRenderCellParams) => (
         <span>{genderMap[params.value as keyof typeof genderMap]}</span>
@@ -49,7 +66,7 @@ export default function PlayerTable({
     },
     {
       field: 'level',
-      headerName: 'Nivel',
+      headerName: TEXT.admin.players.tableHeaders.level,
       width: 100,
       renderCell: (params: GridRenderCellParams) => (
         <span>{levelMap[params.value as keyof typeof levelMap]}</span>
@@ -57,14 +74,14 @@ export default function PlayerTable({
     },
     {
       field: 'actions',
-      headerName: 'Acciones',
+      headerName: TEXT.admin.players.tableHeaders.actions,
       width: 200,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
         <Button
           onClick={() => onPlayerEdit(params.id as string)}
-          size="small"
-          label="Editar"
+          size={ButtonSize.SMALL}
+          label={TEXT.admin.players.tableHeaders.edit}
         />
       ),
     },
@@ -84,7 +101,7 @@ export default function PlayerTable({
     <>
       <div style={{ marginBottom: '1rem' }}>
         <TextField
-          label="Buscar jugador"
+          label={TEXT.admin.players.searchPlaceholder}
           variant="outlined"
           fullWidth
           value={searchTerm}
@@ -95,8 +112,8 @@ export default function PlayerTable({
         <div className="py-8 text-center">
           <p className="text-gray-500">
             {searchTerm
-              ? 'No se encontraron jugadores que coincidan.'
-              : 'No hay jugadores registrados.'}
+              ? TEXT.admin.players.noPlayersFound
+              : TEXT.admin.players.noPlayersRegistered}
           </p>
         </div>
       ) : (

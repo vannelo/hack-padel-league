@@ -2,7 +2,10 @@
 
 import Link from 'next/link'
 
-import Button from '@/components/UI/Button/Button'
+import Button, {
+  ButtonSize,
+  ButtonVariant,
+} from '@/components/UI/Button/Button'
 import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
 import { tournamentStatusMap } from '@/constants/tournamentEnums'
 import type { LeagueRound } from '@/types/league'
@@ -37,9 +40,9 @@ export default function LeagueContentRounds({
                   <div className="mb-4">
                     <Link href={`/admin/torneos/${round.tournament.id}`}>
                       <Button
-                        variant="primary"
+                        variant={ButtonVariant.PRIMARY}
                         label="Ir al torneo"
-                        size="small"
+                        size={ButtonSize.SMALL}
                       />
                     </Link>
                   </div>

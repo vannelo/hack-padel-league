@@ -3,7 +3,11 @@
 import { TournamentStatus, TournamentType } from '@prisma/client'
 import { useState } from 'react'
 
-import Button from '@/components/UI/Button/Button'
+import Button, {
+  ButtonSize,
+  ButtonVariant,
+} from '@/components/UI/Button/Button'
+import { SnackbarSeverity } from '@/hooks/useSnackBar'
 import { Player } from '@/types/player'
 import type { Tournament, TournamentCouple } from '@/types/tournament'
 
@@ -12,7 +16,7 @@ import TournamentCoupleAssignmentModal from '../TournamentCoupleAssignmentModal/
 interface TournamentContentScoresProps {
   tournament: Tournament
   players: Player[]
-  showSnackbar: (message: string, severity: 'success' | 'error') => void
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void
   onTournamentUpdate: () => void
 }
 
@@ -39,8 +43,8 @@ export default function TournamentContentScores({
         tournament.type !== TournamentType.League && (
           <div className="mb-4 mt-4">
             <Button
-              variant="primary"
-              size="small"
+              variant={ButtonVariant.PRIMARY}
+              size={ButtonSize.SMALL}
               onClick={() => setIsAddingPlayer(true)}
               label="Agregar Jugador"
             />

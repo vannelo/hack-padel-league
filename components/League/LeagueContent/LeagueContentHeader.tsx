@@ -5,15 +5,16 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 import { finishLeague, startLeague } from '@/app/actions/leagueActions'
-import Button from '@/components/UI/Button/Button'
+import Button, { ButtonVariant } from '@/components/UI/Button/Button'
 import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
 import { leagueStatusMap } from '@/constants/leagueEnums'
+import { SnackbarSeverity } from '@/hooks/useSnackBar'
 import { formatDate } from '@/lib/helpers'
 import { League, LeaguePlayer } from '@/types/league'
 
 interface LeagueContentHeaderProps {
   league: League
-  showSnackbar: (message: string, severity: 'success' | 'error') => void
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void
   onLeagueUpdate: () => void
 }
 
@@ -28,10 +29,13 @@ export default function LeagueContentHeader({
     setIsLoading(true)
     try {
       await startLeague(league.id)
-      showSnackbar('¡Liga iniciada con éxito!', 'success')
+      showSnackbar('¡Liga iniciada con éxito!', SnackbarSeverity.SUCCESS)
       onLeagueUpdate()
     } catch {
-      showSnackbar('Ocurrió un error al iniciar la liga.', 'error')
+      showSnackbar(
+        'Ocurrió un error al iniciar la liga.',
+        SnackbarSeverity.ERROR
+      )
     } finally {
       setIsLoading(false)
     }
@@ -45,10 +49,13 @@ export default function LeagueContentHeader({
     setIsLoading(true)
     try {
       await finishLeague(league.id)
-      showSnackbar('¡Liga finalizada con éxito!', 'success')
+      showSnackbar('¡Liga finalizada con éxito!', SnackbarSeverity.SUCCESS)
       onLeagueUpdate()
     } catch {
-      showSnackbar('Ocurrió un error al finalizar la liga.', 'error')
+      showSnackbar(
+        'Ocurrió un error al finalizar la liga.',
+        SnackbarSeverity.ERROR
+      )
     } finally {
       setIsLoading(false)
     }
@@ -106,7 +113,7 @@ export default function LeagueContentHeader({
       )}
       {league.status === LeagueStatus.InProgress && (
         <Button
-          variant="danger"
+          variant={ButtonVariant.DANGER}
           onClick={handleFinishLeague}
           disabled={isLoading}
           label={isLoading ? 'Finalizando...' : 'Finalizar Liga'}

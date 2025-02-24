@@ -77,7 +77,6 @@ export default function PlayerCreateFields({
           }
         />
       </div>
-
       <div className="mb-4 flex items-center justify-between gap-4">
         <Field
           as={TextField}
@@ -107,7 +106,6 @@ export default function PlayerCreateFields({
           }
         />
       </div>
-
       <div className="mb-4 flex items-center justify-between gap-4">
         <FormControl fullWidth error={touched.gender && !!errors.gender}>
           <InputLabel id="gender-label">Género</InputLabel>
@@ -131,7 +129,6 @@ export default function PlayerCreateFields({
             className="mt-1 text-sm text-red-500"
           />
         </FormControl>
-
         <FormControl fullWidth error={touched.level && !!errors.level}>
           <InputLabel id="level-label">Nivel</InputLabel>
           <Select

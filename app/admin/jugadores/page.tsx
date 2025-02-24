@@ -9,9 +9,13 @@ import PlayerEdit from '@/components/Admin/Player/PlayerEdit/PlayerEdit'
 import PlayerTable from '@/components/Admin/Player/PlayerTable/PlayerTable'
 import Modal from '@/components/Admin/UI/Modal/Modal'
 import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader'
-import Button from '@/components/UI/Button/Button'
+import Button, {
+  ButtonSize,
+  ButtonVariant,
+} from '@/components/UI/Button/Button'
+import { ACTIONS } from '@/constants/actions'
 import { TEXT } from '@/constants/text'
-import { useSnackbar } from '@/hooks/useSnackBar'
+import { SnackbarSeverity, useSnackbar } from '@/hooks/useSnackBar'
 import type { Player } from '@/types/player'
 
 export default function AdminPlayers() {
@@ -27,7 +31,7 @@ export default function AdminPlayers() {
       const fetchedPlayers = await getAllPlayers()
       setPlayers(fetchedPlayers)
     } catch {
-      showSnackbar(TEXT.admin.players.errorFetching, 'error')
+      showSnackbar(TEXT.admin.players.errorFetching, SnackbarSeverity.ERROR)
     } finally {
       setIsLoading(false)
     }
@@ -42,9 +46,13 @@ export default function AdminPlayers() {
     setIsModalOpen(true)
   }
 
-  const handlePlayerAction = (message: string) => {
+  const handlePlayerAction = (name: string, type: ACTIONS) => {
     fetchPlayers()
-    showSnackbar(message, 'success')
+    const message =
+      type === ACTIONS.UPDATED
+        ? TEXT.admin.players.playerUpdated(name)
+        : TEXT.admin.players.playerDeleted(name)
+    showSnackbar(message, SnackbarSeverity.SUCCESS)
     setIsModalOpen(false)
   }
 
@@ -55,8 +63,8 @@ export default function AdminPlayers() {
         <Button
           label={TEXT.admin.players.createPlayer}
           onClick={() => openModal()}
-          variant="primary"
-          size="medium"
+          variant={ButtonVariant.PRIMARY}
+          size={ButtonSize.MEDIUM}
         />
       }
       table={
@@ -79,17 +87,20 @@ export default function AdminPlayers() {
           {editingPlayerId ? (
             <PlayerEdit
               playerId={editingPlayerId}
-              onPlayerUpdated={() =>
-                handlePlayerAction(TEXT.admin.players.playerUpdated)
+              onPlayerUpdated={(name) =>
+                handlePlayerAction(name, ACTIONS.UPDATED)
               }
-              onPlayerDeleted={() =>
-                handlePlayerAction(TEXT.admin.players.playerDeleted)
+              onPlayerDeleted={(name) =>
+                handlePlayerAction(name, ACTIONS.DELETED)
               }
             />
           ) : (
             <PlayerCreate
               onPlayerCreated={(name) =>
-                handlePlayerAction(TEXT.admin.players.playerCreated(name))
+                showSnackbar(
+                  TEXT.admin.players.playerCreated(name),
+                  SnackbarSeverity.SUCCESS
+                )
               }
             />
           )}

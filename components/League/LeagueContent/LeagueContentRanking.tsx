@@ -3,7 +3,11 @@
 import { LeagueStatus } from '@prisma/client'
 import { useMemo, useState } from 'react'
 
-import Button from '@/components/UI/Button/Button'
+import Button, {
+  ButtonSize,
+  ButtonVariant,
+} from '@/components/UI/Button/Button'
+import { SnackbarSeverity } from '@/hooks/useSnackBar'
 import { League, LeaguePlayer } from '@/types/league'
 import { Player } from '@/types/player'
 
@@ -12,7 +16,7 @@ import LeaguePlayerAssignmentModal from '../LeaguePlayerAssignmentModal/LeaguePl
 interface LeagueContentRankingProps {
   league: League
   players: Player[]
-  showSnackbar: (message: string, severity: 'success' | 'error') => void
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void
   onLeagueUpdate: () => void
 }
 
@@ -43,9 +47,9 @@ export default function LeagueContentRanking({
         <div className="mb-4 mt-4">
           <Button
             onClick={() => setIsAddingPlayer(true)}
-            variant="primary"
+            variant={ButtonVariant.PRIMARY}
             label="Agregar Jugador"
-            size="small"
+            size={ButtonSize.MEDIUM}
           />
         </div>
       )}

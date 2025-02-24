@@ -3,8 +3,13 @@
 import { Alert, Snackbar } from '@mui/material'
 import { createContext, type ReactNode, useContext, useState } from 'react'
 
+export enum SnackbarSeverity {
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
+
 interface SnackbarContextType {
-  showSnackbar: (message: string, severity: 'success' | 'error') => void
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void
 }
 
 const SnackbarContext = createContext<SnackbarContextType | undefined>(
@@ -17,10 +22,10 @@ export const SnackbarProvider: React.FC<{ children: ReactNode }> = ({
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
-    severity: 'success' as 'success' | 'error',
+    severity: SnackbarSeverity.SUCCESS,
   })
 
-  const showSnackbar = (message: string, severity: 'success' | 'error') => {
+  const showSnackbar = (message: string, severity: SnackbarSeverity) => {
     setSnackbar({
       open: true,
       message,

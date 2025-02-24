@@ -5,7 +5,7 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import Link from 'next/link'
 import { useState } from 'react'
 
-import Button from '@/components/UI/Button/Button'
+import Button, { ButtonSize } from '@/components/UI/Button/Button'
 import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
 import {
   tournamentStatusMap,
@@ -66,7 +66,7 @@ export default function TournamentTable({
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
         <Link href={`/admin/torneos/${params.id}`} passHref>
-          <Button size="small" label=" Ver Torneo" />
+          <Button size={ButtonSize.SMALL} label=" Ver Torneo" />
         </Link>
       ),
     },

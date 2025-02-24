@@ -5,12 +5,15 @@ import { useCallback, useEffect, useState } from 'react'
 import { getAllLeagues } from '@/app/actions/leagueActions'
 import AdminTablePageLayout from '@/components/Admin/Layout/AdminTablePageLayout/AdminTablePageLayout'
 import LeagueCreation from '@/components/Admin/League/LeagueCreate/LeagueCreate'
+import LeagueTable from '@/components/Admin/League/LeagueTable/LeagueTable'
 import Modal from '@/components/Admin/UI/Modal/Modal'
 import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader'
-import LeagueTable from '@/components/League/LeagueTable/LeagueTable'
-import Button from '@/components/UI/Button/Button'
+import Button, {
+  ButtonSize,
+  ButtonVariant,
+} from '@/components/UI/Button/Button'
 import { TEXT } from '@/constants/text'
-import { useSnackbar } from '@/hooks/useSnackBar'
+import { SnackbarSeverity, useSnackbar } from '@/hooks/useSnackBar'
 import { League } from '@/types/league'
 
 export default function AdminLeagues() {
@@ -25,7 +28,7 @@ export default function AdminLeagues() {
       const fetchedLeagues = await getAllLeagues()
       setLeagues(fetchedLeagues as League[])
     } catch {
-      showSnackbar(TEXT.admin.leagues.errorFetching, 'error')
+      showSnackbar(TEXT.admin.leagues.errorFetching, SnackbarSeverity.ERROR)
     } finally {
       setIsLoading(false)
     }
@@ -41,7 +44,10 @@ export default function AdminLeagues() {
 
   const handleLeagueAction = (name: string) => {
     fetchLeagues()
-    showSnackbar(TEXT.admin.leagues.leagueCreated(name), 'success')
+    showSnackbar(
+      TEXT.admin.leagues.leagueCreated(name),
+      SnackbarSeverity.SUCCESS
+    )
     setIsModalOpen(false)
   }
 
@@ -52,8 +58,8 @@ export default function AdminLeagues() {
         <Button
           label={TEXT.admin.leagues.createLeague}
           onClick={openModal}
-          variant="primary"
-          size="medium"
+          variant={ButtonVariant.PRIMARY}
+          size={ButtonSize.MEDIUM}
         />
       }
       table={isLoading ? <TableLoader /> : <LeagueTable leagues={leagues} />}

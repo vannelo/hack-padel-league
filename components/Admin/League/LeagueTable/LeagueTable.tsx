@@ -5,9 +5,10 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import Link from 'next/link'
 import { useState } from 'react'
 
-import Button from '@/components/UI/Button/Button'
+import Button, { ButtonSize } from '@/components/UI/Button/Button'
 import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
 import { leagueStatusMap } from '@/constants/leagueEnums'
+import { TEXT } from '@/constants/text'
 import { League } from '@/types/league'
 
 interface LeagueTableProps {
@@ -26,10 +27,14 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
   )
 
   const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Nombre', flex: 1 },
+    {
+      field: 'name',
+      headerName: TEXT.admin.leagues.tableHeaders.name,
+      flex: 1,
+    },
     {
       field: 'status',
-      headerName: 'Estado',
+      headerName: TEXT.admin.leagues.tableHeaders.status,
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <StatusBadge status={params.value} statusMap={leagueStatusMap} />
@@ -37,17 +42,20 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
     },
     {
       field: 'players',
-      headerName: 'Jugadores',
+      headerName: TEXT.admin.leagues.tableHeaders.players,
       flex: 1,
     },
     {
       field: 'actions',
-      headerName: 'Acciones',
+      headerName: TEXT.admin.leagues.tableHeaders.actions,
       flex: 1,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
         <Link href={`/admin/ligas/${params.id}`} passHref>
-          <Button size="small" label="Ver Liga" />
+          <Button
+            size={ButtonSize.SMALL}
+            label={TEXT.admin.leagues.tableHeaders.viewLeague}
+          />
         </Link>
       ),
     },
@@ -64,7 +72,7 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
     <div>
       <div style={{ marginBottom: '1rem' }}>
         <TextField
-          label="Buscar liga"
+          label={TEXT.admin.leagues.searchPlaceholder}
           variant="outlined"
           fullWidth
           value={searchTerm}
@@ -75,8 +83,8 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
         <div style={{ textAlign: 'center', padding: '1rem' }}>
           <p>
             {searchTerm
-              ? 'No se encontraron ligas que coincidan.'
-              : 'No hay ligas registradas.'}
+              ? TEXT.admin.leagues.noLeaguesFound
+              : TEXT.admin.leagues.noLeaguesRegistered}
           </p>
         </div>
       ) : (
