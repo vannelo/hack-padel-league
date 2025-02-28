@@ -40,6 +40,7 @@ export const TEXT = {
     },
     leagues: {
       errorFetching: 'Error al obtener ligas',
+      errorFetchingLeague: 'Error al obtener liga',
       createLeague: 'Crear Liga',
       leaguesTitle: 'Ligas',
       leagueCreated: (name: string) => `Liga "${name}" creada exitosamente`,
@@ -58,6 +59,8 @@ export const TEXT = {
         actions: 'Acciones',
         viewLeague: 'Ver Liga',
       },
+      viewLeagueLink: (id: string) => `/admin/ligas/${id}`,
+      tablePlayersLength: (players: number) => `${players} jugadores`,
     },
   },
 }

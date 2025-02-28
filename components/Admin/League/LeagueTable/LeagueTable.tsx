@@ -51,7 +51,10 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
       flex: 1,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
-        <Link href={`/admin/ligas/${params.id}`} passHref>
+        <Link
+          href={TEXT.admin.leagues.viewLeagueLink(params.id as string)}
+          passHref
+        >
           <Button
             size={ButtonSize.SMALL}
             label={TEXT.admin.leagues.tableHeaders.viewLeague}
@@ -65,11 +68,11 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
     id: league.id,
     name: league.name,
     status: league.status,
-    players: `${league.players.length} jugadores`,
+    players: TEXT.admin.leagues.tablePlayersLength(league.players.length),
   }))
 
   return (
-    <div>
+    <>
       <div style={{ marginBottom: '1rem' }}>
         <TextField
           label={TEXT.admin.leagues.searchPlaceholder}
@@ -80,8 +83,8 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
         />
       </div>
       {filteredLeagues.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '1rem' }}>
-          <p>
+        <div className="py-8 text-center">
+          <p className="text-gray-500">
             {searchTerm
               ? TEXT.admin.leagues.noLeaguesFound
               : TEXT.admin.leagues.noLeaguesRegistered}
@@ -100,6 +103,6 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
           />
         </div>
       )}
-    </div>
+    </>
   )
 }

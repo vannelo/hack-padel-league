@@ -17,9 +17,5 @@ export default async function LeagueDetailsPage({
     notFound()
   }
 
-  return (
-    <div className="container mx-auto py-16">
-      <LeagueContent initialLeague={league as League} players={players} />
-    </div>
-  )
+  return <LeagueContent initialLeague={league as League} players={players} />
 }

@@ -4,6 +4,7 @@ import { CircularProgress } from '@mui/material'
 import { useCallback, useState } from 'react'
 
 import { getLeagueById } from '@/app/actions/leagueActions'
+import { TEXT } from '@/constants/text'
 import { useSnackbar } from '@/hooks/useSnackBar'
 import { League } from '@/types/league'
 import { Player } from '@/types/player'
@@ -32,7 +33,7 @@ export default function LeagueContent({
       const fetchedLeague = await getLeagueById(league.id)
       setLeague(fetchedLeague as League)
     } catch {
-      console.error('Error fetching league:')
+      console.error(TEXT.admin.leagues.errorFetchingLeague)
     } finally {
       setIsLoading(false)
     }
@@ -51,7 +52,7 @@ export default function LeagueContent({
   }
 
   return (
-    <>
+    <div className="container mx-auto py-16">
       <LeagueContentHeader
         league={league}
         showSnackbar={showSnackbar}
@@ -70,6 +71,6 @@ export default function LeagueContent({
           <LeagueContentRounds rounds={league.rounds} />
         </div>
       </div>
-    </>
+    </div>
   )
 }

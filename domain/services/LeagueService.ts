@@ -2,7 +2,7 @@ import { LeagueStatus, TournamentStatus, TournamentType } from '@prisma/client'
 
 import { LeagueRepository } from '@/domain/repositories/LeagueRepository'
 import { TournamentService } from '@/domain/services/TournamentService'
-import { CreateLeagueData } from '@/types/league'
+import { AddPlayerToLeagueData, CreateLeagueData } from '@/types/league'
 
 export class LeagueService {
   private leagueRepository = new LeagueRepository()
@@ -24,8 +24,7 @@ export class LeagueService {
     return this.leagueRepository.getLeagueById(id)
   }
 
-  // eslint-disable-next-line
-  async addPlayerToLeague(data: any) {
+  async addPlayerToLeague(data: AddPlayerToLeagueData) {
     return this.leagueRepository.addPlayerToLeague(data)
   }
 
@@ -143,5 +142,9 @@ export class LeagueService {
     )
 
     return updatedLeague
+  }
+
+  async updatePlayerScore(playerId: string, newScore: number) {
+    return this.leagueRepository.updatePlayerScore(playerId, newScore)
   }
 }

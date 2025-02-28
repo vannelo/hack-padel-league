@@ -4,8 +4,8 @@ import { LeagueStatus } from '@prisma/client'
 import Link from 'next/link'
 import { useState } from 'react'
 
-import { finishLeague, startLeague } from '@/app/actions/leagueActions'
-import Button, { ButtonVariant } from '@/components/UI/Button/Button'
+import { startLeague } from '@/app/actions/leagueActions'
+import Button from '@/components/UI/Button/Button'
 import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
 import { leagueStatusMap } from '@/constants/leagueEnums'
 import { SnackbarSeverity } from '@/hooks/useSnackBar'
@@ -34,26 +34,6 @@ export default function LeagueContentHeader({
     } catch {
       showSnackbar(
         'Ocurrió un error al iniciar la liga.',
-        SnackbarSeverity.ERROR
-      )
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  async function handleFinishLeague() {
-    const isConfirmed = window.confirm(
-      '¿Estás seguro de que quieres finalizar la liga? Esta acción no se puede deshacer.'
-    )
-    if (!isConfirmed) return
-    setIsLoading(true)
-    try {
-      await finishLeague(league.id)
-      showSnackbar('¡Liga finalizada con éxito!', SnackbarSeverity.SUCCESS)
-      onLeagueUpdate()
-    } catch {
-      showSnackbar(
-        'Ocurrió un error al finalizar la liga.',
         SnackbarSeverity.ERROR
       )
     } finally {
@@ -110,14 +90,6 @@ export default function LeagueContentHeader({
           La liga solo puede iniciarse con al menos 4 jugadores activos y un
           número par de jugadores
         </div>
-      )}
-      {league.status === LeagueStatus.InProgress && (
-        <Button
-          variant={ButtonVariant.DANGER}
-          onClick={handleFinishLeague}
-          disabled={isLoading}
-          label={isLoading ? 'Finalizando...' : 'Finalizar Liga'}
-        />
       )}
     </div>
   )

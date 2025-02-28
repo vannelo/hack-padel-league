@@ -63,7 +63,7 @@ export default function LeaguePlayerAssignmentModal({
 
     setIsSubmitting(true)
     try {
-      await addPlayerToLeague({ leagueId: league.id, playerId, points: 0 })
+      await addPlayerToLeague({ leagueId: league.id, playerId })
       showSnackbar(
         'Jugador añadido a la liga correctamente',
         SnackbarSeverity.SUCCESS

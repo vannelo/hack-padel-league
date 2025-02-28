@@ -1,7 +1,7 @@
 import { LeagueStatus } from '@prisma/client'
 
 import { prisma } from '@/lib/prisma'
-import { CreateLeagueData } from '@/types/league'
+import { AddPlayerToLeagueData, CreateLeagueData } from '@/types/league'
 
 export class LeagueRepository {
   async createLeague(data: CreateLeagueData) {
@@ -61,8 +61,7 @@ export class LeagueRepository {
     })
   }
 
-  // eslint-disable-next-line
-  async addPlayerToLeague(data: any) {
+  async addPlayerToLeague(data: AddPlayerToLeagueData) {
     return prisma.leaguePlayer.create({
       data,
     })
@@ -138,5 +137,16 @@ export class LeagueRepository {
         })
       )
     )
+  }
+
+  async updatePlayerScore(playerId: string, newScore: number) {
+    return prisma.leaguePlayer.updateMany({
+      where: {
+        id: playerId,
+      },
+      data: {
+        points: newScore,
+      },
+    })
   }
 }

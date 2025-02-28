@@ -1,10 +1,7 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
-
-import { appRoutes } from '@/constants/appRoutes'
 import { leagueService } from '@/domain'
-import { CreateLeagueData } from '@/types/league'
+import { AddPlayerToLeagueData, CreateLeagueData } from '@/types/league'
 
 export async function createLeague(data: CreateLeagueData) {
   await leagueService.createLeague(data)
@@ -12,13 +9,10 @@ export async function createLeague(data: CreateLeagueData) {
 
 export async function deleteLeague(id: string) {
   await leagueService.deleteLeague(id)
-  revalidatePath(appRoutes.leagues.index)
 }
 
-// eslint-disable-next-line
-export async function addPlayerToLeague(data: any) {
+export async function addPlayerToLeague(data: AddPlayerToLeagueData) {
   await leagueService.addPlayerToLeague(data)
-  revalidatePath(appRoutes.leagues.index)
 }
 
 export async function getAllLeagues() {
@@ -35,4 +29,8 @@ export async function startLeague(leagueId: string) {
 
 export async function finishLeague(leagueId: string) {
   return leagueService.finishLeague(leagueId)
+}
+
+export async function updatePlayerScore(playerId: string, newScore: number) {
+  return leagueService.updatePlayerScore(playerId, newScore)
 }
