@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 
 import { getLeagueById } from '@/app/actions/leagueActions'
 import { getAllPlayers } from '@/app/actions/playerActions'
-import LeagueContent from '@/components/League/LeagueContent/LeagueContent'
+import LeagueDetails from '@/components/Admin/League/LeagueDetails/LeagueDetails'
 import { League } from '@/types/league'
 
 export default async function LeagueDetailsPage({
@@ -17,5 +17,5 @@ export default async function LeagueDetailsPage({
     notFound()
   }
 
-  return <LeagueContent initialLeague={league as League} players={players} />
+  return <LeagueDetails initialLeague={league as League} players={players} />
 }

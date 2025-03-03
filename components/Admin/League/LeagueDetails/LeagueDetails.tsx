@@ -1,27 +1,27 @@
 'use client'
 
-import { CircularProgress } from '@mui/material'
 import { useCallback, useState } from 'react'
 
 import { getLeagueById } from '@/app/actions/leagueActions'
+import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader'
 import { TEXT } from '@/constants/text'
 import { useSnackbar } from '@/hooks/useSnackBar'
 import { League } from '@/types/league'
 import { Player } from '@/types/player'
 
-import LeagueContentHeader from './LeagueContentHeader'
-import LeagueContentCouples from './LeagueContentRanking'
-import LeagueContentRounds from './LeagueContentRounds'
+import LeagueDetailsHeader from './LeagueDetailsHeader'
+import LeagueDetailsRanking from './LeagueDetailsRanking'
+import LeagueDetailsRounds from './LeagueDetailsRounds'
 
-interface LeagueContentProps {
+interface LeagueDetailsProps {
   initialLeague: League
   players: Player[]
 }
 
-export default function LeagueContent({
+export default function LeagueDetails({
   initialLeague,
   players,
-}: LeagueContentProps) {
+}: LeagueDetailsProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [league, setLeague] = useState(initialLeague)
   const { showSnackbar } = useSnackbar()
@@ -44,31 +44,26 @@ export default function LeagueContent({
   }, [fetchLeague])
 
   if (isLoading) {
-    return (
-      <div className="flex h-96 items-center justify-center">
-        <CircularProgress />
-      </div>
-    )
+    return <TableLoader />
   }
 
   return (
     <div className="container mx-auto py-16">
-      <LeagueContentHeader
+      <LeagueDetailsHeader
         league={league}
         showSnackbar={showSnackbar}
         onLeagueUpdate={handleLeagueUpdate}
       />
       <div className="block gap-8 md:flex">
         <div className="mb-4 w-full md:w-1/4">
-          <LeagueContentCouples
+          <LeagueDetailsRanking
             league={league}
             players={players}
-            showSnackbar={showSnackbar}
             onLeagueUpdate={handleLeagueUpdate}
           />
         </div>
         <div className="w-full md:w-3/4">
-          <LeagueContentRounds rounds={league.rounds} />
+          <LeagueDetailsRounds rounds={league.rounds} />
         </div>
       </div>
     </div>

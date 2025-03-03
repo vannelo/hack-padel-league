@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-import { appRoutes } from '@/constants/appRoutes'
+import { APP_ROUTES } from '@/constants/appRoutes'
 
 const NavMobile = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -15,7 +15,7 @@ const NavMobile = () => {
   return (
     <nav className="fixed left-0 top-0 z-20 block w-full bg-white md:hidden">
       <div className="flex items-center justify-between px-4 py-3">
-        <Link href={appRoutes.admin.players} className="flex items-center">
+        <Link href={APP_ROUTES.admin.players} className="flex items-center">
           <Image
             src="/img/hack-logo-black.png"
             alt="Logo"
@@ -39,9 +39,9 @@ const NavMobile = () => {
         <ul className="flex flex-col space-y-2 p-4">
           <li>
             <Link
-              href={appRoutes.admin.players}
+              href={APP_ROUTES.admin.players}
               className={`flex items-center space-x-3 rounded-lg px-4 py-2 font-semibold transition ${
-                pathname === appRoutes.admin.players
+                pathname === APP_ROUTES.admin.players
                   ? 'bg-primary text-black'
                   : 'hover:bg-gray-200'
               }`}
@@ -53,9 +53,9 @@ const NavMobile = () => {
           </li>
           <li>
             <Link
-              href={appRoutes.admin.leagues}
+              href={APP_ROUTES.admin.leagues}
               className={`flex items-center space-x-3 rounded-lg px-4 py-2 font-semibold transition ${
-                pathname === appRoutes.admin.leagues
+                pathname === APP_ROUTES.admin.leagues
                   ? 'bg-primary text-black'
                   : 'hover:bg-gray-200'
               }`}
@@ -67,9 +67,9 @@ const NavMobile = () => {
           </li>
           <li>
             <Link
-              href={appRoutes.admin.tournaments}
+              href={APP_ROUTES.admin.tournaments}
               className={`flex items-center space-x-3 rounded-lg px-4 py-2 font-semibold transition ${
-                pathname === appRoutes.admin.tournaments
+                pathname === APP_ROUTES.admin.tournaments
                   ? 'bg-primary text-black'
                   : 'hover:bg-gray-200'
               }`}

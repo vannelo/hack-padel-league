@@ -7,20 +7,22 @@ import Button, {
   ButtonVariant,
 } from '@/components/UI/Button/Button'
 import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
+import { APP_ROUTES } from '@/constants/appRoutes'
+import { TEXT } from '@/constants/text'
 import { tournamentStatusMap } from '@/constants/tournamentEnums'
 import type { LeagueRound } from '@/types/league'
 
-interface LeagueContentRoundsProps {
+interface LeagueDetailsRoundsProps {
   rounds: LeagueRound[]
 }
 
-export default function LeagueContentRounds({
+export default function LeagueDetailsRounds({
   rounds,
-}: LeagueContentRoundsProps) {
+}: LeagueDetailsRoundsProps) {
   return (
     <div className="rounded-lg border border-gray-200 p-8">
       <h4 className="m-0 mb-4 border-b border-gray-200 text-xl font-bold text-gray-800">
-        JORNADAS
+        {TEXT.admin.leagues.rounds.title}
       </h4>
       {rounds && rounds.length > 0 ? (
         <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -30,7 +32,7 @@ export default function LeagueContentRounds({
                 <>
                   <div className="mb-4 flex items-center gap-2">
                     <h4 className="text-md m-0 font-bold">
-                      Jornada {round.number}
+                      {TEXT.admin.leagues.rounds.roundNumber(round.number)}
                     </h4>
                     <StatusBadge
                       status={round.tournament.status}
@@ -38,10 +40,12 @@ export default function LeagueContentRounds({
                     />
                   </div>
                   <div className="mb-4">
-                    <Link href={`/admin/torneos/${round.tournament.id}`}>
+                    <Link
+                      href={`${APP_ROUTES.admin.tournaments}/${round.tournament.id}`}
+                    >
                       <Button
                         variant={ButtonVariant.PRIMARY}
-                        label="Ir al torneo"
+                        label={TEXT.admin.leagues.rounds.goToTournament}
                         size={ButtonSize.SMALL}
                       />
                     </Link>
@@ -49,7 +53,7 @@ export default function LeagueContentRounds({
                   {round.couples && round.couples.length > 0 && (
                     <>
                       <h5 className="m-0 mb-1 text-sm font-bold text-gray-800">
-                        Parejas
+                        {TEXT.admin.leagues.rounds.couplesTitle}
                       </h5>
                       <ul className="mb-4">
                         {round.couples.map((couple) => (
@@ -64,18 +68,11 @@ export default function LeagueContentRounds({
                     round.tournament.winnerCouples.length > 0 && (
                       <>
                         <h5 className="m-0 text-sm font-bold text-gray-800">
-                          Ganadores
+                          {TEXT.admin.leagues.rounds.winnersTitle}
                         </h5>
-                        {round.tournament.winnerCouples.map((couple, index) => (
+                        {round.tournament.winnerCouples.map((couple) => (
                           <p key={couple.id} className="text-sm">
                             {couple.player1.name} / {couple.player2.name}
-                            {index <
-                            (round.tournament?.winnerCouples.length ?? 0) -
-                              1 ? (
-                              <br></br>
-                            ) : (
-                              ''
-                            )}
                           </p>
                         ))}
                       </>
@@ -87,7 +84,7 @@ export default function LeagueContentRounds({
         </ul>
       ) : (
         <p className="mb-4 text-center text-sm text-gray-500">
-          Las jornadas serán creadas una vez que se haya iniciado la liga.
+          {TEXT.admin.leagues.rounds.noRounds}
         </p>
       )}
     </div>

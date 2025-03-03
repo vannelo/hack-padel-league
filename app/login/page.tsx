@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 
-import { appRoutes } from '@/constants/appRoutes'
+import { APP_ROUTES } from '@/constants/appRoutes'
 
 export default function LoginPage() {
   const [username, setUsername] = useState('')
@@ -21,7 +21,7 @@ export default function LoginPage() {
     })
 
     if (result?.ok) {
-      router.push(appRoutes.admin.players)
+      router.push(APP_ROUTES.admin.players)
     } else {
       alert('Invalid credentials')
     }

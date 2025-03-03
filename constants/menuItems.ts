@@ -1,20 +1,20 @@
 import { Award, Trophy, Users } from 'lucide-react'
 
-import { appRoutes } from './appRoutes'
+import { APP_ROUTES } from './appRoutes'
 
 export const adminMenuItems = [
   {
-    href: appRoutes.admin.players,
+    href: APP_ROUTES.admin.players,
     icon: Users,
     text: 'Jugadores',
   },
   {
-    href: appRoutes.admin.leagues,
+    href: APP_ROUTES.admin.leagues,
     icon: Award,
     text: 'Ligas',
   },
   {
-    href: appRoutes.admin.tournaments,
+    href: APP_ROUTES.admin.tournaments,
     icon: Trophy,
     text: 'Torneos',
   },

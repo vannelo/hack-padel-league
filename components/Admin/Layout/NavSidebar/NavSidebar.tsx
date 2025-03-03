@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import { appRoutes } from '@/constants/appRoutes'
+import { APP_ROUTES } from '@/constants/appRoutes'
 import { adminMenuItems } from '@/constants/menuItems'
 
 import NavSidebarItem from './NavSidebarItem'
@@ -14,7 +14,7 @@ const NavSidebar = () => {
     <nav className="left-0 top-0 z-10 hidden h-screen w-64 flex-col bg-white p-4 transition-all duration-300 md:fixed md:flex">
       <div className="h-screen rounded-lg border border-gray-200 px-4 py-8">
         <div className="mb-6 text-center">
-          <Link href={appRoutes.admin.players}>
+          <Link href={APP_ROUTES.admin.players}>
             <Image
               src="/img/hack-logo-black.png"
               alt="Logo"

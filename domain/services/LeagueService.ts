@@ -43,7 +43,6 @@ export class LeagueService {
       throw new Error('A league must have at least 2 players to start.')
     }
 
-    // Generate rounds and couples
     const rounds = this.generateLeagueRounds(league.players)
 
     try {
@@ -82,6 +81,7 @@ export class LeagueService {
         )
       }
 
+      await this.leagueRepository.updateLeagueStartDate(leagueId, new Date())
       return await this.leagueRepository.updateLeagueStatus(
         leagueId,
         LeagueStatus.InProgress

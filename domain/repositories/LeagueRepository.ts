@@ -10,6 +10,14 @@ export class LeagueRepository {
     })
   }
 
+  // update startDate
+  async updateLeagueStartDate(leagueId: string, startDate: Date) {
+    return prisma.league.update({
+      where: { id: leagueId },
+      data: { startDate },
+    })
+  }
+
   async deleteLeague(id: string) {
     await prisma.league.delete({
       where: { id },
@@ -98,8 +106,8 @@ export class LeagueRepository {
         return createdRounds
       },
       {
-        maxWait: 10000, // 10 seconds
-        timeout: 60000, // 60 seconds
+        maxWait: 10000,
+        timeout: 60000,
       }
     )
   }

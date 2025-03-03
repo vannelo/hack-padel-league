@@ -52,6 +52,7 @@ export const TEXT = {
         saving: 'Creando...',
         create: 'Crear',
       },
+      addPlayer: 'Agregar Jugador',
       tableHeaders: {
         name: 'Nombre',
         status: 'Estado',
@@ -61,6 +62,42 @@ export const TEXT = {
       },
       viewLeagueLink: (id: string) => `/admin/ligas/${id}`,
       tablePlayersLength: (players: number) => `${players} jugadores`,
+      leagueHeader: {
+        startLeagueSuccess: '¡Liga iniciada con éxito!',
+        startLeagueError: 'Ocurrió un error al iniciar la liga.',
+        startLeagueButton: (isLoading: boolean) =>
+          isLoading ? 'Iniciando...' : 'Iniciar Liga',
+        leagueStartConditions:
+          'La liga solo puede iniciarse con al menos 4 jugadores activos y un número par de jugadores',
+        viewLeagueLink: (id: string) => `/ligas/${id}`,
+      },
+      ranking: {
+        title: 'RANKING',
+        playerHeader: 'Jugador',
+        pointsHeader: 'Puntos',
+        noPlayersAssigned: 'No hay jugadores asignados a esta liga.',
+        updateScoreSuccess: 'Puntuación actualizada correctamente',
+        updateScoreError: 'Error al actualizar la puntuación',
+        saveButton: (isLoading: boolean) =>
+          isLoading ? 'Guardando...' : 'Guardar',
+        selectPlayerLabel: 'Jugador',
+        selectPlayerPlaceholder: '-- Selecciona un Jugador --',
+        selectPlayerError: 'Por favor, seleccione un jugador.',
+        noAvailablePlayers: 'No hay jugadores disponibles',
+        playerAdded: 'Jugador añadido a la liga correctamente',
+        playerAddError: 'Error al añadir jugador a la liga',
+        addPlayer: 'Añadir Jugador a la Liga',
+        addingPlayer: 'Añadiendo...',
+      },
+      rounds: {
+        title: 'JORNADAS',
+        goToTournament: 'Ir al torneo',
+        couplesTitle: 'Parejas',
+        winnersTitle: 'Ganadores',
+        noRounds:
+          'Las jornadas serán creadas una vez que se haya iniciado la liga.',
+        roundNumber: (number: number) => `Jornada ${number}`,
+      },
     },
   },
 }
