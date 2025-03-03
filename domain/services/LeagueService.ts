@@ -2,7 +2,11 @@ import { LeagueStatus, TournamentStatus, TournamentType } from '@prisma/client'
 
 import { LeagueRepository } from '@/domain/repositories/LeagueRepository'
 import { TournamentService } from '@/domain/services/TournamentService'
-import { AddPlayerToLeagueData, CreateLeagueData } from '@/types/league'
+import {
+  AddPlayerToLeagueData,
+  CreateLeagueData,
+  LeaguePlayer,
+} from '@/types/league'
 
 export class LeagueService {
   private leagueRepository = new LeagueRepository()
@@ -30,18 +34,7 @@ export class LeagueService {
 
   async startLeague(leagueId: string) {
     const league = await this.leagueRepository.getLeagueById(leagueId)
-
-    if (!league) {
-      throw new Error('League not found.')
-    }
-
-    if (league.status !== LeagueStatus.Upcoming) {
-      throw new Error('Only upcoming leagues can be started.')
-    }
-
-    if (league.players.length < 2) {
-      throw new Error('A league must have at least 2 players to start.')
-    }
+    if (!league) throw new Error('League not found.')
 
     const rounds = this.generateLeagueRounds(league.players)
 
@@ -51,22 +44,19 @@ export class LeagueService {
         rounds
       )
 
-      // Create tournaments for each round
       for (const round of createdRounds) {
         const tournamentData = {
           name: `${league.name} - Jornada ${round.number}`,
           type: TournamentType.League,
-          startDate: null, // You may want to adjust this based on your requirements
-          endDate: null, // You may want to set an end date
           status: TournamentStatus.Upcoming,
+          // TODO: Make this configurable
           availableCourts: 3,
-          leagueId: leagueId,
+          leagueId,
         }
 
         const tournament =
           await this.tournamentService.createTournament(tournamentData)
 
-        // Add couples to the tournament
         for (const couple of round.couples) {
           await this.tournamentService.addCoupleToTournament(tournament.id, {
             player1Id: couple.player1Id,
@@ -74,7 +64,6 @@ export class LeagueService {
           })
         }
 
-        // Update the round with the created tournament
         await this.leagueRepository.updateRoundTournament(
           round.id,
           tournament.id
@@ -82,6 +71,7 @@ export class LeagueService {
       }
 
       await this.leagueRepository.updateLeagueStartDate(leagueId, new Date())
+
       return await this.leagueRepository.updateLeagueStatus(
         leagueId,
         LeagueStatus.InProgress
@@ -92,12 +82,8 @@ export class LeagueService {
     }
   }
 
-  private generateLeagueRounds(
-    // eslint-disable-next-line
-    players: any
-  ): { number: number; couples: { player1Id: string; player2Id: string }[] }[] {
-    // eslint-disable-next-line
-    const playerIds = players.map((player: any) => player.playerId)
+  private generateLeagueRounds(players: LeaguePlayer[]) {
+    const playerIds = players.map((player) => player.playerId)
     const totalRounds = playerIds.length - 1
     const rounds = []
 
@@ -114,7 +100,6 @@ export class LeagueService {
         round.couples.push({ player1Id, player2Id })
       }
 
-      // Rotate players for next round
       const fixedPlayer = playerIds[0]
       playerIds.splice(1, 0, playerIds.pop()!)
       playerIds[0] = fixedPlayer
@@ -127,14 +112,7 @@ export class LeagueService {
 
   async finishLeague(leagueId: string) {
     const league = await this.leagueRepository.getLeagueById(leagueId)
-
-    if (!league) {
-      throw new Error('League not found.')
-    }
-
-    if (league.status !== LeagueStatus.InProgress) {
-      throw new Error('Only leagues in progress can be finished.')
-    }
+    if (!league) throw new Error('League not found.')
 
     const updatedLeague = await this.leagueRepository.updateLeagueStatus(
       leagueId,

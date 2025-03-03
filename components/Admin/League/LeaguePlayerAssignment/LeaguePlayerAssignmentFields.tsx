@@ -1,7 +1,13 @@
 'use client'
 
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
-import { ErrorMessage, Field } from 'formik'
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material'
+import { ErrorMessage } from 'formik'
 
 import { TEXT } from '@/constants/text'
 import { League } from '@/types/league'
@@ -9,9 +15,7 @@ import { Player } from '@/types/player'
 
 interface LeaguePlayerAssignmentFieldsProps {
   values: { playerId: string }
-  handleChange: (
-    e: React.ChangeEvent<{ name?: string; value: unknown }>
-  ) => void
+  handleChange: (e: SelectChangeEvent<string>) => void
   touched: { playerId?: boolean }
   errors: { playerId?: string }
   players: Player[]
@@ -32,17 +36,17 @@ export default function LeaguePlayerAssignmentFields({
 
   return (
     <div className="mb-4">
-      <FormControl fullWidth error={!!errors.playerId && touched.playerId}>
+      <FormControl fullWidth error={touched.playerId && !!errors.playerId}>
         <InputLabel id="player-select-label">
           {TEXT.admin.leagues.ranking.selectPlayerLabel}
         </InputLabel>
-        <Field
-          as={Select}
+        <Select
           labelId="player-select-label"
           id="playerId"
           name="playerId"
           value={values.playerId}
           onChange={handleChange}
+          label={TEXT.admin.leagues.ranking.selectPlayerLabel}
         >
           <MenuItem value="">
             <em>{TEXT.admin.leagues.ranking.selectPlayerPlaceholder}</em>
@@ -58,8 +62,12 @@ export default function LeaguePlayerAssignmentFields({
               {TEXT.admin.leagues.ranking.noAvailablePlayers}
             </MenuItem>
           )}
-        </Field>
-        <ErrorMessage name="playerId" component="span" />
+        </Select>
+        <ErrorMessage
+          name="playerId"
+          component="div"
+          className="mt-1 text-sm text-red-500"
+        />
       </FormControl>
     </div>
   )

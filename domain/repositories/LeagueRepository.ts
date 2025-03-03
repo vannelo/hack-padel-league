@@ -10,7 +10,6 @@ export class LeagueRepository {
     })
   }
 
-  // update startDate
   async updateLeagueStartDate(leagueId: string, startDate: Date) {
     return prisma.league.update({
       where: { id: leagueId },
