@@ -99,5 +99,18 @@ export const TEXT = {
         roundNumber: (number: number) => `Jornada ${number}`,
       },
     },
+    tournaments: {
+      errorFetching: 'Error al obtener torneos',
+      errorFetchingTournament: 'Error al obtener torneo',
+      tournamentsTitle: 'Torneos',
+      createTournament: 'Crear Torneo',
+      tournamentCreated: (name: string) =>
+        `Torneo "${name}" creado exitosamente`,
+      submitButton: {
+        saving: 'Creando...',
+        create: 'Crear',
+      },
+      errorCreating: 'Error al crear torneo',
+    },
   },
 };

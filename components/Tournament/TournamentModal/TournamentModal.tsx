@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 
-import TournamentCreationForm from '../TournamentCreationForm/TournamentCreationForm';
+import TournamentCreationForm from '../../Admin/Tournament/TournamentCreate/TournamentCreate';
 
 interface TournamentModalProps {
   open: boolean;

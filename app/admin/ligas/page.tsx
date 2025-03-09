@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { getAllLeagues } from '@/app/actions/leagueActions';
 import AdminTablePageLayout from '@/components/Admin/Layout/AdminTablePageLayout/AdminTablePageLayout';
-import LeagueCreation from '@/components/Admin/League/LeagueCreate/LeagueCreate';
+import LeagueCreate from '@/components/Admin/League/LeagueCreate/LeagueCreate';
 import LeagueTable from '@/components/Admin/League/LeagueTable/LeagueTable';
 import Modal from '@/components/Admin/UI/Modal/Modal';
 import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader';
@@ -69,7 +69,7 @@ export default function AdminLeagues() {
           onClose={() => setIsModalOpen(false)}
           title={TEXT.admin.leagues.createLeague}
         >
-          <LeagueCreation onLeagueCreated={handleLeagueAction} />
+          <LeagueCreate onLeagueCreated={handleLeagueAction} />
         </Modal>
       }
     />

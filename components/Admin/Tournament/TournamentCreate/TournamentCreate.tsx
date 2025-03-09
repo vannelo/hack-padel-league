@@ -2,30 +2,35 @@
 
 import { Form, Formik } from 'formik';
 
-import { createLeague } from '@/app/actions/leagueActions';
+import { createTournament } from '@/app/actions/tournamentActions';
 import Button, { ButtonType } from '@/components/UI/Button/Button';
 import { TEXT } from '@/constants/text';
-import { leagueValidationSchema } from '@/formik/leagueValidations';
+import { tournamentValidationSchema } from '@/formik/tournamentValidations';
 
-import LeagueCreateFields from './LeagueCreateFields';
+import TournamentCreateFields from './TournamentCreateFields';
 
-interface LeagueCreateProps {
-  onLeagueCreated: (name: string) => void;
+interface TournamentCreateProps {
+  onTournamentCreated: (message: string) => void;
 }
 
-export default function LeagueCreate({ onLeagueCreated }: LeagueCreateProps) {
+export default function TournamentCreate({
+  onTournamentCreated,
+}: TournamentCreateProps) {
   return (
     <Formik
-      initialValues={{ name: '' }}
-      validationSchema={leagueValidationSchema}
+      initialValues={{ name: '', availableCourts: '1' }}
+      validationSchema={tournamentValidationSchema}
       validateOnBlur
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         try {
-          await createLeague({ name: values.name });
-          onLeagueCreated(values.name);
+          await createTournament({
+            name: values.name,
+            availableCourts: Number(values.availableCourts),
+          });
+          onTournamentCreated(values.name);
           resetForm();
         } catch {
-          alert(TEXT.admin.leagues.errorCreating);
+          alert(TEXT.admin.tournaments.errorCreating);
         } finally {
           setSubmitting(false);
         }
@@ -33,7 +38,7 @@ export default function LeagueCreate({ onLeagueCreated }: LeagueCreateProps) {
     >
       {({ isSubmitting, handleChange, values, touched, errors }) => (
         <Form className="pt-2">
-          <LeagueCreateFields
+          <TournamentCreateFields
             values={values}
             handleChange={handleChange}
             touched={touched}
@@ -45,8 +50,8 @@ export default function LeagueCreate({ onLeagueCreated }: LeagueCreateProps) {
               disabled={isSubmitting}
               label={
                 isSubmitting
-                  ? TEXT.admin.leagues.submitButton.saving
-                  : TEXT.admin.leagues.submitButton.create
+                  ? TEXT.admin.tournaments.submitButton.saving
+                  : TEXT.admin.tournaments.submitButton.create
               }
               className="w-full"
             />
