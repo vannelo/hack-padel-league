@@ -5,19 +5,19 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
-} from '@mui/material'
-import { ErrorMessage, Field } from 'formik'
+} from '@mui/material';
+import { ErrorMessage, Field } from 'formik';
 
-import { genderMap, levelMap } from '@/constants/playerEnums'
+import { genderMap, levelMap } from '@/constants/playerEnums';
 
 interface PlayerEditFieldsProps {
   values: {
-    gender: string
-    level: string
-  }
+    gender: string;
+    level: string;
+  };
   handleChange: (
     e: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>
-  ) => void
+  ) => void;
 }
 
 export default function PlayerEditFields({
@@ -99,5 +99,5 @@ export default function PlayerEditFields({
         </FormControl>
       </div>
     </>
-  )
+  );
 }

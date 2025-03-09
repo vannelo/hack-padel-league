@@ -11,4 +11,4 @@ export const APP_ROUTES = {
   players: {
     index: '/admin/jugadores',
   },
-}
+};

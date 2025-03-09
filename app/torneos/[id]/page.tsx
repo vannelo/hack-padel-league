@@ -1,23 +1,23 @@
-import { TournamentType } from '@prisma/client'
-import type { Metadata } from 'next'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { TournamentType } from '@prisma/client';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
-import { getTournamentById } from '@/app/actions/tournamentActions'
-import { TournamentLiveUpdater } from '@/components/Tournament/TournamentLiveUpdater/TournamentLiveUpdater'
+import { getTournamentById } from '@/app/actions/tournamentActions';
+import { TournamentLiveUpdater } from '@/components/Tournament/TournamentLiveUpdater/TournamentLiveUpdater';
 
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string }
+  params: { id: string };
 }): Promise<Metadata> {
-  const tournament = await getTournamentById(params.id)
+  const tournament = await getTournamentById(params.id);
 
   if (!tournament) {
     return {
       title: 'Torneo no encontrado | Hack Padel',
       description: 'El torneo que buscas no existe o ha sido eliminado.',
-    }
+    };
   }
 
   return {
@@ -44,18 +44,18 @@ export async function generateMetadata({
       description: `Consulta los resultados, parejas y rondas del torneo ${tournament.name} en Hack Padel.`,
       images: ['/img/meta.jpg'],
     },
-  }
+  };
 }
 
 export default async function TournamentDetailsPage({
   params,
 }: {
-  params: { id: string }
+  params: { id: string };
 }) {
-  const tournament = await getTournamentById(params.id)
+  const tournament = await getTournamentById(params.id);
 
   if (!tournament) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -178,5 +178,5 @@ export default async function TournamentDetailsPage({
         </div>
       </div>
     </TournamentLiveUpdater>
-  )
+  );
 }

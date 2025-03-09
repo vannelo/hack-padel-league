@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
 
-import { APP_ROUTES } from '@/constants/appRoutes'
-import { adminMenuItems } from '@/constants/menuItems'
+import { APP_ROUTES } from '@/constants/appRoutes';
+import { adminMenuItems } from '@/constants/menuItems';
 
-import NavSidebarItem from './NavSidebarItem'
+import NavSidebarItem from './NavSidebarItem';
 
 const NavSidebar = () => {
   return (
@@ -31,7 +31,7 @@ const NavSidebar = () => {
         </ul>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default NavSidebar
+export default NavSidebar;

@@ -4,12 +4,12 @@ import {
   PrismaClient,
   TournamentStatus,
   TournamentType,
-} from '@prisma/client'
-import { randomUUID } from 'crypto'
+} from '@prisma/client';
+import { randomUUID } from 'crypto';
 
-import { Player } from '@/types/player'
+import { Player } from '@/types/player';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 const levels: Level[] = [
   Level.Five,
@@ -17,7 +17,7 @@ const levels: Level[] = [
   Level.Three,
   Level.Two,
   Level.One,
-]
+];
 const playerNames = [
   'Juan Lebrón',
   'Alejandro Galán',
@@ -39,29 +39,29 @@ const playerNames = [
   'Marta Marrero',
   'Javier Garrido',
   'Miguel Lamperti',
-]
+];
 
 function getRandomElement<T>(array: T[]): T {
-  return array[Math.floor(Math.random() * array.length)]
+  return array[Math.floor(Math.random() * array.length)];
 }
 
 async function createTournamentCouples(players: Player[], count: number) {
-  const couples = []
-  const shuffledPlayers = [...players].sort(() => Math.random() - 0.5)
+  const couples = [];
+  const shuffledPlayers = [...players].sort(() => Math.random() - 0.5);
 
   for (let i = 0; i < count && i * 2 + 1 < shuffledPlayers.length; i++) {
-    const player1 = shuffledPlayers[i * 2]
-    const player2 = shuffledPlayers[i * 2 + 1]
+    const player1 = shuffledPlayers[i * 2];
+    const player2 = shuffledPlayers[i * 2 + 1];
     const couple = await prisma.tournamentCouple.create({
       data: {
         id: randomUUID(),
         player1Id: player1.id,
         player2Id: player2.id,
       },
-    })
-    couples.push(couple)
+    });
+    couples.push(couple);
   }
-  return couples
+  return couples;
 }
 
 async function createTournament(
@@ -82,13 +82,13 @@ async function createTournament(
         connect: couples.map((couple) => ({ id: couple.id })),
       },
     },
-  })
-  return tournament
+  });
+  return tournament;
 }
 
 async function main() {
   // Create 20 players
-  const players = []
+  const players = [];
   for (let i = 0; i < playerNames.length; i++) {
     const player = await prisma.player.create({
       data: {
@@ -101,8 +101,8 @@ async function main() {
         gender: i < 10 ? Gender.Male : Gender.Female,
         level: getRandomElement(levels),
       },
-    })
-    players.push(player)
+    });
+    players.push(player);
   }
 
   // Create 1 league
@@ -113,7 +113,7 @@ async function main() {
       startDate: new Date('2023-06-01'),
       endDate: new Date('2023-08-31'),
     },
-  })
+  });
 
   // Associate players with the league
   for (const player of players) {
@@ -124,32 +124,32 @@ async function main() {
         playerId: player.id,
         points: 0,
       },
-    })
+    });
   }
 
   // Create tournaments
-  const tournament1Couples = await createTournamentCouples(players, 4)
-  const tournament2Couples = await createTournamentCouples(players, 6)
-  const tournament3Couples = await createTournamentCouples(players, 8)
-  const tournament4Couples = await createTournamentCouples(players, 10)
-  const tournament5Couples = await createTournamentCouples(players, 4)
-  const tournament6Couples = await createTournamentCouples(players, 6)
+  const tournament1Couples = await createTournamentCouples(players, 4);
+  const tournament2Couples = await createTournamentCouples(players, 6);
+  const tournament3Couples = await createTournamentCouples(players, 8);
+  const tournament4Couples = await createTournamentCouples(players, 10);
+  const tournament5Couples = await createTournamentCouples(players, 4);
+  const tournament6Couples = await createTournamentCouples(players, 6);
 
-  await createTournament('Torneo 1 Court', 1, tournament1Couples)
-  await createTournament('Torneo 3 Courts', 3, tournament2Couples)
-  await createTournament('Torneo 4 Courts', 4, tournament3Couples)
-  await createTournament('Torneo 5 Courts', 5, tournament4Couples)
-  await createTournament('Torneo 1 Court', 3, tournament5Couples)
-  await createTournament('Torneo 3 Courts', 3, tournament6Couples)
+  await createTournament('Torneo 1 Court', 1, tournament1Couples);
+  await createTournament('Torneo 3 Courts', 3, tournament2Couples);
+  await createTournament('Torneo 4 Courts', 4, tournament3Couples);
+  await createTournament('Torneo 5 Courts', 5, tournament4Couples);
+  await createTournament('Torneo 1 Court', 3, tournament5Couples);
+  await createTournament('Torneo 3 Courts', 3, tournament6Couples);
 
-  console.log('Seeding completed successfully!')
+  console.log('Seeding completed successfully!');
 }
 
 main()
   .catch((e) => {
-    console.error(e)
-    process.exit(1)
+    console.error(e);
+    process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect()
-  })
+    await prisma.$disconnect();
+  });

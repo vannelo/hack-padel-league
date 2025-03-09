@@ -1,6 +1,6 @@
-import type { Metadata } from 'next'
+import type { Metadata } from 'next';
 
-import PageLayout from '@/components/Admin/Layout/AdminPageLayout/AdminPageLayout'
+import PageLayout from '@/components/Admin/Layout/AdminPageLayout/AdminPageLayout';
 
 export const metadata: Metadata = {
   title: 'Admin | Hack Padel',
@@ -25,8 +25,8 @@ export const metadata: Metadata = {
     description: 'Primera cancha de padel en Lindavista',
     images: ['/img/meta.jpg'],
   },
-}
+};
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <PageLayout>{children}</PageLayout>
+  return <PageLayout>{children}</PageLayout>;
 }

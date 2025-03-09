@@ -1,24 +1,24 @@
-'use client'
+'use client';
 
-import { TournamentStatus } from '@prisma/client'
-import Link from 'next/link'
-import { useState } from 'react'
+import { TournamentStatus } from '@prisma/client';
+import Link from 'next/link';
+import { useState } from 'react';
 
 import {
   finishTournament,
   startTournament,
-} from '@/app/actions/tournamentActions'
-import Button, { ButtonVariant } from '@/components/UI/Button/Button'
-import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
-import { tournamentStatusMap } from '@/constants/tournamentEnums'
-import { SnackbarSeverity } from '@/hooks/useSnackBar'
-import { formatDate } from '@/lib/helpers'
-import type { Tournament } from '@/types/tournament'
+} from '@/app/actions/tournamentActions';
+import Button, { ButtonVariant } from '@/components/UI/Button/Button';
+import StatusBadge from '@/components/UI/StatusBadge/StatusBadge';
+import { tournamentStatusMap } from '@/constants/tournamentEnums';
+import { SnackbarSeverity } from '@/hooks/useSnackBar';
+import { formatDate } from '@/lib/helpers';
+import type { Tournament } from '@/types/tournament';
 
 interface TournamentDetailsHeaderProps {
-  tournament: Tournament
-  showSnackbar: (message: string, severity: SnackbarSeverity) => void
-  onTournamentUpdate: (updatedTournament: Tournament) => void
+  tournament: Tournament;
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void;
+  onTournamentUpdate: (updatedTournament: Tournament) => void;
 }
 
 export default function TournamentContentHeader({
@@ -26,37 +26,37 @@ export default function TournamentContentHeader({
   showSnackbar,
   onTournamentUpdate,
 }: TournamentDetailsHeaderProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleStartTournament() {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const updatedTournament = await startTournament(tournament.id)
-      showSnackbar('¡Torneo iniciado con éxito!', SnackbarSeverity.SUCCESS)
-      onTournamentUpdate(updatedTournament as Tournament)
+      const updatedTournament = await startTournament(tournament.id);
+      showSnackbar('¡Torneo iniciado con éxito!', SnackbarSeverity.SUCCESS);
+      onTournamentUpdate(updatedTournament as Tournament);
     } catch {
       showSnackbar(
         'Ocurrió un error al iniciar el torneo.',
         SnackbarSeverity.ERROR
-      )
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   async function handleFinishTournament() {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const updatedTournament = await finishTournament(tournament.id)
-      showSnackbar('¡Torneo finalizado con éxito!', SnackbarSeverity.SUCCESS)
-      onTournamentUpdate(updatedTournament as Tournament)
+      const updatedTournament = await finishTournament(tournament.id);
+      showSnackbar('¡Torneo finalizado con éxito!', SnackbarSeverity.SUCCESS);
+      onTournamentUpdate(updatedTournament as Tournament);
     } catch {
       showSnackbar(
         'Ocurrió un error al finalizar el torneo.',
         SnackbarSeverity.ERROR
-      )
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -106,5 +106,5 @@ export default function TournamentContentHeader({
         />
       )}
     </div>
-  )
+  );
 }

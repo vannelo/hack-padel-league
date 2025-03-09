@@ -1,5 +1,5 @@
-import Pusher from 'pusher'
-import PusherClient from 'pusher-js'
+import Pusher from 'pusher';
+import PusherClient from 'pusher-js';
 
 // Server-side Pusher instance (for sending events)
 export const pusher = new Pusher({
@@ -8,7 +8,7 @@ export const pusher = new Pusher({
   secret: process.env.PUSHER_SECRET!,
   cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
   useTLS: true,
-})
+});
 
 // Client-side Pusher instance (for receiving events)
 export const pusherClient = new PusherClient(
@@ -16,4 +16,4 @@ export const pusherClient = new PusherClient(
   {
     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
   }
-)
+);

@@ -4,9 +4,9 @@ export const formatDate = (date: Date) => {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
-  }).format(date)
-}
+  }).format(date);
+};
 
 export const startsWithRoute = (pathname: string, href: string) => {
-  return pathname.startsWith(href)
-}
+  return pathname.startsWith(href);
+};

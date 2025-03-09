@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const breadcrumbMap: { [key: string]: string } = {
   admin: 'Admin',
   jugadores: 'Jugadores',
   ligas: 'Ligas',
   torneos: 'Torneos',
-}
+};
 
 export default function Breadcrumbs() {
-  const pathname = usePathname()
-  const pathSegments = pathname.split('/').filter(Boolean)
+  const pathname = usePathname();
+  const pathSegments = pathname.split('/').filter(Boolean);
 
   return (
     <nav aria-label="breadcrumb">
       <ul className="flex items-center text-sm">
         {pathSegments.map((segment, index) => {
-          const path = `/${pathSegments.slice(0, index + 1).join('/')}`
-          const isLast = index === pathSegments.length - 1
-          const label = breadcrumbMap[segment] || segment
+          const path = `/${pathSegments.slice(0, index + 1).join('/')}`;
+          const isLast = index === pathSegments.length - 1;
+          const label = breadcrumbMap[segment] || segment;
 
           return (
             <li key={path} className="flex items-center">
@@ -35,9 +35,9 @@ export default function Breadcrumbs() {
                 </Link>
               )}
             </li>
-          )
+          );
         })}
       </ul>
     </nav>
-  )
+  );
 }

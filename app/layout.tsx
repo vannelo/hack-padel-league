@@ -1,16 +1,16 @@
-import './globals.css'
+import './globals.css';
 
-import type { Metadata } from 'next'
-import { Montserrat } from 'next/font/google'
+import type { Metadata } from 'next';
+import { Montserrat } from 'next/font/google';
 
-import { SnackbarProvider } from '@/hooks/useSnackBar'
+import { SnackbarProvider } from '@/hooks/useSnackBar';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   variable: '--font-montserrat',
   display: 'swap',
-})
+});
 
 export const metadata: Metadata = {
   title: 'Hack Padel',
@@ -35,12 +35,12 @@ export const metadata: Metadata = {
     description: 'Primera cancha de padel en Lindavista',
     images: ['/img/meta.jpg'],
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="es">
@@ -50,5 +50,5 @@ export default function RootLayout({
         </SnackbarProvider>
       </body>
     </html>
-  )
+  );
 }

@@ -1,50 +1,50 @@
-'use client'
+'use client';
 
-import { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react';
 
-import { getLeagueById } from '@/app/actions/leagueActions'
-import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader'
-import { TEXT } from '@/constants/text'
-import { useSnackbar } from '@/hooks/useSnackBar'
-import { League } from '@/types/league'
-import { Player } from '@/types/player'
+import { getLeagueById } from '@/app/actions/leagueActions';
+import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader';
+import { TEXT } from '@/constants/text';
+import { useSnackbar } from '@/hooks/useSnackBar';
+import { League } from '@/types/league';
+import { Player } from '@/types/player';
 
-import LeagueDetailsHeader from './LeagueDetailsHeader'
-import LeagueDetailsRanking from './LeagueDetailsRanking'
-import LeagueDetailsRounds from './LeagueDetailsRounds'
+import LeagueDetailsHeader from './LeagueDetailsHeader';
+import LeagueDetailsRanking from './LeagueDetailsRanking';
+import LeagueDetailsRounds from './LeagueDetailsRounds';
 
 interface LeagueDetailsProps {
-  initialLeague: League
-  players: Player[]
+  initialLeague: League;
+  players: Player[];
 }
 
 export default function LeagueDetails({
   initialLeague,
   players,
 }: LeagueDetailsProps) {
-  const [isLoading, setIsLoading] = useState(false)
-  const [league, setLeague] = useState(initialLeague)
-  const { showSnackbar } = useSnackbar()
+  const [isLoading, setIsLoading] = useState(false);
+  const [league, setLeague] = useState(initialLeague);
+  const { showSnackbar } = useSnackbar();
 
   const fetchLeague = useCallback(async () => {
-    if (!league) return
-    setIsLoading(true)
+    if (!league) return;
+    setIsLoading(true);
     try {
-      const fetchedLeague = await getLeagueById(league.id)
-      setLeague(fetchedLeague as League)
+      const fetchedLeague = await getLeagueById(league.id);
+      setLeague(fetchedLeague as League);
     } catch {
-      console.error(TEXT.admin.leagues.errorFetchingLeague)
+      console.error(TEXT.admin.leagues.errorFetchingLeague);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [league])
+  }, [league]);
 
   const handleLeagueUpdate = useCallback(() => {
-    fetchLeague()
-  }, [fetchLeague])
+    fetchLeague();
+  }, [fetchLeague]);
 
   if (isLoading) {
-    return <TableLoader />
+    return <TableLoader />;
   }
 
   return (
@@ -67,5 +67,5 @@ export default function LeagueDetails({
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import React from 'react'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import React from 'react';
 
-import { startsWithRoute } from '@/lib/helpers'
+import { startsWithRoute } from '@/lib/helpers';
 
 interface NavSidebarItemProps {
   item: {
-    text: string
-    href: string
-    icon?: React.ElementType
-  }
+    text: string;
+    href: string;
+    icon?: React.ElementType;
+  };
 }
 
 const NavSidebarItem = ({ item }: NavSidebarItemProps) => {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <li key={item.text}>
@@ -31,7 +31,7 @@ const NavSidebarItem = ({ item }: NavSidebarItemProps) => {
         <span>{item.text}</span>
       </Link>
     </li>
-  )
-}
+  );
+};
 
-export default NavSidebarItem
+export default NavSidebarItem;

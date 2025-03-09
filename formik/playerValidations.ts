@@ -1,4 +1,4 @@
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 
 export const playerValidationSchema = Yup.object().shape({
   name: Yup.string()
@@ -14,4 +14,4 @@ export const playerValidationSchema = Yup.object().shape({
     .optional(),
   gender: Yup.string(),
   level: Yup.string(),
-})
+});

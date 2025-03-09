@@ -1,17 +1,17 @@
-import type { Metadata } from 'next'
-import Link from 'next/link'
+import type { Metadata } from 'next';
+import Link from 'next/link';
 
-import { getAllLeagues } from '@/app/actions/leagueActions'
+import { getAllLeagues } from '@/app/actions/leagueActions';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `Ligas | Hack Padel`,
     description: `Consulta la clasificación, jugadores y rondas de las ligas en Hack Padel.`,
-  }
+  };
 }
 
 export default async function LeaguesPage() {
-  const leagues = await getAllLeagues()
+  const leagues = await getAllLeagues();
 
   return (
     <div className="p-2">
@@ -40,5 +40,5 @@ export default async function LeaguesPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }

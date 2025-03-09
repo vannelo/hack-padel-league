@@ -5,39 +5,39 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
-} from '@mui/material'
-import { ErrorMessage, Field } from 'formik'
+} from '@mui/material';
+import { ErrorMessage, Field } from 'formik';
 
-import { genderMap, levelMap } from '@/constants/playerEnums'
+import { genderMap, levelMap } from '@/constants/playerEnums';
 
 interface PlayerCreateFieldsProps {
   values: {
-    name: string
-    email: string
-    age: string
-    phone: string
-    gender: string
-    level: string
-  }
+    name: string;
+    email: string;
+    age: string;
+    phone: string;
+    gender: string;
+    level: string;
+  };
   handleChange: (
     e: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>
-  ) => void
+  ) => void;
   touched: {
-    name?: boolean
-    email?: boolean
-    age?: boolean
-    phone?: boolean
-    gender?: boolean
-    level?: boolean
-  }
+    name?: boolean;
+    email?: boolean;
+    age?: boolean;
+    phone?: boolean;
+    gender?: boolean;
+    level?: boolean;
+  };
   errors: {
-    name?: string
-    email?: string
-    age?: string
-    phone?: string
-    gender?: string
-    level?: string
-  }
+    name?: string;
+    email?: string;
+    age?: string;
+    phone?: string;
+    gender?: string;
+    level?: string;
+  };
 }
 
 export default function PlayerCreateFields({
@@ -153,5 +153,5 @@ export default function PlayerCreateFields({
         </FormControl>
       </div>
     </>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { Home, Menu, Trophy, Users, X } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { Home, Menu, Trophy, Users, X } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
-import { APP_ROUTES } from '@/constants/appRoutes'
+import { APP_ROUTES } from '@/constants/appRoutes';
 
 const NavMobile = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <nav className="fixed left-0 top-0 z-20 block w-full bg-white md:hidden">
@@ -82,7 +82,7 @@ const NavMobile = () => {
         </ul>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default NavMobile
+export default NavMobile;

@@ -1,30 +1,30 @@
-'use client'
+'use client';
 
-import { TextField } from '@mui/material'
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
-import Link from 'next/link'
-import { useState } from 'react'
+import { TextField } from '@mui/material';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import Link from 'next/link';
+import { useState } from 'react';
 
-import Button, { ButtonSize } from '@/components/UI/Button/Button'
-import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
-import { leagueStatusMap } from '@/constants/leagueEnums'
-import { TEXT } from '@/constants/text'
-import { League } from '@/types/league'
+import Button, { ButtonSize } from '@/components/UI/Button/Button';
+import StatusBadge from '@/components/UI/StatusBadge/StatusBadge';
+import { leagueStatusMap } from '@/constants/leagueEnums';
+import { TEXT } from '@/constants/text';
+import { League } from '@/types/league';
 
 interface LeagueTableProps {
-  leagues: League[]
+  leagues: League[];
 }
 
 export default function LeagueTable({ leagues }: LeagueTableProps) {
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 50,
     page: 0,
-  })
-  const [searchTerm, setSearchTerm] = useState('')
+  });
+  const [searchTerm, setSearchTerm] = useState('');
 
   const filteredLeagues = leagues.filter((league) =>
     league.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  );
 
   const columns: GridColDef[] = [
     {
@@ -62,14 +62,14 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
         </Link>
       ),
     },
-  ]
+  ];
 
   const rows = filteredLeagues.map((league) => ({
     id: league.id,
     name: league.name,
     status: league.status,
     players: TEXT.admin.leagues.tablePlayersLength(league.players.length),
-  }))
+  }));
 
   return (
     <>
@@ -104,5 +104,5 @@ export default function LeagueTable({ leagues }: LeagueTableProps) {
         </div>
       )}
     </>
-  )
+  );
 }

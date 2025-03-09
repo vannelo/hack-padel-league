@@ -1,27 +1,27 @@
-'use client'
+'use client';
 
-import { TextField } from '@mui/material'
-import { LeagueStatus } from '@prisma/client'
-import { Pencil, X } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { TextField } from '@mui/material';
+import { LeagueStatus } from '@prisma/client';
+import { Pencil, X } from 'lucide-react';
+import { useCallback, useState } from 'react';
 
-import { updatePlayerScore } from '@/app/actions/leagueActions'
-import LeaguePlayerAssignment from '@/components/Admin/League/LeaguePlayerAssignment/LeaguePlayerAssignment'
-import { getSortedLeaguePlayers } from '@/components/Admin/League/utils'
-import Modal from '@/components/Admin/UI/Modal/Modal'
+import { updatePlayerScore } from '@/app/actions/leagueActions';
+import LeaguePlayerAssignment from '@/components/Admin/League/LeaguePlayerAssignment/LeaguePlayerAssignment';
+import { getSortedLeaguePlayers } from '@/components/Admin/League/utils';
+import Modal from '@/components/Admin/UI/Modal/Modal';
 import Button, {
   ButtonSize,
   ButtonVariant,
-} from '@/components/UI/Button/Button'
-import { TEXT } from '@/constants/text'
-import { SnackbarSeverity, useSnackbar } from '@/hooks/useSnackBar'
-import { League, LeaguePlayer } from '@/types/league'
-import { Player } from '@/types/player'
+} from '@/components/UI/Button/Button';
+import { TEXT } from '@/constants/text';
+import { SnackbarSeverity, useSnackbar } from '@/hooks/useSnackBar';
+import { League, LeaguePlayer } from '@/types/league';
+import { Player } from '@/types/player';
 
 interface LeagueDetailsRankingProps {
-  league: League
-  players: Player[]
-  onLeagueUpdate: () => void
+  league: League;
+  players: Player[];
+  onLeagueUpdate: () => void;
 }
 
 export default function LeagueDetailsRanking({
@@ -29,63 +29,63 @@ export default function LeagueDetailsRanking({
   players,
   onLeagueUpdate,
 }: LeagueDetailsRankingProps) {
-  const { showSnackbar } = useSnackbar()
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [scoreEdits, setScoreEdits] = useState<{ [key: string]: number }>({})
+  const { showSnackbar } = useSnackbar();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [scoreEdits, setScoreEdits] = useState<{ [key: string]: number }>({});
   const [editingPlayers, setEditingPlayers] = useState<{
-    [key: string]: boolean
-  }>({})
+    [key: string]: boolean;
+  }>({});
   const [loadingPlayers, setLoadingPlayers] = useState<{
-    [key: string]: boolean
-  }>({})
-  const sortedPlayers = getSortedLeaguePlayers(league.players)
+    [key: string]: boolean;
+  }>({});
+  const sortedPlayers = getSortedLeaguePlayers(league.players);
 
   const handleScoreChange = (playerId: string, value: string) => {
-    const score = value === '' ? 0 : Math.max(0, Number.parseInt(value, 10))
-    setScoreEdits((prev) => ({ ...prev, [playerId]: score }))
-  }
+    const score = value === '' ? 0 : Math.max(0, Number.parseInt(value, 10));
+    setScoreEdits((prev) => ({ ...prev, [playerId]: score }));
+  };
 
   const handleEditClick = (playerId: string, currentScore: number) => {
-    setEditingPlayers((prev) => ({ ...prev, [playerId]: true }))
-    setScoreEdits((prev) => ({ ...prev, [playerId]: currentScore }))
-  }
+    setEditingPlayers((prev) => ({ ...prev, [playerId]: true }));
+    setScoreEdits((prev) => ({ ...prev, [playerId]: currentScore }));
+  };
 
   const handleCancelEdit = (playerId: string) => {
-    setEditingPlayers((prev) => ({ ...prev, [playerId]: false }))
-  }
+    setEditingPlayers((prev) => ({ ...prev, [playerId]: false }));
+  };
 
   const handleSaveScore = useCallback(
     async (playerId: string) => {
-      setLoadingPlayers((prev) => ({ ...prev, [playerId]: true }))
+      setLoadingPlayers((prev) => ({ ...prev, [playerId]: true }));
 
       try {
-        await updatePlayerScore(playerId, scoreEdits[playerId])
+        await updatePlayerScore(playerId, scoreEdits[playerId]);
         showSnackbar(
           TEXT.admin.leagues.ranking.updateScoreSuccess,
           SnackbarSeverity.SUCCESS
-        )
-        onLeagueUpdate()
-        setEditingPlayers((prev) => ({ ...prev, [playerId]: false }))
+        );
+        onLeagueUpdate();
+        setEditingPlayers((prev) => ({ ...prev, [playerId]: false }));
       } catch {
         showSnackbar(
           TEXT.admin.leagues.ranking.updateScoreError,
           SnackbarSeverity.ERROR
-        )
+        );
       } finally {
-        setLoadingPlayers((prev) => ({ ...prev, [playerId]: false }))
+        setLoadingPlayers((prev) => ({ ...prev, [playerId]: false }));
       }
     },
     [scoreEdits, showSnackbar, onLeagueUpdate]
-  )
+  );
 
   const handlePlayerAdded = useCallback(() => {
     showSnackbar(
       TEXT.admin.leagues.ranking.playerAdded,
       SnackbarSeverity.SUCCESS
-    )
-    onLeagueUpdate()
-    setIsModalOpen(false)
-  }, [showSnackbar, onLeagueUpdate])
+    );
+    onLeagueUpdate();
+    setIsModalOpen(false);
+  }, [showSnackbar, onLeagueUpdate]);
 
   return (
     <div className="rounded-lg border border-gray-200 p-8">
@@ -183,5 +183,5 @@ export default function LeagueDetailsRanking({
         </Modal>
       )}
     </div>
-  )
+  );
 }

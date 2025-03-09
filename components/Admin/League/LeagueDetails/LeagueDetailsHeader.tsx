@@ -1,24 +1,24 @@
-'use client'
+'use client';
 
-import { LeagueStatus } from '@prisma/client'
-import Link from 'next/link'
-import { useState } from 'react'
+import { LeagueStatus } from '@prisma/client';
+import Link from 'next/link';
+import { useState } from 'react';
 
-import { startLeague } from '@/app/actions/leagueActions'
-import Button from '@/components/UI/Button/Button'
-import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
-import { leagueStatusMap } from '@/constants/leagueEnums'
-import { TEXT } from '@/constants/text'
-import { SnackbarSeverity } from '@/hooks/useSnackBar'
-import { formatDate } from '@/lib/helpers'
-import { League } from '@/types/league'
+import { startLeague } from '@/app/actions/leagueActions';
+import Button from '@/components/UI/Button/Button';
+import StatusBadge from '@/components/UI/StatusBadge/StatusBadge';
+import { leagueStatusMap } from '@/constants/leagueEnums';
+import { TEXT } from '@/constants/text';
+import { SnackbarSeverity } from '@/hooks/useSnackBar';
+import { formatDate } from '@/lib/helpers';
+import { League } from '@/types/league';
 
-import { getIsLeagueReady, getLeagueActivePlayers } from '../utils'
+import { getIsLeagueReady, getLeagueActivePlayers } from '../utils';
 
 interface LeagueDetailsHeaderProps {
-  league: League
-  showSnackbar: (message: string, severity: SnackbarSeverity) => void
-  onLeagueUpdate: () => void
+  league: League;
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void;
+  onLeagueUpdate: () => void;
 }
 
 export default function LeagueDetailsHeader({
@@ -26,26 +26,26 @@ export default function LeagueDetailsHeader({
   showSnackbar,
   onLeagueUpdate,
 }: LeagueDetailsHeaderProps) {
-  const [isLoading, setIsLoading] = useState(false)
-  const activePlayers = getLeagueActivePlayers(league.players)
-  const isLeagueReady = getIsLeagueReady(activePlayers)
+  const [isLoading, setIsLoading] = useState(false);
+  const activePlayers = getLeagueActivePlayers(league.players);
+  const isLeagueReady = getIsLeagueReady(activePlayers);
 
   async function handleStartLeague() {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await startLeague(league.id)
+      await startLeague(league.id);
       showSnackbar(
         TEXT.admin.leagues.leagueHeader.startLeagueSuccess,
         SnackbarSeverity.SUCCESS
-      )
-      onLeagueUpdate()
+      );
+      onLeagueUpdate();
     } catch {
       showSnackbar(
         TEXT.admin.leagues.leagueHeader.startLeagueError,
         SnackbarSeverity.ERROR
-      )
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -95,5 +95,5 @@ export default function LeagueDetailsHeader({
         </div>
       )}
     </div>
-  )
+  );
 }

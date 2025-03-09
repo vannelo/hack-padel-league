@@ -1,47 +1,47 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react';
 
 import {
   finishTournament as finishTournamentAction,
   getTournamentById,
-} from '@/app/actions/tournamentActions'
-import type { Tournament } from '@/types/tournament'
+} from '@/app/actions/tournamentActions';
+import type { Tournament } from '@/types/tournament';
 
 export function useTournament(initialTournament: Tournament) {
   const [tournament, setTournament] = useState<Tournament | null>(
     initialTournament
-  )
-  const [isLoading, setIsLoading] = useState(false)
+  );
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchTournament = useCallback(async () => {
-    if (!tournament) return
-    setIsLoading(true)
+    if (!tournament) return;
+    setIsLoading(true);
     try {
-      const fetchedTournament = await getTournamentById(tournament.id)
-      setTournament(fetchedTournament)
+      const fetchedTournament = await getTournamentById(tournament.id);
+      setTournament(fetchedTournament);
     } catch (error) {
-      console.error('Error fetching tournament:', error)
+      console.error('Error fetching tournament:', error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [tournament])
+  }, [tournament]);
 
   const finishTournament = useCallback(async () => {
-    if (!tournament) return
-    setIsLoading(true)
+    if (!tournament) return;
+    setIsLoading(true);
     try {
-      await finishTournamentAction(tournament.id)
-      await fetchTournament()
+      await finishTournamentAction(tournament.id);
+      await fetchTournament();
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [tournament, fetchTournament])
+  }, [tournament, fetchTournament]);
 
   const areAllMatchesPlayed = useCallback((tournamentToCheck: Tournament) => {
-    if (tournamentToCheck.rounds.length === 0) return false
+    if (tournamentToCheck.rounds.length === 0) return false;
     return tournamentToCheck.rounds.every((round) =>
       round.matches.every((match) => match.status === 'Completed')
-    )
-  }, [])
+    );
+  }, []);
 
   return {
     tournament,
@@ -49,5 +49,5 @@ export function useTournament(initialTournament: Tournament) {
     fetchTournament,
     finishTournament,
     areAllMatchesPlayed: tournament ? areAllMatchesPlayed(tournament) : false,
-  }
+  };
 }

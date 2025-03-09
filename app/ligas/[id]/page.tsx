@@ -1,41 +1,41 @@
-import { TournamentStatus } from '@prisma/client'
-import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { TournamentStatus } from '@prisma/client';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-import { getLeagueById } from '@/app/actions/leagueActions'
+import { getLeagueById } from '@/app/actions/leagueActions';
 
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string }
+  params: { id: string };
 }): Promise<Metadata> {
-  const league = await getLeagueById(params.id)
+  const league = await getLeagueById(params.id);
 
   if (!league) {
     return {
       title: 'Liga no encontrada | Hack Padel',
       description: 'La liga que buscas no existe o ha sido eliminada.',
-    }
+    };
   }
 
   return {
     title: `Liga | ${league.name} | Hack Padel`,
     description: `Consulta la clasificación, jugadores y rondas de la liga ${league.name} en Hack Padel.`,
-  }
+  };
 }
 
 export default async function LeagueDetailsPage({
   params,
 }: {
-  params: { id: string }
+  params: { id: string };
 }) {
-  const league = await getLeagueById(params.id)
+  const league = await getLeagueById(params.id);
 
   if (!league) {
-    notFound()
+    notFound();
   }
 
-  const sortedPlayers = [...league.players].sort((a, b) => b.points - a.points)
+  const sortedPlayers = [...league.players].sort((a, b) => b.points - a.points);
 
   return (
     <div className="p-2">
@@ -168,5 +168,5 @@ export default async function LeagueDetailsPage({
         </div>
       </div>
     </div>
-  )
+  );
 }

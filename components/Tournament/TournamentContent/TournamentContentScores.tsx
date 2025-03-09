@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
-import { TournamentStatus, TournamentType } from '@prisma/client'
-import { useState } from 'react'
+import { TournamentStatus, TournamentType } from '@prisma/client';
+import { useState } from 'react';
 
 import Button, {
   ButtonSize,
   ButtonVariant,
-} from '@/components/UI/Button/Button'
-import { SnackbarSeverity } from '@/hooks/useSnackBar'
-import { Player } from '@/types/player'
-import type { Tournament, TournamentCouple } from '@/types/tournament'
+} from '@/components/UI/Button/Button';
+import { SnackbarSeverity } from '@/hooks/useSnackBar';
+import { Player } from '@/types/player';
+import type { Tournament, TournamentCouple } from '@/types/tournament';
 
-import TournamentCoupleAssignmentModal from '../TournamentCoupleAssignmentModal/TournamentCoupleAssignmentModal'
+import TournamentCoupleAssignmentModal from '../TournamentCoupleAssignmentModal/TournamentCoupleAssignmentModal';
 
 interface TournamentContentScoresProps {
-  tournament: Tournament
-  players: Player[]
-  showSnackbar: (message: string, severity: SnackbarSeverity) => void
-  onTournamentUpdate: () => void
+  tournament: Tournament;
+  players: Player[];
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void;
+  onTournamentUpdate: () => void;
 }
 
 export default function TournamentContentScores({
@@ -26,7 +26,7 @@ export default function TournamentContentScores({
   showSnackbar,
   onTournamentUpdate,
 }: TournamentContentScoresProps) {
-  const [isAddingPlayer, setIsAddingPlayer] = useState(false)
+  const [isAddingPlayer, setIsAddingPlayer] = useState(false);
 
   return (
     <div className="rounded-lg border border-gray-200 p-8">
@@ -79,5 +79,5 @@ export default function TournamentContentScores({
         />
       )}
     </div>
-  )
+  );
 }

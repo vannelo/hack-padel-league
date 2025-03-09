@@ -1,37 +1,37 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
-import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 
-import { pusherClient } from '@/lib/pusher'
+import { pusherClient } from '@/lib/pusher';
 
 export function TournamentLiveUpdater({
   tournamentId,
   children,
 }: {
-  tournamentId: string
-  children: React.ReactNode
+  tournamentId: string;
+  children: React.ReactNode;
 }) {
-  const router = useRouter()
-  const [isUpdating, setIsUpdating] = useState(false)
+  const router = useRouter();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
-    const channel = pusherClient.subscribe(`tournament-${tournamentId}`)
+    const channel = pusherClient.subscribe(`tournament-${tournamentId}`);
     channel.bind('score-updated', () => {
-      setIsUpdating(true)
-      router.refresh()
+      setIsUpdating(true);
+      router.refresh();
 
       setTimeout(() => {
-        setIsUpdating(false)
-      }, 1000)
-    })
+        setIsUpdating(false);
+      }, 1000);
+    });
 
     return () => {
-      channel.unbind('score-updated')
-      pusherClient.unsubscribe(`tournament-${tournamentId}`)
-    }
-  }, [tournamentId, router])
+      channel.unbind('score-updated');
+      pusherClient.unsubscribe(`tournament-${tournamentId}`);
+    };
+  }, [tournamentId, router]);
 
   return (
     <>
@@ -42,5 +42,5 @@ export function TournamentLiveUpdater({
       )}
       {children}
     </>
-  )
+  );
 }

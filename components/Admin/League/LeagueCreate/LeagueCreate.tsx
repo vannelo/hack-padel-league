@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
-import { Form, Formik } from 'formik'
-import * as Yup from 'yup'
+import { Form, Formik } from 'formik';
+import * as Yup from 'yup';
 
-import { createLeague } from '@/app/actions/leagueActions'
-import Button, { ButtonType } from '@/components/UI/Button/Button'
-import { TEXT } from '@/constants/text'
+import { createLeague } from '@/app/actions/leagueActions';
+import Button, { ButtonType } from '@/components/UI/Button/Button';
+import { TEXT } from '@/constants/text';
 
-import LeagueCreateFields from './LeagueCreateFields'
+import LeagueCreateFields from './LeagueCreateFields';
 
 interface LeagueCreateProps {
-  onLeagueCreated: (name: string) => void
+  onLeagueCreated: (name: string) => void;
 }
 
 const leagueValidationSchema = Yup.object({
   name: Yup.string()
     .min(2, 'El nombre debe tener al menos 2 caracteres.')
     .required('El nombre es obligatorio.'),
-})
+});
 
 export default function LeagueCreate({ onLeagueCreated }: LeagueCreateProps) {
   return (
@@ -27,13 +27,13 @@ export default function LeagueCreate({ onLeagueCreated }: LeagueCreateProps) {
       validateOnBlur
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         try {
-          await createLeague({ name: values.name })
-          onLeagueCreated(values.name)
-          resetForm()
+          await createLeague({ name: values.name });
+          onLeagueCreated(values.name);
+          resetForm();
         } catch {
-          alert(TEXT.admin.leagues.errorCreating)
+          alert(TEXT.admin.leagues.errorCreating);
         } finally {
-          setSubmitting(false)
+          setSubmitting(false);
         }
       }}
     >
@@ -60,5 +60,5 @@ export default function LeagueCreate({ onLeagueCreated }: LeagueCreateProps) {
         </Form>
       )}
     </Formik>
-  )
+  );
 }

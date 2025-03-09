@@ -1,37 +1,37 @@
-'use client'
+'use client';
 
-import { CircularProgress } from '@mui/material'
-import { notFound } from 'next/navigation'
-import { useCallback } from 'react'
+import { CircularProgress } from '@mui/material';
+import { notFound } from 'next/navigation';
+import { useCallback } from 'react';
 
-import { useSnackbar } from '@/hooks/useSnackBar'
-import { useTournament } from '@/hooks/useTournament'
-import type { Player } from '@/types/player'
-import type { Tournament } from '@/types/tournament'
+import { useSnackbar } from '@/hooks/useSnackBar';
+import { useTournament } from '@/hooks/useTournament';
+import type { Player } from '@/types/player';
+import type { Tournament } from '@/types/tournament';
 
-import TournamentContentHeader from './TournamentContentHeader'
-import TournamentContentRounds from './TournamentContentRounds'
-import TournamentContentScores from './TournamentContentScores'
+import TournamentContentHeader from './TournamentContentHeader';
+import TournamentContentRounds from './TournamentContentRounds';
+import TournamentContentScores from './TournamentContentScores';
 
 interface TournamentContentProps {
-  initialTournament: Tournament
-  players: Player[]
+  initialTournament: Tournament;
+  players: Player[];
 }
 
 export default function TournamentContent({
   initialTournament,
   players,
 }: TournamentContentProps) {
-  const { showSnackbar } = useSnackbar()
+  const { showSnackbar } = useSnackbar();
   const { tournament, isLoading, fetchTournament } =
-    useTournament(initialTournament)
+    useTournament(initialTournament);
 
   const handleTournamentUpdate = useCallback(() => {
-    fetchTournament()
-  }, [fetchTournament])
+    fetchTournament();
+  }, [fetchTournament]);
 
   if (!tournament) {
-    notFound()
+    notFound();
   }
 
   if (isLoading) {
@@ -39,7 +39,7 @@ export default function TournamentContent({
       <div className="flex h-96 items-center justify-center">
         <CircularProgress />
       </div>
-    )
+    );
   }
 
   return (
@@ -67,5 +67,5 @@ export default function TournamentContent({
         </div>
       </div>
     </>
-  )
+  );
 }

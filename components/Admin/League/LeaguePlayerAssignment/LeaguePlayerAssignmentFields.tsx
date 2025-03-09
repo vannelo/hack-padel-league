@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   FormControl,
@@ -6,20 +6,20 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-} from '@mui/material'
-import { ErrorMessage } from 'formik'
+} from '@mui/material';
+import { ErrorMessage } from 'formik';
 
-import { TEXT } from '@/constants/text'
-import { League } from '@/types/league'
-import { Player } from '@/types/player'
+import { TEXT } from '@/constants/text';
+import { League } from '@/types/league';
+import { Player } from '@/types/player';
 
 interface LeaguePlayerAssignmentFieldsProps {
-  values: { playerId: string }
-  handleChange: (e: SelectChangeEvent<string>) => void
-  touched: { playerId?: boolean }
-  errors: { playerId?: string }
-  players: Player[]
-  league: League
+  values: { playerId: string };
+  handleChange: (e: SelectChangeEvent<string>) => void;
+  touched: { playerId?: boolean };
+  errors: { playerId?: string };
+  players: Player[];
+  league: League;
 }
 
 export default function LeaguePlayerAssignmentFields({
@@ -32,7 +32,7 @@ export default function LeaguePlayerAssignmentFields({
 }: LeaguePlayerAssignmentFieldsProps) {
   const availablePlayers = players.filter(
     (player) => !league.players.some((lp) => lp.player.id === player.id)
-  )
+  );
 
   return (
     <div className="mb-4">
@@ -70,5 +70,5 @@ export default function LeaguePlayerAssignmentFields({
         />
       </FormControl>
     </div>
-  )
+  );
 }

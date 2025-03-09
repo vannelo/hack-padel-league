@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { TextField } from '@mui/material'
+import { TextField } from '@mui/material';
 import {
   DataGrid,
   type GridColDef,
   type GridRenderCellParams,
-} from '@mui/x-data-grid'
-import { useState } from 'react'
+} from '@mui/x-data-grid';
+import { useState } from 'react';
 
-import Button, { ButtonSize } from '@/components/UI/Button/Button'
-import { genderMap, levelMap } from '@/constants/playerEnums'
-import { TEXT } from '@/constants/text'
-import { Player } from '@/types/player'
+import Button, { ButtonSize } from '@/components/UI/Button/Button';
+import { genderMap, levelMap } from '@/constants/playerEnums';
+import { TEXT } from '@/constants/text';
+import { Player } from '@/types/player';
 
 interface PlayerTableProps {
-  players: Player[]
-  onPlayerEdit: (playerId: string) => void
+  players: Player[];
+  onPlayerEdit: (playerId: string) => void;
 }
 
 export default function PlayerTable({
@@ -25,15 +25,15 @@ export default function PlayerTable({
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 50,
     page: 0,
-  })
-  const [searchTerm, setSearchTerm] = useState('')
+  });
+  const [searchTerm, setSearchTerm] = useState('');
 
   const filteredPlayers = players.filter(
     (player) =>
       player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       player.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       player.phone?.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  );
 
   const columns: GridColDef[] = [
     {
@@ -85,7 +85,7 @@ export default function PlayerTable({
         />
       ),
     },
-  ]
+  ];
 
   const rows = filteredPlayers.map((player) => ({
     id: player.id,
@@ -95,7 +95,7 @@ export default function PlayerTable({
     phone: player.phone,
     gender: player.gender,
     level: player.level,
-  }))
+  }));
 
   return (
     <>
@@ -130,5 +130,5 @@ export default function PlayerTable({
         </div>
       )}
     </>
-  )
+  );
 }

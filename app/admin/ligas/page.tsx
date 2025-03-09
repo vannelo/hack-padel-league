@@ -1,55 +1,55 @@
-'use client'
+'use client';
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react';
 
-import { getAllLeagues } from '@/app/actions/leagueActions'
-import AdminTablePageLayout from '@/components/Admin/Layout/AdminTablePageLayout/AdminTablePageLayout'
-import LeagueCreation from '@/components/Admin/League/LeagueCreate/LeagueCreate'
-import LeagueTable from '@/components/Admin/League/LeagueTable/LeagueTable'
-import Modal from '@/components/Admin/UI/Modal/Modal'
-import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader'
+import { getAllLeagues } from '@/app/actions/leagueActions';
+import AdminTablePageLayout from '@/components/Admin/Layout/AdminTablePageLayout/AdminTablePageLayout';
+import LeagueCreation from '@/components/Admin/League/LeagueCreate/LeagueCreate';
+import LeagueTable from '@/components/Admin/League/LeagueTable/LeagueTable';
+import Modal from '@/components/Admin/UI/Modal/Modal';
+import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader';
 import Button, {
   ButtonSize,
   ButtonVariant,
-} from '@/components/UI/Button/Button'
-import { TEXT } from '@/constants/text'
-import { SnackbarSeverity, useSnackbar } from '@/hooks/useSnackBar'
-import { League } from '@/types/league'
+} from '@/components/UI/Button/Button';
+import { TEXT } from '@/constants/text';
+import { SnackbarSeverity, useSnackbar } from '@/hooks/useSnackBar';
+import { League } from '@/types/league';
 
 export default function AdminLeagues() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [leagues, setLeagues] = useState<League[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const { showSnackbar } = useSnackbar()
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [leagues, setLeagues] = useState<League[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { showSnackbar } = useSnackbar();
 
   const fetchLeagues = useCallback(async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const fetchedLeagues = await getAllLeagues()
-      setLeagues(fetchedLeagues as League[])
+      const fetchedLeagues = await getAllLeagues();
+      setLeagues(fetchedLeagues as League[]);
     } catch {
-      showSnackbar(TEXT.admin.leagues.errorFetching, SnackbarSeverity.ERROR)
+      showSnackbar(TEXT.admin.leagues.errorFetching, SnackbarSeverity.ERROR);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [showSnackbar])
+  }, [showSnackbar]);
 
   useEffect(() => {
-    fetchLeagues()
-  }, [fetchLeagues])
+    fetchLeagues();
+  }, [fetchLeagues]);
 
   const openModal = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
 
   const handleLeagueAction = (name: string) => {
-    fetchLeagues()
+    fetchLeagues();
     showSnackbar(
       TEXT.admin.leagues.leagueCreated(name),
       SnackbarSeverity.SUCCESS
-    )
-    setIsModalOpen(false)
-  }
+    );
+    setIsModalOpen(false);
+  };
 
   return (
     <AdminTablePageLayout
@@ -73,5 +73,5 @@ export default function AdminLeagues() {
         </Modal>
       }
     />
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import type { Metadata } from 'next'
+import type { Metadata } from 'next';
 
-import NavHeader from '@/components/Layout/NavHeader/NavHeader'
+import NavHeader from '@/components/Layout/NavHeader/NavHeader';
 
 export const metadata: Metadata = {
   title: 'Ligas | Hack Padel',
@@ -27,12 +27,12 @@ export const metadata: Metadata = {
     description: 'Primera cancha de padel en Lindavista',
     images: ['/img/meta.jpg'],
   },
-}
+};
 
 export default function LeaguesLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <div className="min-h-[100vh] bg-black text-white">
@@ -41,5 +41,5 @@ export default function LeaguesLayout({
         {children}
       </div>
     </div>
-  )
+  );
 }

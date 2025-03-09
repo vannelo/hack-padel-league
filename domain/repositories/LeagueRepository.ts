@@ -1,26 +1,26 @@
-import { LeagueStatus } from '@prisma/client'
+import { LeagueStatus } from '@prisma/client';
 
-import { prisma } from '@/lib/prisma'
-import { AddPlayerToLeagueData, CreateLeagueData } from '@/types/league'
+import { prisma } from '@/lib/prisma';
+import { AddPlayerToLeagueData, CreateLeagueData } from '@/types/league';
 
 export class LeagueRepository {
   async createLeague(data: CreateLeagueData) {
     return prisma.league.create({
       data,
-    })
+    });
   }
 
   async updateLeagueStartDate(leagueId: string, startDate: Date) {
     return prisma.league.update({
       where: { id: leagueId },
       data: { startDate },
-    })
+    });
   }
 
   async deleteLeague(id: string) {
     await prisma.league.delete({
       where: { id },
-    })
+    });
   }
 
   async getAllLeagues() {
@@ -35,7 +35,7 @@ export class LeagueRepository {
       orderBy: {
         createdAt: 'desc',
       },
-    })
+    });
   }
 
   async getLeagueById(id: string) {
@@ -65,25 +65,25 @@ export class LeagueRepository {
           },
         },
       },
-    })
+    });
   }
 
   async addPlayerToLeague(data: AddPlayerToLeagueData) {
     return prisma.leaguePlayer.create({
       data,
-    })
+    });
   }
 
   async createRoundsAndCouples(
     leagueId: string,
     rounds: {
-      number: number
-      couples: { player1Id: string; player2Id: string }[]
+      number: number;
+      couples: { player1Id: string; player2Id: string }[];
     }[]
   ) {
     return prisma.$transaction(
       async (tx) => {
-        const createdRounds = []
+        const createdRounds = [];
         for (const round of rounds) {
           const createdRound = await tx.leagueRound.create({
             data: {
@@ -99,30 +99,30 @@ export class LeagueRepository {
             include: {
               couples: true,
             },
-          })
-          createdRounds.push(createdRound)
+          });
+          createdRounds.push(createdRound);
         }
-        return createdRounds
+        return createdRounds;
       },
       {
         maxWait: 10000,
         timeout: 60000,
       }
-    )
+    );
   }
 
   async updateRoundTournament(roundId: string, tournamentId: string) {
     return prisma.leagueRound.update({
       where: { id: roundId },
       data: { tournamentId: tournamentId },
-    })
+    });
   }
 
   async updateLeagueStatus(leagueId: string, status: LeagueStatus) {
     return prisma.league.update({
       where: { id: leagueId },
       data: { status },
-    })
+    });
   }
 
   async updatePlayerScores(
@@ -143,7 +143,7 @@ export class LeagueRepository {
           },
         })
       )
-    )
+    );
   }
 
   async updatePlayerScore(playerId: string, newScore: number) {
@@ -154,6 +154,6 @@ export class LeagueRepository {
       data: {
         points: newScore,
       },
-    })
+    });
   }
 }

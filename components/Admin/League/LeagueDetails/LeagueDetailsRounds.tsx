@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
+import Link from 'next/link';
 
 import Button, {
   ButtonSize,
   ButtonVariant,
-} from '@/components/UI/Button/Button'
-import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
-import { APP_ROUTES } from '@/constants/appRoutes'
-import { TEXT } from '@/constants/text'
-import { tournamentStatusMap } from '@/constants/tournamentEnums'
-import type { LeagueRound } from '@/types/league'
+} from '@/components/UI/Button/Button';
+import StatusBadge from '@/components/UI/StatusBadge/StatusBadge';
+import { APP_ROUTES } from '@/constants/appRoutes';
+import { TEXT } from '@/constants/text';
+import { tournamentStatusMap } from '@/constants/tournamentEnums';
+import type { LeagueRound } from '@/types/league';
 
 interface LeagueDetailsRoundsProps {
-  rounds: LeagueRound[]
+  rounds: LeagueRound[];
 }
 
 export default function LeagueDetailsRounds({
@@ -88,5 +88,5 @@ export default function LeagueDetailsRounds({
         </p>
       )}
     </div>
-  )
+  );
 }

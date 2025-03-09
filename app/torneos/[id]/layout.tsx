@@ -1,9 +1,9 @@
-import NavHeader from '@/components/Layout/NavHeader/NavHeader'
+import NavHeader from '@/components/Layout/NavHeader/NavHeader';
 
 export default function LeaguesLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <div className="min-h-[100vh] bg-black text-white">
@@ -12,5 +12,5 @@ export default function LeaguesLayout({
         {children}
       </div>
     </div>
-  )
+  );
 }

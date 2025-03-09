@@ -1,6 +1,6 @@
-import { Award, Trophy, Users } from 'lucide-react'
+import { Award, Trophy, Users } from 'lucide-react';
 
-import { APP_ROUTES } from './appRoutes'
+import { APP_ROUTES } from './appRoutes';
 
 export const adminMenuItems = [
   {
@@ -18,4 +18,4 @@ export const adminMenuItems = [
     icon: Trophy,
     text: 'Torneos',
   },
-]
+];

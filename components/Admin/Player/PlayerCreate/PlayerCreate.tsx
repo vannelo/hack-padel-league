@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { Gender, Level } from '@prisma/client'
-import { Form, Formik } from 'formik'
+import { Gender, Level } from '@prisma/client';
+import { Form, Formik } from 'formik';
 
-import { createPlayer } from '@/app/actions/playerActions'
-import Button, { ButtonType } from '@/components/UI/Button/Button'
-import { TEXT } from '@/constants/text'
-import { playerValidationSchema } from '@/formik/playerValidations'
+import { createPlayer } from '@/app/actions/playerActions';
+import Button, { ButtonType } from '@/components/UI/Button/Button';
+import { TEXT } from '@/constants/text';
+import { playerValidationSchema } from '@/formik/playerValidations';
 
-import PlayerCreateFields from './PlayerCreateFields'
+import PlayerCreateFields from './PlayerCreateFields';
 
 interface PlayerCreateProps {
-  onPlayerCreated: (name: string) => void
+  onPlayerCreated: (name: string) => void;
 }
 
 export default function PlayerCreate({ onPlayerCreated }: PlayerCreateProps) {
@@ -32,12 +32,12 @@ export default function PlayerCreate({ onPlayerCreated }: PlayerCreateProps) {
           await createPlayer({
             ...values,
             age: values.age ? Number(values.age) : undefined,
-          })
-          onPlayerCreated(values.name)
+          });
+          onPlayerCreated(values.name);
         } catch {
-          alert(TEXT.admin.players.errorCreating)
+          alert(TEXT.admin.players.errorCreating);
         } finally {
-          setSubmitting(false)
+          setSubmitting(false);
         }
       }}
     >
@@ -64,5 +64,5 @@ export default function PlayerCreate({ onPlayerCreated }: PlayerCreateProps) {
         </Form>
       )}
     </Formik>
-  )
+  );
 }

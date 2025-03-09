@@ -1,10 +1,10 @@
-import NextAuth, { type NextAuthOptions } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
+import NextAuth, { type NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 interface CustomUser {
-  id: string
-  name: string
-  role: string
+  id: string;
+  name: string;
+  role: string;
 }
 
 const authOptions: NextAuthOptions = {
@@ -20,9 +20,9 @@ const authOptions: NextAuthOptions = {
           credentials?.username === process.env.ADMIN_USER &&
           credentials?.password === process.env.ADMIN_PASS
         ) {
-          return { id: '1', name: 'Admin', role: 'admin' }
+          return { id: '1', name: 'Admin', role: 'admin' };
         }
-        return null
+        return null;
       },
     }),
   ],
@@ -32,20 +32,20 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.role = token.role as string
+        session.user.role = token.role as string;
       }
-      return session
+      return session;
     },
     async jwt({ token, user }) {
       if (user) {
-        token.role = (user as CustomUser).role
+        token.role = (user as CustomUser).role;
       }
-      return token
+      return token;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-}
+};
 
-const handler = NextAuth(authOptions)
+const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST };

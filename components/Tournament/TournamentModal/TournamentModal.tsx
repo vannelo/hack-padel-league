@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   Alert,
@@ -6,15 +6,15 @@ import {
   DialogContent,
   DialogTitle,
   Snackbar,
-} from '@mui/material'
-import { useState } from 'react'
+} from '@mui/material';
+import { useState } from 'react';
 
-import TournamentCreationForm from '../TournamentCreationForm/TournamentCreationForm'
+import TournamentCreationForm from '../TournamentCreationForm/TournamentCreationForm';
 
 interface TournamentModalProps {
-  open: boolean
-  onClose: () => void
-  onTournamentCreated: () => void
+  open: boolean;
+  onClose: () => void;
+  onTournamentCreated: () => void;
 }
 
 export default function TournamentModal({
@@ -26,35 +26,35 @@ export default function TournamentModal({
     open: false,
     message: '',
     severity: 'success' as 'success' | 'error',
-  })
+  });
 
   const handleTournamentCreated = (message: string) => {
     setSnackbar({
       open: true,
       message,
       severity: 'success',
-    })
-    onTournamentCreated()
-    onClose()
-  }
+    });
+    onTournamentCreated();
+    onClose();
+  };
 
   const handleError = (message: string) => {
     setSnackbar({
       open: true,
       message,
       severity: 'error',
-    })
-  }
+    });
+  };
 
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === 'clickaway') {
-      return
+      return;
     }
-    setSnackbar((prev) => ({ ...prev, open: false }))
-  }
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   return (
     <>
@@ -82,5 +82,5 @@ export default function TournamentModal({
         </Alert>
       </Snackbar>
     </>
-  )
+  );
 }

@@ -1,14 +1,14 @@
-import React from 'react'
+import React from 'react';
 
-import Breadcrumbs from '@/components/UI/Breadcrumbs/Breadcrumbs'
+import Breadcrumbs from '@/components/UI/Breadcrumbs/Breadcrumbs';
 
-import Heading from '../../UI/Heading/Heading'
+import Heading from '../../UI/Heading/Heading';
 
 interface AdminTablePageLayoutProps {
-  title: string
-  ctaButton?: React.ReactNode
-  table: React.ReactNode
-  modal: React.ReactNode
+  title: string;
+  ctaButton?: React.ReactNode;
+  table: React.ReactNode;
+  modal: React.ReactNode;
 }
 
 export default function AdminTablePageLayout({
@@ -25,5 +25,5 @@ export default function AdminTablePageLayout({
       <section className="mb-8">{table}</section>
       {modal && <section className="mb-8">{modal}</section>}
     </div>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 
 interface HeadingProps {
-  children: React.ReactNode
-  size?: 'sm' | 'md' | 'lg' | 'xl'
-  className?: string
+  children: React.ReactNode;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  className?: string;
 }
 
 export default function Heading({
@@ -16,7 +16,7 @@ export default function Heading({
     md: 'text-xl sm:text-2xl',
     lg: 'text-2xl sm:text-3xl',
     xl: 'text-3xl sm:text-4xl',
-  }
+  };
 
   return (
     <h2
@@ -24,5 +24,5 @@ export default function Heading({
     >
       {children}
     </h2>
-  )
+  );
 }

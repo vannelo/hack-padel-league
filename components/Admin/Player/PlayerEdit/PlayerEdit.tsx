@@ -1,24 +1,24 @@
-'use client'
+'use client';
 
-import { Gender, Level } from '@prisma/client'
-import { Form, Formik } from 'formik'
-import { useEffect, useState } from 'react'
+import { Gender, Level } from '@prisma/client';
+import { Form, Formik } from 'formik';
+import { useEffect, useState } from 'react';
 
 import {
   deletePlayer,
   getPlayerById,
   updatePlayer,
-} from '@/app/actions/playerActions'
-import Button, { ButtonType } from '@/components/UI/Button/Button'
-import { TEXT } from '@/constants/text'
-import { playerValidationSchema } from '@/formik/playerValidations'
+} from '@/app/actions/playerActions';
+import Button, { ButtonType } from '@/components/UI/Button/Button';
+import { TEXT } from '@/constants/text';
+import { playerValidationSchema } from '@/formik/playerValidations';
 
-import PlayerEditFields from './PlayerEditFields'
+import PlayerEditFields from './PlayerEditFields';
 
 interface PlayerEditProps {
-  playerId: string
-  onPlayerUpdated: (message: string) => void
-  onPlayerDeleted: (message: string) => void
+  playerId: string;
+  onPlayerUpdated: (message: string) => void;
+  onPlayerDeleted: (message: string) => void;
 }
 
 export default function PlayerEdit({
@@ -33,13 +33,13 @@ export default function PlayerEdit({
     phone: '',
     gender: '',
     level: '',
-  })
+  });
 
   useEffect(() => {
     if (playerId) {
       const fetchPlayerData = async () => {
-        const player = await getPlayerById(playerId)
-        if (!player) return
+        const player = await getPlayerById(playerId);
+        if (!player) return;
         setInitialValues({
           name: player.name,
           email: player.email ?? '',
@@ -47,22 +47,22 @@ export default function PlayerEdit({
           phone: player.phone ?? '',
           gender: player.gender,
           level: player.level,
-        })
-      }
-      fetchPlayerData()
+        });
+      };
+      fetchPlayerData();
     }
-  }, [playerId])
+  }, [playerId]);
 
   const handleDelete = async () => {
     if (window.confirm(TEXT.admin.players.confirmDelete(initialValues.name))) {
       try {
-        await deletePlayer(playerId)
-        onPlayerDeleted(TEXT.admin.players.playerDeleted(initialValues.name))
+        await deletePlayer(playerId);
+        onPlayerDeleted(TEXT.admin.players.playerDeleted(initialValues.name));
       } catch {
-        alert(TEXT.admin.players.errorDeleting)
+        alert(TEXT.admin.players.errorDeleting);
       }
     }
-  }
+  };
 
   return (
     <>
@@ -77,12 +77,12 @@ export default function PlayerEdit({
               age: values.age ? Number(values.age) : undefined,
               gender: values.gender as Gender,
               level: values.level as Level,
-            })
-            onPlayerUpdated(TEXT.admin.players.playerUpdated(values.name))
+            });
+            onPlayerUpdated(TEXT.admin.players.playerUpdated(values.name));
           } catch {
-            alert(TEXT.admin.players.errorUpdating)
+            alert(TEXT.admin.players.errorUpdating);
           } finally {
-            setSubmitting(false)
+            setSubmitting(false);
           }
         }}
       >
@@ -110,5 +110,5 @@ export default function PlayerEdit({
         </button>
       </div>
     </>
-  )
+  );
 }

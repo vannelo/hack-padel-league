@@ -1,32 +1,32 @@
-'use client'
+'use client';
 
-import { TextField } from '@mui/material'
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
-import Link from 'next/link'
-import { useState } from 'react'
+import { TextField } from '@mui/material';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import Link from 'next/link';
+import { useState } from 'react';
 
-import Button, { ButtonSize } from '@/components/UI/Button/Button'
-import StatusBadge from '@/components/UI/StatusBadge/StatusBadge'
+import Button, { ButtonSize } from '@/components/UI/Button/Button';
+import StatusBadge from '@/components/UI/StatusBadge/StatusBadge';
 import {
   tournamentStatusMap,
   tournamentTypeMap,
-} from '@/constants/tournamentEnums'
-import { Tournament } from '@/types/tournament'
+} from '@/constants/tournamentEnums';
+import { Tournament } from '@/types/tournament';
 
 export default function TournamentTable({
   tournaments,
 }: {
-  tournaments: Tournament[]
+  tournaments: Tournament[];
 }) {
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 50,
     page: 0,
-  })
-  const [searchTerm, setSearchTerm] = useState('')
+  });
+  const [searchTerm, setSearchTerm] = useState('');
 
   const filteredTournaments = tournaments.filter((tournament) =>
     tournament.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  );
 
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'Nombre', flex: 1 },
@@ -70,7 +70,7 @@ export default function TournamentTable({
         </Link>
       ),
     },
-  ]
+  ];
 
   const rows = filteredTournaments.map((tournament) => ({
     id: tournament.id,
@@ -79,7 +79,7 @@ export default function TournamentTable({
     status: tournament.status,
     type: tournament.type,
     couples: `${tournament.couples.length} parejas`,
-  }))
+  }));
 
   return (
     <div>
@@ -110,5 +110,5 @@ export default function TournamentTable({
         />
       )}
     </div>
-  )
+  );
 }

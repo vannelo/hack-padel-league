@@ -1,13 +1,13 @@
-import { TextField } from '@mui/material'
-import { ErrorMessage, Field } from 'formik'
+import { TextField } from '@mui/material';
+import { ErrorMessage, Field } from 'formik';
 
 interface LeagueCreateFieldsProps {
   values: {
-    name: string
-  }
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  touched: { name?: boolean }
-  errors: { name?: string }
+    name: string;
+  };
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  touched: { name?: boolean };
+  errors: { name?: string };
 }
 
 export default function LeagueCreateFields({
@@ -32,5 +32,5 @@ export default function LeagueCreateFields({
         }
       />
     </div>
-  )
+  );
 }

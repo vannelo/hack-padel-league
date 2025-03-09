@@ -1,31 +1,31 @@
-'use client'
+'use client';
 
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
-import { useState } from 'react'
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import { useState } from 'react';
 
-import { APP_ROUTES } from '@/constants/appRoutes'
+import { APP_ROUTES } from '@/constants/appRoutes';
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const router = useRouter()
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     const result = await signIn('credentials', {
       username,
       password,
       redirect: false,
-    })
+    });
 
     if (result?.ok) {
-      router.push(APP_ROUTES.admin.players)
+      router.push(APP_ROUTES.admin.players);
     } else {
-      alert('Invalid credentials')
+      alert('Invalid credentials');
     }
-  }
+  };
 
   return (
     <div className="flex h-screen items-center justify-center">
@@ -65,5 +65,5 @@ export default function LoginPage() {
         </button>
       </form>
     </div>
-  )
+  );
 }

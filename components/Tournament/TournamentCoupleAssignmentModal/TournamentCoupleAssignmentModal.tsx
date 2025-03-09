@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   Box,
@@ -12,21 +12,21 @@ import {
   Select,
   SelectChangeEvent,
   Stack,
-} from '@mui/material'
-import { useState } from 'react'
+} from '@mui/material';
+import { useState } from 'react';
 
-import { addCoupleToTournament } from '@/app/actions/tournamentActions'
-import { SnackbarSeverity } from '@/hooks/useSnackBar'
-import type { Player } from '@/types/player'
-import type { Tournament } from '@/types/tournament'
+import { addCoupleToTournament } from '@/app/actions/tournamentActions';
+import { SnackbarSeverity } from '@/hooks/useSnackBar';
+import type { Player } from '@/types/player';
+import type { Tournament } from '@/types/tournament';
 
 interface TournamentCoupleAssignmentModalProps {
-  tournament: Tournament
-  players: Player[]
-  open: boolean
-  onClose: () => void
-  showSnackbar: (message: string, severity: SnackbarSeverity) => void
-  onTournamentUpdate: () => void
+  tournament: Tournament;
+  players: Player[];
+  open: boolean;
+  onClose: () => void;
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void;
+  onTournamentUpdate: () => void;
 }
 
 export default function TournamentCoupleAssignmentModal({
@@ -37,21 +37,21 @@ export default function TournamentCoupleAssignmentModal({
   showSnackbar,
   onTournamentUpdate,
 }: TournamentCoupleAssignmentModalProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     player1Id: '',
     player2Id: '',
-  })
+  });
   const [errors, setErrors] = useState({
     player1Id: '',
     player2Id: '',
-  })
+  });
 
   const handleInputChange = (event: SelectChangeEvent<string>) => {
-    const { name, value } = event.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-    setErrors((prev) => ({ ...prev, [name]: '' }))
-  }
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: '' }));
+  };
 
   const getAvailablePlayers = () => {
     const playersInCouples = new Set(
@@ -59,52 +59,52 @@ export default function TournamentCoupleAssignmentModal({
         couple.player1Id,
         couple.player2Id,
       ])
-    )
+    );
 
-    return players.filter((player) => !playersInCouples.has(player.id))
-  }
+    return players.filter((player) => !playersInCouples.has(player.id));
+  };
 
   const validateForm = () => {
-    let isValid = true
-    const newErrors = { player1Id: '', player2Id: '' }
+    let isValid = true;
+    const newErrors = { player1Id: '', player2Id: '' };
 
     if (!formData.player1Id) {
-      newErrors.player1Id = 'Por favor, seleccione el primer jugador.'
-      isValid = false
+      newErrors.player1Id = 'Por favor, seleccione el primer jugador.';
+      isValid = false;
     }
 
     if (!formData.player2Id) {
-      newErrors.player2Id = 'Por favor, seleccione el segundo jugador.'
-      isValid = false
+      newErrors.player2Id = 'Por favor, seleccione el segundo jugador.';
+      isValid = false;
     }
 
     if (formData.player1Id === formData.player2Id) {
-      newErrors.player2Id = 'Los dos jugadores deben ser diferentes.'
-      isValid = false
+      newErrors.player2Id = 'Los dos jugadores deben ser diferentes.';
+      isValid = false;
     }
 
-    setErrors(newErrors)
-    return isValid
-  }
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!validateForm()) return
+    e.preventDefault();
+    if (!validateForm()) return;
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
-      await addCoupleToTournament(tournament.id, formData)
-      showSnackbar('Pareja añadida correctamente', SnackbarSeverity.SUCCESS)
-      onTournamentUpdate()
-      onClose()
+      await addCoupleToTournament(tournament.id, formData);
+      showSnackbar('Pareja añadida correctamente', SnackbarSeverity.SUCCESS);
+      onTournamentUpdate();
+      onClose();
     } catch {
-      showSnackbar('Error al añadir pareja', SnackbarSeverity.ERROR)
+      showSnackbar('Error al añadir pareja', SnackbarSeverity.ERROR);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
-  const availablePlayers = getAvailablePlayers()
+  const availablePlayers = getAvailablePlayers();
 
   return (
     <>
@@ -193,5 +193,5 @@ export default function TournamentCoupleAssignmentModal({
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

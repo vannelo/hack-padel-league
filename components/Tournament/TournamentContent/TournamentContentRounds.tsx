@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { TextField } from '@mui/material'
-import { TournamentMatchStatus, TournamentStatus } from '@prisma/client'
-import { Pencil, X } from 'lucide-react'
-import { useState } from 'react'
+import { TextField } from '@mui/material';
+import { TournamentMatchStatus, TournamentStatus } from '@prisma/client';
+import { Pencil, X } from 'lucide-react';
+import { useState } from 'react';
 
-import { updateMatchScore } from '@/app/actions/tournamentActions'
+import { updateMatchScore } from '@/app/actions/tournamentActions';
 import Button, {
   ButtonSize,
   ButtonVariant,
-} from '@/components/UI/Button/Button'
-import { SnackbarSeverity } from '@/hooks/useSnackBar'
+} from '@/components/UI/Button/Button';
+import { SnackbarSeverity } from '@/hooks/useSnackBar';
 import type {
   Tournament,
   TournamentMatch,
   TournamentRound,
-} from '@/types/tournament'
+} from '@/types/tournament';
 
 interface TournamentContentRoundsProps {
-  tournament: Tournament
-  showSnackbar: (message: string, severity: SnackbarSeverity) => void
-  onTournamentUpdate: () => void
+  tournament: Tournament;
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void;
+  onTournamentUpdate: () => void;
 }
 
 export default function TournamentContentRounds({
@@ -30,13 +30,13 @@ export default function TournamentContentRounds({
 }: TournamentContentRoundsProps) {
   const [scores, setScores] = useState<
     Record<string, { couple1Score: number | null; couple2Score: number | null }>
-  >({})
+  >({});
   const [editingMatches, setEditingMatches] = useState<Record<string, boolean>>(
     {}
-  )
+  );
   const [loadingMatches, setLoadingMatches] = useState<Record<string, boolean>>(
     {}
-  )
+  );
 
   const handleScoreChange = (
     matchId: string,
@@ -46,20 +46,20 @@ export default function TournamentContentRounds({
     const score =
       value === ''
         ? null
-        : Math.min(Math.max(0, Number.parseInt(value, 10)), 20)
+        : Math.min(Math.max(0, Number.parseInt(value, 10)), 20);
     setScores((prevScores) => ({
       ...prevScores,
       [matchId]: {
         ...prevScores[matchId],
         [`couple${coupleNumber}Score`]: score,
       },
-    }))
-  }
+    }));
+  };
 
   const handleUpdateScore = async (matchId: string) => {
-    setLoadingMatches((prev) => ({ ...prev, [matchId]: true }))
+    setLoadingMatches((prev) => ({ ...prev, [matchId]: true }));
 
-    const matchScores = scores[matchId]
+    const matchScores = scores[matchId];
     if (
       matchScores?.couple1Score !== null &&
       matchScores?.couple2Score !== null
@@ -70,29 +70,32 @@ export default function TournamentContentRounds({
           matchId,
           couple1Score: matchScores.couple1Score,
           couple2Score: matchScores.couple2Score,
-        })
+        });
         showSnackbar(
           'Resultado actualizado correctamente',
           SnackbarSeverity.SUCCESS
-        )
-        onTournamentUpdate()
-        setEditingMatches((prev) => ({ ...prev, [matchId]: false }))
+        );
+        onTournamentUpdate();
+        setEditingMatches((prev) => ({ ...prev, [matchId]: false }));
       } catch {
-        showSnackbar('Error al actualizar el resultado', SnackbarSeverity.ERROR)
+        showSnackbar(
+          'Error al actualizar el resultado',
+          SnackbarSeverity.ERROR
+        );
       } finally {
-        setLoadingMatches((prev) => ({ ...prev, [matchId]: false }))
+        setLoadingMatches((prev) => ({ ...prev, [matchId]: false }));
       }
     } else {
       showSnackbar(
         'Ingrese puntuaciones válidas para ambas parejas',
         SnackbarSeverity.ERROR
-      )
-      setLoadingMatches((prev) => ({ ...prev, [matchId]: false }))
+      );
+      setLoadingMatches((prev) => ({ ...prev, [matchId]: false }));
     }
-  }
+  };
 
   const handleEditClick = (matchId: string) => {
-    setEditingMatches((prev) => ({ ...prev, [matchId]: true }))
+    setEditingMatches((prev) => ({ ...prev, [matchId]: true }));
     setScores((prevScores) => ({
       ...prevScores,
       [matchId]: {
@@ -105,12 +108,12 @@ export default function TournamentContentRounds({
             .flatMap((round) => round.matches)
             .find((m) => m.id === matchId)?.couple2Score ?? 0,
       },
-    }))
-  }
+    }));
+  };
 
   const handleCancelEdit = (matchId: string) => {
-    setEditingMatches((prev) => ({ ...prev, [matchId]: false }))
-  }
+    setEditingMatches((prev) => ({ ...prev, [matchId]: false }));
+  };
 
   return (
     <div className="rounded-lg border border-gray-200 p-8">
@@ -126,8 +129,8 @@ export default function TournamentContentRounds({
             <h4 className="text-md m-0 mb-4 font-bold">Ronda {round.number}</h4>
             {round.matches.map((match: TournamentMatch) => {
               const isCompleted =
-                match.status === TournamentMatchStatus.Completed
-              const isEditable = !isCompleted
+                match.status === TournamentMatchStatus.Completed;
+              const isEditable = !isCompleted;
 
               return (
                 <div key={match.id} className="mb-8 md:mb-4">
@@ -231,7 +234,7 @@ export default function TournamentContentRounds({
                       </div>
                     )}
                 </div>
-              )
+              );
             })}
           </div>
         ))
@@ -241,5 +244,5 @@ export default function TournamentContentRounds({
         </p>
       )}
     </div>
-  )
+  );
 }

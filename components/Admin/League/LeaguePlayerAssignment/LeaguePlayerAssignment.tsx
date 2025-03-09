@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import { Form, Formik } from 'formik'
-import * as Yup from 'yup'
+import { Form, Formik } from 'formik';
+import * as Yup from 'yup';
 
-import { addPlayerToLeague } from '@/app/actions/leagueActions'
-import Button, { ButtonType } from '@/components/UI/Button/Button'
-import { TEXT } from '@/constants/text'
-import { League } from '@/types/league'
-import type { Player } from '@/types/player'
+import { addPlayerToLeague } from '@/app/actions/leagueActions';
+import Button, { ButtonType } from '@/components/UI/Button/Button';
+import { TEXT } from '@/constants/text';
+import { League } from '@/types/league';
+import type { Player } from '@/types/player';
 
-import LeaguePlayerAssignmentFields from './LeaguePlayerAssignmentFields'
+import LeaguePlayerAssignmentFields from './LeaguePlayerAssignmentFields';
 
 interface LeaguePlayerAssignmentProps {
-  league: League
-  players: Player[]
-  onPlayerAdded: () => void
+  league: League;
+  players: Player[];
+  onPlayerAdded: () => void;
 }
 
 const playerAssignmentSchema = Yup.object({
   playerId: Yup.string().required(TEXT.admin.leagues.ranking.selectPlayerError),
-})
+});
 
 export default function LeaguePlayerAssignment({
   league,
@@ -35,13 +35,13 @@ export default function LeaguePlayerAssignment({
           await addPlayerToLeague({
             leagueId: league.id,
             playerId: values.playerId,
-          })
-          onPlayerAdded()
-          resetForm()
+          });
+          onPlayerAdded();
+          resetForm();
         } catch {
-          alert(TEXT.admin.leagues.ranking.playerAddError)
+          alert(TEXT.admin.leagues.ranking.playerAddError);
         } finally {
-          setSubmitting(false)
+          setSubmitting(false);
         }
       }}
     >
@@ -68,5 +68,5 @@ export default function LeaguePlayerAssignment({
         </Form>
       )}
     </Formik>
-  )
+  );
 }

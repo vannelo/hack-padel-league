@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { Alert, Snackbar } from '@mui/material'
-import { createContext, type ReactNode, useContext, useState } from 'react'
+import { Alert, Snackbar } from '@mui/material';
+import { createContext, type ReactNode, useContext, useState } from 'react';
 
 export enum SnackbarSeverity {
   SUCCESS = 'success',
@@ -9,12 +9,12 @@ export enum SnackbarSeverity {
 }
 
 interface SnackbarContextType {
-  showSnackbar: (message: string, severity: SnackbarSeverity) => void
+  showSnackbar: (message: string, severity: SnackbarSeverity) => void;
 }
 
 const SnackbarContext = createContext<SnackbarContextType | undefined>(
   undefined
-)
+);
 
 export const SnackbarProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -23,25 +23,25 @@ export const SnackbarProvider: React.FC<{ children: ReactNode }> = ({
     open: false,
     message: '',
     severity: SnackbarSeverity.SUCCESS,
-  })
+  });
 
   const showSnackbar = (message: string, severity: SnackbarSeverity) => {
     setSnackbar({
       open: true,
       message,
       severity,
-    })
-  }
+    });
+  };
 
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === 'clickaway') {
-      return
+      return;
     }
-    setSnackbar((prev) => ({ ...prev, open: false }))
-  }
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   return (
     <SnackbarContext.Provider value={{ showSnackbar }}>
@@ -61,13 +61,13 @@ export const SnackbarProvider: React.FC<{ children: ReactNode }> = ({
         </Alert>
       </Snackbar>
     </SnackbarContext.Provider>
-  )
-}
+  );
+};
 
 export const useSnackbar = () => {
-  const context = useContext(SnackbarContext)
+  const context = useContext(SnackbarContext);
   if (context === undefined) {
-    throw new Error('useSnackbar must be used within a SnackbarProvider')
+    throw new Error('useSnackbar must be used within a SnackbarProvider');
   }
-  return context
-}
+  return context;
+};

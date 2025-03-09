@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `Hack Padel | Primera cancha de padel en Lindavista`,
     description: `Consulta la clasificación, jugadores y rondas de las ligas en Hack Padel.`,
-  }
+  };
 }
 
 export default async function HomePage() {
@@ -39,5 +39,5 @@ export default async function HomePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
