@@ -2,8 +2,8 @@
 
 import { revalidatePath } from 'next/cache';
 
+import { APP_ROUTES } from '@/constants/appRoutes';
 import { tournamentService } from '@/domain';
-import { pusher } from '@/lib/pusher';
 import { CreateTournamentData, TournamentCoupleData } from '@/types/tournament';
 
 export async function createTournament(tournamentData: CreateTournamentData) {
@@ -36,17 +36,7 @@ export async function updateMatchScore(data: {
   couple2Score: number;
 }) {
   await tournamentService.updateMatchScore(data);
-  revalidatePath(`/torneos/${data.tournamentId}`);
-
-  try {
-    await pusher.trigger(`tournament-${data.tournamentId}`, 'score-updated', {
-      matchId: data.matchId,
-      timestamp: new Date().toISOString(),
-    });
-    console.log('Pusher event triggered for tournament update');
-  } catch (error) {
-    console.error('Failed to trigger Pusher event:', error);
-  }
+  revalidatePath(APP_ROUTES.user.tournaments.tournament(data.tournamentId));
 }
 
 export async function finishTournament(tournamentId: string) {

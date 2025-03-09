@@ -1,6 +1,8 @@
 import { TournamentStatus, TournamentType } from '@prisma/client';
 
+import { PUSHER_VALUES } from '@/constants/pusherValues';
 import { TournamentRepository } from '@/domain/repositories/TournamentRepository';
+import { pusher } from '@/lib/pusher';
 import { CreateTournamentData, TournamentCoupleData } from '@/types/tournament';
 
 import { LeagueRepository } from '../repositories/LeagueRepository';
@@ -97,11 +99,22 @@ export class TournamentService {
   }
 
   async updateMatchScore(data: {
+    tournamentId: string;
     matchId: string;
     couple1Score: number;
     couple2Score: number;
   }) {
-    return this.tournamentRepository.updateMatchScore(data);
+    await this.tournamentRepository.updateMatchScore(data);
+    const { channel, event } = PUSHER_VALUES.triggers.scoreUpdate;
+
+    try {
+      await pusher.trigger(channel(data.tournamentId), event, {
+        matchId: data.matchId,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async finishTournament(tournamentId: string) {

@@ -11,4 +11,9 @@ export const APP_ROUTES = {
   players: {
     index: '/admin/jugadores',
   },
+  user: {
+    tournaments: {
+      tournament: (id: string) => `/torneos/${id}`,
+    },
+  },
 };
