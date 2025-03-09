@@ -4,7 +4,7 @@ import { Gender, Level } from '@prisma/client';
 import { Form, Formik } from 'formik';
 
 import { createPlayer } from '@/app/actions/playerActions';
-import Button, { ButtonType } from '@/components/UI/Button/Button';
+import Button, { ButtonType } from '@/components/Admin/UI/Button/Button';
 import { TEXT } from '@/constants/text';
 import { playerValidationSchema } from '@/formik/playerValidations';
 

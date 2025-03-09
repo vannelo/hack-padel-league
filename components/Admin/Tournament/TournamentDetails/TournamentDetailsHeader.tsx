@@ -8,8 +8,8 @@ import {
   finishTournament,
   startTournament,
 } from '@/app/actions/tournamentActions';
-import Button, { ButtonVariant } from '@/components/UI/Button/Button';
-import StatusBadge from '@/components/UI/StatusBadge/StatusBadge';
+import Button, { ButtonVariant } from '@/components/Admin/UI/Button/Button';
+import StatusBadge from '@/components/Admin/UI/StatusBadge/StatusBadge';
 import { tournamentStatusMap } from '@/constants/tournamentEnums';
 import { SnackbarSeverity } from '@/hooks/useSnackBar';
 import { formatDate } from '@/lib/helpers';
@@ -21,7 +21,7 @@ interface TournamentDetailsHeaderProps {
   onTournamentUpdate: (updatedTournament: Tournament) => void;
 }
 
-export default function TournamentContentHeader({
+export default function TournamentDetailsHeader({
   tournament,
   showSnackbar,
   onTournamentUpdate,

@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { startLeague } from '@/app/actions/leagueActions';
-import Button from '@/components/UI/Button/Button';
-import StatusBadge from '@/components/UI/StatusBadge/StatusBadge';
+import Button from '@/components/Admin/UI/Button/Button';
+import StatusBadge from '@/components/Admin/UI/StatusBadge/StatusBadge';
 import { leagueStatusMap } from '@/constants/leagueEnums';
 import { TEXT } from '@/constants/text';
 import { SnackbarSeverity } from '@/hooks/useSnackBar';

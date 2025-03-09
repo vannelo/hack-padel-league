@@ -8,7 +8,7 @@ import {
 } from '@mui/x-data-grid';
 import { useState } from 'react';
 
-import Button, { ButtonSize } from '@/components/UI/Button/Button';
+import Button, { ButtonSize } from '@/components/Admin/UI/Button/Button';
 import { genderMap, levelMap } from '@/constants/playerEnums';
 import { TEXT } from '@/constants/text';
 import { Player } from '@/types/player';

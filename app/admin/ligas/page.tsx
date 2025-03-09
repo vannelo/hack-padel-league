@@ -6,12 +6,12 @@ import { getAllLeagues } from '@/app/actions/leagueActions';
 import AdminTablePageLayout from '@/components/Admin/Layout/AdminTablePageLayout/AdminTablePageLayout';
 import LeagueCreate from '@/components/Admin/League/LeagueCreate/LeagueCreate';
 import LeagueTable from '@/components/Admin/League/LeagueTable/LeagueTable';
-import Modal from '@/components/Admin/UI/Modal/Modal';
-import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader';
 import Button, {
   ButtonSize,
   ButtonVariant,
-} from '@/components/UI/Button/Button';
+} from '@/components/Admin/UI/Button/Button';
+import Modal from '@/components/Admin/UI/Modal/Modal';
+import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader';
 import { TEXT } from '@/constants/text';
 import { SnackbarSeverity, useSnackbar } from '@/hooks/useSnackBar';
 import { League } from '@/types/league';

@@ -6,26 +6,26 @@ import { useState } from 'react';
 import Button, {
   ButtonSize,
   ButtonVariant,
-} from '@/components/UI/Button/Button';
+} from '@/components/Admin/UI/Button/Button';
 import { SnackbarSeverity } from '@/hooks/useSnackBar';
 import { Player } from '@/types/player';
 import type { Tournament, TournamentCouple } from '@/types/tournament';
 
 import TournamentCoupleAssignmentModal from '../TournamentCoupleAssignmentModal/TournamentCoupleAssignmentModal';
 
-interface TournamentContentScoresProps {
+interface TournamentDetailsScoresProps {
   tournament: Tournament;
   players: Player[];
   showSnackbar: (message: string, severity: SnackbarSeverity) => void;
   onTournamentUpdate: () => void;
 }
 
-export default function TournamentContentScores({
+export default function TournamentDetailsScores({
   tournament,
   players,
   showSnackbar,
   onTournamentUpdate,
-}: TournamentContentScoresProps) {
+}: TournamentDetailsScoresProps) {
   const [isAddingPlayer, setIsAddingPlayer] = useState(false);
 
   return (

@@ -9,7 +9,7 @@ import { updateMatchScore } from '@/app/actions/tournamentActions';
 import Button, {
   ButtonSize,
   ButtonVariant,
-} from '@/components/UI/Button/Button';
+} from '@/components/Admin/UI/Button/Button';
 import { SnackbarSeverity } from '@/hooks/useSnackBar';
 import type {
   Tournament,
@@ -17,17 +17,17 @@ import type {
   TournamentRound,
 } from '@/types/tournament';
 
-interface TournamentContentRoundsProps {
+interface TournamentDetailsRoundsProps {
   tournament: Tournament;
   showSnackbar: (message: string, severity: SnackbarSeverity) => void;
   onTournamentUpdate: () => void;
 }
 
-export default function TournamentContentRounds({
+export default function TournamentDetailsRounds({
   tournament,
   showSnackbar,
   onTournamentUpdate,
-}: TournamentContentRoundsProps) {
+}: TournamentDetailsRoundsProps) {
   const [scores, setScores] = useState<
     Record<string, { couple1Score: number | null; couple2Score: number | null }>
   >({});

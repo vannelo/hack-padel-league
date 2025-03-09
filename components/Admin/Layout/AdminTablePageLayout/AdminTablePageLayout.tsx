@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Breadcrumbs from '@/components/UI/Breadcrumbs/Breadcrumbs';
+import Breadcrumbs from '@/components/Admin/UI/Breadcrumbs/Breadcrumbs';
 
 import Heading from '../../UI/Heading/Heading';
 

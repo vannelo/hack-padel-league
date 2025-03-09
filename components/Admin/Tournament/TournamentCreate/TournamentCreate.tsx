@@ -3,7 +3,7 @@
 import { Form, Formik } from 'formik';
 
 import { createTournament } from '@/app/actions/tournamentActions';
-import Button, { ButtonType } from '@/components/UI/Button/Button';
+import Button, { ButtonType } from '@/components/Admin/UI/Button/Button';
 import { TEXT } from '@/constants/text';
 import { tournamentValidationSchema } from '@/formik/tournamentValidations';
 

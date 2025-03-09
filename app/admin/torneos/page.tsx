@@ -5,13 +5,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { getAllTournaments } from '@/app/actions/tournamentActions';
 import AdminTablePageLayout from '@/components/Admin/Layout/AdminTablePageLayout/AdminTablePageLayout';
 import TournamentCreate from '@/components/Admin/Tournament/TournamentCreate/TournamentCreate';
-import Modal from '@/components/Admin/UI/Modal/Modal';
-import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader';
-import TournamentTable from '@/components/Tournament/TournamentTable/TournamentTable';
+import TournamentTable from '@/components/Admin/Tournament/TournamentTable/TournamentTable';
 import Button, {
   ButtonSize,
   ButtonVariant,
-} from '@/components/UI/Button/Button';
+} from '@/components/Admin/UI/Button/Button';
+import Modal from '@/components/Admin/UI/Modal/Modal';
+import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader';
 import { TEXT } from '@/constants/text';
 import { SnackbarSeverity, useSnackbar } from '@/hooks/useSnackBar';
 import { Tournament } from '@/types/tournament';

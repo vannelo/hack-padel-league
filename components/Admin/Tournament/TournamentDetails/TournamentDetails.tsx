@@ -1,6 +1,5 @@
 'use client';
 
-import { CircularProgress } from '@mui/material';
 import { notFound } from 'next/navigation';
 import { useCallback } from 'react';
 
@@ -9,19 +8,20 @@ import { useTournament } from '@/hooks/useTournament';
 import type { Player } from '@/types/player';
 import type { Tournament } from '@/types/tournament';
 
-import TournamentContentHeader from './TournamentContentHeader';
-import TournamentContentRounds from './TournamentContentRounds';
-import TournamentContentScores from './TournamentContentScores';
+import TableLoader from '../../UI/TableLoader/TableLoader';
+import TournamentDetailsHeader from './TournamentDetailsHeader';
+import TournamentDetailsRounds from './TournamentDetailsRounds';
+import TournamentDetailsScores from './TournamentDetailsScores';
 
-interface TournamentContentProps {
+interface TournamentDetailsProps {
   initialTournament: Tournament;
   players: Player[];
 }
 
-export default function TournamentContent({
+export default function TournamentDetails({
   initialTournament,
   players,
-}: TournamentContentProps) {
+}: TournamentDetailsProps) {
   const { showSnackbar } = useSnackbar();
   const { tournament, isLoading, fetchTournament } =
     useTournament(initialTournament);
@@ -35,23 +35,19 @@ export default function TournamentContent({
   }
 
   if (isLoading) {
-    return (
-      <div className="flex h-96 items-center justify-center">
-        <CircularProgress />
-      </div>
-    );
+    return <TableLoader />;
   }
 
   return (
-    <>
-      <TournamentContentHeader
+    <div className="container mx-auto py-16">
+      <TournamentDetailsHeader
         tournament={tournament}
         showSnackbar={showSnackbar}
         onTournamentUpdate={handleTournamentUpdate}
       />
       <div className="block gap-8 md:flex">
         <div className="mb-4 w-full md:w-2/6">
-          <TournamentContentScores
+          <TournamentDetailsScores
             tournament={tournament}
             players={players}
             showSnackbar={showSnackbar}
@@ -59,13 +55,13 @@ export default function TournamentContent({
           />
         </div>
         <div className="w-full md:w-4/6">
-          <TournamentContentRounds
+          <TournamentDetailsRounds
             tournament={tournament}
             showSnackbar={showSnackbar}
             onTournamentUpdate={handleTournamentUpdate}
           />
         </div>
       </div>
-    </>
+    </div>
   );
 }

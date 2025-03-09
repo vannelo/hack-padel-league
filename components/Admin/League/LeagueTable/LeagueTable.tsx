@@ -5,8 +5,8 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import Button, { ButtonSize } from '@/components/UI/Button/Button';
-import StatusBadge from '@/components/UI/StatusBadge/StatusBadge';
+import Button, { ButtonSize } from '@/components/Admin/UI/Button/Button';
+import StatusBadge from '@/components/Admin/UI/StatusBadge/StatusBadge';
 import { leagueStatusMap } from '@/constants/leagueEnums';
 import { TEXT } from '@/constants/text';
 import { League } from '@/types/league';

@@ -8,11 +8,11 @@ import { useCallback, useState } from 'react';
 import { updatePlayerScore } from '@/app/actions/leagueActions';
 import LeaguePlayerAssignment from '@/components/Admin/League/LeaguePlayerAssignment/LeaguePlayerAssignment';
 import { getSortedLeaguePlayers } from '@/components/Admin/League/utils';
-import Modal from '@/components/Admin/UI/Modal/Modal';
 import Button, {
   ButtonSize,
   ButtonVariant,
-} from '@/components/UI/Button/Button';
+} from '@/components/Admin/UI/Button/Button';
+import Modal from '@/components/Admin/UI/Modal/Modal';
 import { TEXT } from '@/constants/text';
 import { SnackbarSeverity, useSnackbar } from '@/hooks/useSnackBar';
 import { League, LeaguePlayer } from '@/types/league';

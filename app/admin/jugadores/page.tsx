@@ -7,12 +7,12 @@ import AdminTablePageLayout from '@/components/Admin/Layout/AdminTablePageLayout
 import PlayerCreate from '@/components/Admin/Player/PlayerCreate/PlayerCreate';
 import PlayerEdit from '@/components/Admin/Player/PlayerEdit/PlayerEdit';
 import PlayerTable from '@/components/Admin/Player/PlayerTable/PlayerTable';
-import Modal from '@/components/Admin/UI/Modal/Modal';
-import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader';
 import Button, {
   ButtonSize,
   ButtonVariant,
-} from '@/components/UI/Button/Button';
+} from '@/components/Admin/UI/Button/Button';
+import Modal from '@/components/Admin/UI/Modal/Modal';
+import TableLoader from '@/components/Admin/UI/TableLoader/TableLoader';
 import { ACTIONS } from '@/constants/actions';
 import { TEXT } from '@/constants/text';
 import { SnackbarSeverity, useSnackbar } from '@/hooks/useSnackBar';

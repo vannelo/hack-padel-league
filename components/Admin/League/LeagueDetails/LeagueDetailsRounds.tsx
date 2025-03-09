@@ -5,8 +5,8 @@ import Link from 'next/link';
 import Button, {
   ButtonSize,
   ButtonVariant,
-} from '@/components/UI/Button/Button';
-import StatusBadge from '@/components/UI/StatusBadge/StatusBadge';
+} from '@/components/Admin/UI/Button/Button';
+import StatusBadge from '@/components/Admin/UI/StatusBadge/StatusBadge';
 import { APP_ROUTES } from '@/constants/appRoutes';
 import { TEXT } from '@/constants/text';
 import { tournamentStatusMap } from '@/constants/tournamentEnums';
