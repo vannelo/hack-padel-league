@@ -66,6 +66,7 @@ export default function TournamentContentRounds({
     ) {
       try {
         await updateMatchScore({
+          tournamentId: tournament.id,
           matchId,
           couple1Score: matchScores.couple1Score,
           couple2Score: matchScores.couple2Score,
