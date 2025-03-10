@@ -1,4 +1,8 @@
-import { TournamentStatus, TournamentType } from '@prisma/client';
+import {
+  TournamentRoundStatus,
+  TournamentStatus,
+  TournamentType,
+} from '@prisma/client';
 
 import { PUSHER_VALUES } from '@/constants/pusherValues';
 import { TournamentRepository } from '@/domain/repositories/TournamentRepository';
@@ -41,7 +45,7 @@ export class TournamentService {
       throw new Error('Tournament not found.');
     }
 
-    if (tournament.status !== 'Upcoming') {
+    if (tournament.status !== TournamentStatus.Upcoming) {
       throw new Error('Only upcoming tournaments can be started.');
     }
 
@@ -54,15 +58,29 @@ export class TournamentService {
       tournament.availableCourts
     );
 
+    // Create rounds and matches
     await this.tournamentRepository.createRoundsAndMatches(
       tournamentId,
       rounds
     );
 
-    return this.tournamentRepository.updateTournamentStatus(
+    // **Update tournament status to InProgress**
+    await this.tournamentRepository.updateTournamentStatus(
       tournamentId,
       TournamentStatus.InProgress
     );
+
+    // **Find the first round and update its status to InProgress**
+    const firstRound =
+      await this.tournamentRepository.getFirstRound(tournamentId);
+    if (firstRound) {
+      await this.tournamentRepository.updateRoundStatus(
+        firstRound.id,
+        TournamentRoundStatus.InProgress
+      );
+    }
+
+    return tournament;
   }
 
   private generateRounds(

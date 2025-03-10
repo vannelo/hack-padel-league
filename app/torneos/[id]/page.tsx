@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { getTournamentById } from '@/app/actions/tournamentActions';
-import { TournamentLiveUpdater } from '@/components/Tournament/TournamentLiveUpdater/TournamentLiveUpdater';
+import { TournamentLiveUpdater } from '@/components/User/Tournament/TournamentLiveUpdater/TournamentLiveUpdater';
 
 export async function generateMetadata({
   params,

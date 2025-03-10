@@ -9,8 +9,8 @@ export default function NavHeader() {
       <Link href="/" className="text-2xl font-bold text-primary">
         <Image
           src="/img/hack-logo.png"
-          width={160}
-          height={160}
+          width={120}
+          height={120}
           alt="Hack Padel Logo"
           className="mx-auto"
         />

@@ -243,4 +243,18 @@ export class TournamentRepository {
       },
     });
   }
+
+  async getFirstRound(tournamentId: string) {
+    return prisma.tournamentRound.findFirst({
+      where: { tournamentId },
+      orderBy: { number: 'asc' },
+    });
+  }
+
+  async updateRoundStatus(roundId: string, status: TournamentRoundStatus) {
+    return prisma.tournamentRound.update({
+      where: { id: roundId },
+      data: { status },
+    });
+  }
 }
