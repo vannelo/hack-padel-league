@@ -56,7 +56,7 @@ export default function TournamentDetailsRounds({
     }));
   };
 
-  const handleUpdateScore = async (matchId: string) => {
+  const handleUpdateScore = async (roundId: string, matchId: string) => {
     setLoadingMatches((prev) => ({ ...prev, [matchId]: true }));
 
     const matchScores = scores[matchId];
@@ -67,6 +67,7 @@ export default function TournamentDetailsRounds({
       try {
         await updateMatchScore({
           tournamentId: tournament.id,
+          roundId,
           matchId,
           couple1Score: matchScores.couple1Score,
           couple2Score: matchScores.couple2Score,
@@ -198,7 +199,9 @@ export default function TournamentDetailsRounds({
                   {editingMatches[match.id] && (
                     <div className="mb-8 flex items-center justify-center gap-2">
                       <Button
-                        onClick={() => handleUpdateScore(match.id)}
+                        onClick={() =>
+                          handleUpdateScore(match.roundId, match.id)
+                        }
                         disabled={loadingMatches[match.id]}
                         variant={ButtonVariant.PRIMARY}
                         size={ButtonSize.SMALL}
@@ -217,7 +220,9 @@ export default function TournamentDetailsRounds({
                     tournament.status === TournamentStatus.InProgress && (
                       <div className="mb-8 text-center">
                         <Button
-                          onClick={() => handleUpdateScore(match.id)}
+                          onClick={() =>
+                            handleUpdateScore(match.roundId, match.id)
+                          }
                           disabled={
                             loadingMatches[match.id] ||
                             scores[match.id]?.couple1Score === null ||

@@ -38,6 +38,7 @@ export class TournamentRepository {
           orderBy: { score: 'desc' },
         },
         rounds: {
+          orderBy: { number: 'asc' },
           include: {
             matches: {
               include: {
@@ -155,6 +156,8 @@ export class TournamentRepository {
   }
 
   async updateMatchScore(data: {
+    tournamentId: string;
+    roundId: string;
     matchId: string;
     couple1Score: number;
     couple2Score: number;
@@ -255,6 +258,39 @@ export class TournamentRepository {
     return prisma.tournamentRound.update({
       where: { id: roundId },
       data: { status },
+    });
+  }
+
+  async areAllMatchesCompleted(roundId: string): Promise<boolean> {
+    const totalMatches = await prisma.tournamentMatch.count({
+      where: { roundId },
+    });
+    console.log('totalMatches', totalMatches);
+
+    const completedMatches = await prisma.tournamentMatch.count({
+      where: {
+        roundId,
+        status: TournamentMatchStatus.Completed,
+      },
+    });
+    console.log('completedMatches', completedMatches);
+
+    return totalMatches === completedMatches;
+  }
+
+  async getNextRound(tournamentId: string, currentRoundId: string) {
+    const currentRound = await prisma.tournamentRound.findUnique({
+      where: { id: currentRoundId },
+    });
+
+    if (!currentRound) return null;
+
+    return prisma.tournamentRound.findFirst({
+      where: {
+        tournamentId,
+        number: currentRound.number + 1,
+      },
+      orderBy: { number: 'asc' },
     });
   }
 }

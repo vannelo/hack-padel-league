@@ -31,6 +31,7 @@ export async function getTournamentById(id: string) {
 
 export async function updateMatchScore(data: {
   tournamentId: string;
+  roundId: string;
   matchId: string;
   couple1Score: number;
   couple2Score: number;

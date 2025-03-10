@@ -118,11 +118,39 @@ export class TournamentService {
 
   async updateMatchScore(data: {
     tournamentId: string;
+    roundId: string;
     matchId: string;
     couple1Score: number;
     couple2Score: number;
   }) {
     await this.tournamentRepository.updateMatchScore(data);
+
+    // ✅ Step 1: Check if all matches in this round are completed
+    const allMatchesCompleted =
+      await this.tournamentRepository.areAllMatchesCompleted(data.roundId);
+    console.log('allMatchesCompleted', allMatchesCompleted);
+
+    if (allMatchesCompleted) {
+      // ✅ Step 2: Update the round status to "Completed"
+      await this.tournamentRepository.updateRoundStatus(
+        data.roundId,
+        TournamentRoundStatus.Completed
+      );
+
+      // ✅ Step 3: Find the next round and update it to "InProgress" if it exists
+      const nextRound = await this.tournamentRepository.getNextRound(
+        data.tournamentId,
+        data.roundId
+      );
+
+      if (nextRound) {
+        await this.tournamentRepository.updateRoundStatus(
+          nextRound.id,
+          TournamentRoundStatus.InProgress
+        );
+      }
+    }
+
     const { channel, event } = PUSHER_VALUES.triggers.scoreUpdate;
 
     try {
