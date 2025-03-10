@@ -151,15 +151,20 @@ export class TournamentService {
       }
     }
 
-    const { channel, event } = PUSHER_VALUES.triggers.scoreUpdate;
+    // ✅ **Only run Pusher trigger in production**
+    if (process.env.VERCEL_ENV === 'production') {
+      const { channel, event } = PUSHER_VALUES.triggers.scoreUpdate;
 
-    try {
-      await pusher.trigger(channel(data.tournamentId), event, {
-        matchId: data.matchId,
-        timestamp: new Date().toISOString(),
-      });
-    } catch (error) {
-      console.error(error);
+      try {
+        await pusher.trigger(channel(data.tournamentId), event, {
+          matchId: data.matchId,
+          timestamp: new Date().toISOString(),
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.log('Skipping Pusher trigger (Not in Production)');
     }
   }
 

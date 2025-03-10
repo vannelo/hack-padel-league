@@ -9,6 +9,7 @@ import {
   getTournamentActiveRound,
   getTournamentNextRound,
   getTournamentPreviousRound,
+  getTournamentWinners,
 } from './utils';
 
 interface TournamentLiveViewProps {
@@ -24,10 +25,10 @@ export default function TournamentLiveView({
     activeRound?.number ?? 0,
     tournament.rounds
   );
-  const nextRound = getTournamentNextRound(
-    activeRound?.number ?? 0,
-    tournament.rounds
-  );
+  const nextRound = activeRound
+    ? getTournamentNextRound(activeRound.number, tournament.rounds)
+    : null;
+  const winners = !nextRound ? getTournamentWinners(tournament.couples) : null;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -98,10 +99,10 @@ export default function TournamentLiveView({
                 className="w-full"
               >
                 <h3 className="text-center text-2xl font-bold uppercase">
-                  Ronda {activeRound.number}
+                  {tournament.name}
                 </h3>
                 <h4 className="text-center text-sm font-bold uppercase text-primary">
-                  Ronda Activa
+                  Ronda {activeRound.number}
                 </h4>
                 <div className="m-auto my-2 mb-8 flex h-[1px] w-32 items-center justify-center rounded-full bg-primary text-xl font-bold text-white" />
                 <ul>
@@ -144,11 +145,55 @@ export default function TournamentLiveView({
                 transition={{ duration: 0.5 }}
                 className="w-full px-16"
               >
+                {winners && (
+                  <>
+                    <h2 className="text-center text-lg font-bold uppercase">
+                      Ganadores
+                    </h2>
+                    <div className="flex w-full flex-col items-center justify-center">
+                      {winners.map((couple) => (
+                        <motion.div
+                          key={couple.id}
+                          className="relative mb-8 text-3xl font-bold"
+                          style={{
+                            position: 'relative',
+                            display: 'inline-block',
+                            color: '#c0ff00', // Primary color remains
+                            overflow: 'hidden',
+                            textAlign: 'center', // Ensure text is centered
+                          }}
+                        >
+                          {couple.player1.name} / {couple.player2.name}
+                          {/* Shining overlay */}
+                          <motion.div
+                            style={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              width: '100%',
+                              height: '100%',
+                              background:
+                                'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%)',
+                              mixBlendMode: 'overlay',
+                            }}
+                            initial={{ x: '-100%' }}
+                            animate={{ x: '100%' }}
+                            transition={{
+                              duration: 2, // Speed of shine movement
+                              repeat: Infinity,
+                              ease: 'linear',
+                            }}
+                          />
+                        </motion.div>
+                      ))}
+                    </div>
+                  </>
+                )}
                 <h3 className="text-center text-2xl font-bold uppercase">
-                  Tabla de Posiciones
+                  {tournament.name}
                 </h3>
                 <h4 className="text-center text-sm font-bold uppercase text-primary">
-                  Parejas
+                  Tabla de posiciones
                 </h4>
                 <div className="m-auto my-2 mb-8 flex h-[1px] w-32 items-center justify-center rounded-full bg-primary text-xl font-bold text-white" />
                 <ul>

@@ -1,6 +1,6 @@
 import { TournamentRoundStatus } from '@prisma/client';
 
-import { TournamentRound } from '@/types/tournament';
+import { TournamentCouple, TournamentRound } from '@/types/tournament';
 
 export const getTournamentActiveRound = (rounds: TournamentRound[]) => {
   return rounds.find(
@@ -20,4 +20,14 @@ export const getTournamentNextRound = (
   rounds: TournamentRound[]
 ) => {
   return rounds.find((round) => round.number === currentRoundNumber + 1);
+};
+
+export const getTournamentWinners = (tournamentCouples: TournamentCouple[]) => {
+  const firstCouple = tournamentCouples[0];
+
+  const winners = tournamentCouples.filter(
+    (couple) => couple.score === firstCouple.score
+  );
+
+  return winners;
 };
