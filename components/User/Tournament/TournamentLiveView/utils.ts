@@ -31,3 +31,9 @@ export const getTournamentWinners = (tournamentCouples: TournamentCouple[]) => {
 
   return winners;
 };
+
+export const getIsAllRoundsCompleted = (rounds: TournamentRound[]) => {
+  return rounds.every(
+    (round) => round.status === TournamentRoundStatus.Completed
+  );
+};

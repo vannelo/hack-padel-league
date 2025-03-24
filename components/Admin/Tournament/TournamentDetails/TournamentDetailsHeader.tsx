@@ -62,34 +62,38 @@ export default function TournamentDetailsHeader({
 
   return (
     <div className="mb-4 block items-center justify-between border-b border-gray-200 pb-4 md:flex">
-      <div className="mb-4 flex items-center gap-2 md:mb-0">
-        <h1 className="text-2xl font-bold text-gray-800">{tournament.name}</h1>
-        <StatusBadge
-          status={tournament.status}
-          statusMap={tournamentStatusMap}
-        />
-        <Link
-          href={`/torneos/${tournament.id}`}
-          target="_blank"
-          rel="noreferrer"
-          className="font-bold text-black"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            fill="currentColor"
-            viewBox="0 0 16 16"
+      <div className="mb-4 md:mb-0">
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-gray-800">
+            {tournament.name}
+          </h1>
+          <StatusBadge
+            status={tournament.status}
+            statusMap={tournamentStatusMap}
+          />
+          <Link
+            href={`/torneos/${tournament.id}`}
+            target="_blank"
+            rel="noreferrer"
+            className="font-bold text-black"
           >
-            <path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zM5.904 10.803 10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707" />
-          </svg>
-        </Link>
-      </div>
-      {tournament.startDate && (
-        <div className="text-sm font-semibold text-gray-500">
-          {formatDate(tournament.startDate)}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zM5.904 10.803 10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707" />
+            </svg>
+          </Link>
         </div>
-      )}
+        {tournament.startDate && (
+          <div className="text-sm font-semibold text-gray-500">
+            {formatDate(tournament.startDate)}
+          </div>
+        )}
+      </div>
       {tournament.status === TournamentStatus.Upcoming && (
         <Button
           onClick={handleStartTournament}

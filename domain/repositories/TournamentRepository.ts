@@ -265,7 +265,6 @@ export class TournamentRepository {
     const totalMatches = await prisma.tournamentMatch.count({
       where: { roundId },
     });
-    console.log('totalMatches', totalMatches);
 
     const completedMatches = await prisma.tournamentMatch.count({
       where: {
@@ -273,7 +272,6 @@ export class TournamentRepository {
         status: TournamentMatchStatus.Completed,
       },
     });
-    console.log('completedMatches', completedMatches);
 
     return totalMatches === completedMatches;
   }

@@ -65,7 +65,7 @@ export default async function TournamentDetailsPage({
           {tournament.name}
         </h2>
         {tournament.type === TournamentType.League && (
-          <div className="mb-4 font-bold uppercase text-white">
+          <div className="font-bold uppercase text-white">
             Liga:{' '}
             <Link
               href={`/ligas/${tournament.leagueId}`}
@@ -76,7 +76,7 @@ export default async function TournamentDetailsPage({
           </div>
         )}
         {tournament.status === TournamentStatus.InProgress && (
-          <div className="text-center">
+          <div className="mt-4 text-center">
             <Link
               href={`/torneos/live/${tournament.id}`}
               passHref

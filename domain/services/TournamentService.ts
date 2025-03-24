@@ -128,7 +128,6 @@ export class TournamentService {
     // ✅ Step 1: Check if all matches in this round are completed
     const allMatchesCompleted =
       await this.tournamentRepository.areAllMatchesCompleted(data.roundId);
-    console.log('allMatchesCompleted', allMatchesCompleted);
 
     if (allMatchesCompleted) {
       // ✅ Step 2: Update the round status to "Completed"
@@ -163,8 +162,6 @@ export class TournamentService {
       } catch (error) {
         console.error(error);
       }
-    } else {
-      console.log('Skipping Pusher trigger (Not in Production)');
     }
   }
 
